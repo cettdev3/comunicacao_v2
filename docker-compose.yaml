@@ -1,0 +1,95 @@
+version: '3'
+
+services:
+    app:
+        restart: always
+        depends_on:
+            - database_comunicacao_cett
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+            args:
+                - APP_UID=${APP_UID}
+                - AGG_GID=${APP_GID}
+                - APP_USER_NAME=${APP_USER_NAME}
+                - APP_NAME=${APP_NAME}
+        environment:
+            DJANGO_DEBUG: ${DJANGO_DEBUG}
+            DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+            DATABASE_NAME: app
+            DATABASE_USER: app
+            DATABASE_HOST: database_comunicacao_cett
+            DATABASE_PASS: numsei
+            DATABASE_PORT: 3306
+        user: ${APP_UID}:${APP_GID}
+        labels:
+            #Enable Traefk 
+            - "traefik.enable=true"
+            - "traefik.docker.network=backend"
+            
+            - "traefik.constraint-label-stack=comunicacao-cett"
+            - "traefik.http.services.comunicacao-cett.loadbalancer.server.port=8000"
+            #http
+            - "traefik.http.routers.comunicacao-cett_http.entrypoints=web"
+            - "traefik.http.routers.comunicacao-cett_http.rule=Host(`comunicacao.${PRIMARY_DOMAIN_NAME}`)&&PathPrefix(`/`)"
+            - "traefik.http.routers.comunicacao-cett_http.middlewares=https_redirect"
+            #https
+            - "traefik.http.routers.comunicacao-cett_https.rule=Host(`comunicacao.${PRIMARY_DOMAIN_NAME}`)&&PathPrefix(`/`)"
+            - "traefik.http.routers.comunicacao-cett_https.entrypoints=websecure"
+            - "traefik.http.routers.comunicacao-cett_https.tls.certresolver=letsencryptresolver"
+        volumes:
+            - ./src:/home/${APP_USER_NAME}/${APP_NAME}
+            - ./backups:/home/${APP_USER_NAME}/${APP_NAME}/backups
+            - ./media:/home/${APP_USER_NAME}/${APP_NAME}/media
+            - ./data/uploads:/home/${APP_USER_NAME}/${APP_NAME}/uploads
+        networks:
+            - db
+            - backend
+    database_comunicacao_cett:
+        image: mariadb:latest
+        restart: on-failure
+        environment:
+            MARIADB_ROOT_PASSWORD: numsei
+            MARIADB_DATABASE: app
+            MARIADB_USER: app
+            MARIADB_PASSWORD: numsei
+        volumes:
+            - ./data/dadabase:/var/lib/mysql
+            - ./logs/database:/var/log/mysql
+        networks:
+            - db
+    admin:
+        restart: always
+        image: phpmyadmin/phpmyadmin
+        links:
+            - "database_comunicacao_cett:database"
+        environment:
+            PMA_HOST: database_comunicacao_cett
+            PMA_PORT: 3306
+            PMA_ARBITRARY: 1
+            APACHE_HTTP_PORT_NUMBER: 8081
+            APACHE_PORT: 8081
+        labels:
+            #Enable Traefk 
+            - "traefik.enable=true"
+            - "traefik.docker.network=backend"
+            
+            - "traefik.constraint-label-stack=comunicacao-cett-db"
+            - "traefik.http.services.comunicacao-cett-db.loadbalancer.server.port=8081"
+            #http
+            - "traefik.http.routers.comunicacao-cett-db_http.entrypoints=web"
+            - "traefik.http.routers.comunicacao-cett-db_http.rule=Host(`comunicacao-db.${PRIMARY_DOMAIN_NAME}`)&&PathPrefix(`/`)"
+            - "traefik.http.routers.comunicacao-cett-db_http.middlewares=https_redirect"
+            #https
+            - "traefik.http.routers.comunicacao-cett-db_https.rule=Host(`comunicacao-db.${PRIMARY_DOMAIN_NAME}`)&&PathPrefix(`/`)"
+            - "traefik.http.routers.comunicacao-cett-db_https.entrypoints=websecure"
+            - "traefik.http.routers.comunicacao-cett-db_https.tls.certresolver=letsencryptresolver"
+        networks:
+            - db
+            - backend
+networks:
+    backend:
+        external: true
+        name: backend
+    db:
+        driver: bridge

@@ -1,0 +1,93 @@
+{
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.fontLigatures": true,
+    "editor.formatOnSaveMode": "modifications",
+    "python.defaultInterpreterPath": "${workspaceFolder}/comunicacao/.vevn/bin/python",
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.terminal.activateEnvironment": true,
+    "python.analysis.typeCheckingMode": "basic",
+    "python.autoComplete.extraPaths": [
+        "./src",
+        ".venv"
+    ],
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "/bin/bash",
+            "icon": "terminal-bash"
+        },
+        "zsh": {
+            "path": "/bin/zsh"
+        },
+        "fish": {
+            "path": "/bin/fish"
+        },
+        "tmux": {
+            "path": "/bin/tmux",
+            "icon": "terminal-tmux"
+        },
+        "pwsh": {
+            "path": "/bin/pwsh",
+            "icon": "terminal-powershell"
+        }
+    },
+    "python.languageServer": "Default",
+    "python.linting.enabled": true,
+    "python.linting.pylamaEnabled": true,
+    "python.linting.pylamaPath": "${workspaceFolder}/.venv/bin/pylama",
+    "python.linting.pylintArgs": [
+        "--init-hook='import sys; sys.path.append(${workspaceFolder})'"
+    ],
+    "python.formatting.autopep8Path": "${workspaceFolder}/.venv/bin/autopep8",
+    "python.formatting.provider": "autopep8",
+    "files.associations": {
+        // "**/templates/*.html": "django-html",
+        "**/templates/**/*.html": "django-html",
+        "**/templates/*": "django-txt",
+        "**/requirements{/**,*}.{txt,in}": "pip-requirements",
+        "*.html": "html"
+    },
+    "emmet.includeLanguages": {
+        "django-html": "html"
+    },
+    "html.format.indentInnerHtml": true,
+    "html.format.indentHandlebars": true,
+    "python.analysis.extraPaths": [
+        "./src",
+        ".venv"
+    ],
+    "[html]": {
+        "editor.defaultFormatter": "monosans.djlint"
+    },
+    "[django-html]": {
+        "editor.defaultFormatter": "monosans.djlint"
+    },
+    "[handlebars]": {
+        "editor.defaultFormatter": "monosans.djlint"
+    },
+    "[hbs]": {
+        "editor.defaultFormatter": "monosans.djlint"
+    },
+    "[mustache]": {
+        "editor.defaultFormatter": "monosans.djlint"
+    },
+    "[jinja]": {
+        "editor.defaultFormatter": "monosans.djlint"
+    },
+    "[jinja-html]": {
+        "editor.defaultFormatter": "monosans.djlint"
+    },
+    "[nj]": {
+        "editor.defaultFormatter": "monosans.djlint"
+    },
+    "[njk]": {
+        "editor.defaultFormatter": "monosans.djlint"
+    },
+    "[nunjucks]": {
+        "editor.defaultFormatter": "monosans.djlint"
+    },
+    "[twig]": {
+        "editor.defaultFormatter": "monosans.djlint"
+    },
+}

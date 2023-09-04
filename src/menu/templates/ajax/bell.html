@@ -1,0 +1,30 @@
+<li id="notifica" class="nav-item dropdown">
+    <a  class="nav-link" data-toggle="dropdown" href="#">
+      <i class="far fa-bell"></i>
+      
+      <span  class="badge badge-danger navbar-badge">{% if count > 0 %}{{count}}{% endif %}</span>
+    </a>
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+      <span class="dropdown-item dropdown-header">{{count}} Notificações</span>
+      <div class="dropdown-divider"></div>
+      {% for notificacao in notificacoes %}
+      <a  class="dropdown-item">
+        <!-- Message Start -->
+        <div class="media">
+          
+          <div class="media-body">
+            <h3 class="dropdown-item-title">
+              <b>{{notificacao.actor}}</b>
+
+            </h3>
+            <p class="text-sm" >{{notificacao.verb}}</p>
+            <p class="text-sm text-muted" style="float: right;"><i class="far fa-clock mr-1" ></i> {{notificacao.timestamp|date:"H:i d/m/Y"}}</p>
+            <button onclick="desabilita_notificacao('{{notificacao.id}}')" type="button" style="width: 50%;" class="btn btn-block bg-gradient-warning btn-xs">Marcar como Lido</button>
+          </div>
+        </div>
+        <!-- Message End -->
+      </a>
+      {% endfor %}
+   
+    </div>
+  </li>

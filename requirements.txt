@@ -1,0 +1,13 @@
+autopep8==2.0.2
+decorator==5.1.1
+Django==4.1.7
+django-user-agents==0.4.0
+fontawesomefree==6.3.0
+ipdb==0.13.11
+ipython==8.11.0
+jedi==0.18.2
+matplotlib-inline==0.1.6
+mysqlclient==2.1.1
+sqlparse==0.4.3
+sweetify==2.3.1
+user-agents==2.2.0
