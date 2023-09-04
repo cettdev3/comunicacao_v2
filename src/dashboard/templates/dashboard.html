@@ -1,0 +1,591 @@
+{% extends 'menu.html' %}
+{% load static %}
+{% block content %}
+<style>
+
+
+
+  table {
+  
+    border: 1px solid #cacaca;
+  border-collapse: collapse;
+  text-align: left;
+  width: 100%;
+  align-items: center;
+  font-family: 'Open Sans', sans-serif;
+  }
+  
+  table thead th {
+  
+  padding: 10px;
+  font-size: 12px;
+  color: #000;
+  font-weight: 600;
+  }
+  
+  table tbody tr td {
+  
+  display: table-cell;
+  font-weight: 400;
+  padding: 10px;
+  text-align: left;
+  position: relative;
+  }
+
+  
+  
+  table tbody tr {
+  
+  border: 1px solid #cacaca;
+  display: table-row;
+  }
+  
+  table tbody tr:nth-child(odd) {
+  
+  background: #dddddd4a;
+  }
+  
+  table tbody tr td button {
+  
+  display: inline-block;
+  padding: 10px 15px;
+  position: initial;
+  transform: translate(0);
+  width: auto;
+  }
+  
+  table tbody tr td button {
+  
+  background: #4CAF50;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(34, 34, 34, 0.2);
+  color: #fff;
+  font-weight: 700;;
+  padding: 10px 0;
+  width: 100%;
+  }
+  
+  table thead {
+  
+  display: table-header-group;
+  font-weight: 500;
+  }
+  
+  table tbody tr:hover {
+    background-color: #7e7e7e8d; /* Cor de fundo quando o mouse passa por cima */
+    cursor: pointer; /* Altera o cursor para indicar que é clicável */
+}
+  
+  table tbody tr td:before {
+  
+  display: none;
+  }
+  
+  table tbody tr td button:hover, table tbody tr td button:focus {
+  
+  background: #0C504B;
+  color: #ffffff;
+  cursor: pointer;
+  }
+  
+  @media all and (max-width: 800px) {
+  
+  table tbody tr td {
+  
+      display: block;
+      text-align: center;
+  }
+  
+  table tbody tr td:before {
+  
+      content: attr(data-title);
+      position: absolute;
+      left: 15px;
+      display: block;
+      font-weight: 600;
+      font-size: 1em;
+  }
+  
+  table {
+  
+      border: none;
+  }
+  
+  table thead {
+  
+      display: none;
+  }
+  
+  table tbody tr {
+  
+      margin-bottom: 10px;
+      display: block;
+      border: 1px solid #dad6eb;
+  }
+  
+  
+  }
+
+  .modal-dialog-full {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+  }
+  
+  .modal-content-full {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+  }
+  
+  .modal-body-full {
+    overflow-y: auto;
+  }
+ 
+
+  
+  </style>
+   <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Dashboard</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+              <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+<section class="content">
+    <div class="container-fluid">
+    
+      
+
+          
+      <div class="card">
+        <div class="card-header" style="background-color: #fafafa;">
+          <h3 class="card-title" style="color:#000000; font-weight: bold;">Solicitações Ativas</h3>
+
+        </div>
+        <!-- /.card-header -->
+        <div class="card">
+          {% if messages %}
+          {% for message in messages%}
+          <div {% if message.tags %} class="{{ message.tags }}"{% endif %} style="text-align: center;" role="alert">
+          {{message}}
+          </div>
+          {% endfor %}
+          {% endif  %}
+          <!-- /.card-header -->
+          
+          <div class="card-body">
+            <div class="form-group">
+              <div class="row">
+                <div class="col-12 col-sm-6 col-md-4" style="float:right">
+                  <label>Status:</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i style="color: #0C504B" class="fa fa-search"></i></span>
+                    
+                    </div>
+                    <select required="" class="form-control" name="filtro" id="filtro" onchange="filtrarTabela()">
+                      <option value="TODOS" selected>TODOS</option>
+                      <option value="1">Enviado para Análise</option>
+                      <!-- <option value="2">Cancelado</option> -->
+                      <option value="3">Devolvido ao Autor</option>
+                      <option value="4">Em Andamento</option>
+                      <option value="5">Em Aprovação CETT</option>
+                      <option value="8">Em Aprovação Secretaria</option>
+                      <option value="6">Aguardando Protocolo</option>
+                      <!-- <option value="7">Finalizado</option> -->
+  
+  
+  
+                    
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="col-12 col-sm-6 col-md-4" style="float:right">
+                  <label>Convênio:</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i style="color: #0C504B" class="fa fa-search"></i></span>
+                    
+                    </div>
+                    <select required="" class="form-control" name="filtro_convenio" id="filtro_convenio" onchange="filtrarUnidade()">
+                      <option value="TODOS" selected>TODOS</option>
+                      <option value="COTEC">COTEC</option>
+                      <option value="EFG">EFG</option>
+                      <option value="CETT/UFG">CETT/UFG</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="col-12 col-sm-6 col-md-4" style="float:right">
+                  <label>Prioridades:</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i style="color: #0C504B" class="fa fa-search"></i></span>
+                    
+                    </div>
+                    <select class="form-control" name="filtro_prioridade" id="filtro_prioridade" onchange="filtrarUnidade()">
+                      <option selected value="1" selected>TODAS</option>
+                      <option value="2">CRÍTICA</option>
+  
+                    </select>
+                  </div>
+                </div>
+            
+                <div class="col-12 col-sm-12 col-md-12">
+                  <table style="margin-top: 10px;">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Projeto</th>
+                        <th>Data da Solicitação</th>
+                        <th>Evento</th>
+                        <th>Data do Evento</th>
+                        <th>Solicitante</th>
+                        <th>Demandas Pendentes</th>
+                        <th>Demandas Concluidas</th>
+                        <th>Status</th>
+
+                        
+                      </tr>
+                    </thead>
+                    <tbody id="resultados">
+          
+                      {% for solicitacao in solicitacoes %}
+                        <tr style="cursor: pointer;" onclick="buscaSolicitacaoModal('{{solicitacao.id}}')">
+                         <td>#{{solicitacao.id}}</td>
+                         <td>
+      
+                          {% if solicitacao.tipo_projeto == '1' %}
+                          <span class="badge bg-success" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
+                            {% elif solicitacao.tipo_projeto == '2' %}
+                            <span class="badge bg-warning" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
+                            {% elif solicitacao.tipo_projeto == '3' %}
+                            <span class="badge bg-info" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
+                            {% endif %}
+                          </td>
+                          <td>{{solicitacao.data_solicitacao|date:'d/m/Y'}}</td>
+                         <td>{{solicitacao.evento_json.tipo_formatado}}</td>
+                         <td>{{solicitacao.evento_json.data_inicio_formatada}} até {{solicitacao.evento_json.data_fim_formatada}}</td>
+                         <td>{{solicitacao.criado_por.first_name}}</td>
+                         <td><span style="color:#c5221f">{{solicitacao.entregaveis_pendentes}}</span> / <span style="color:#c5221f">{{solicitacao.entregaveis_totais}}</span></td>
+                         <td><span style="color:#0b942b">{{solicitacao.entregaveis_concluidos}}</span> / <span style="color:#0b942b">{{solicitacao.entregaveis_totais}}</span></td>
+                         <td>
+                          {% if solicitacao.status == '0' %}
+                          <span class="badge bg-primary" style="padding: 5px;">{{solicitacao.get_status_display}}</td></span>
+                          {% elif solicitacao.status == '1' %}
+                          <span class="badge bg-warning">{{solicitacao.get_status_display}}</td></span>
+                          {% elif solicitacao.status == '2' %}
+                          <span class="badge bg-success">{{solicitacao.get_status_display}}</td></span>
+                          {% elif solicitacao.status == '3' %}
+                          <span class="badge bg-danger">{{solicitacao.get_status_display}}</td></span>
+                         {% endif %}
+                        </tr>
+                       {% endfor %}
+                      
+                    </tbody>
+                    
+                  </table>
+                </div>
+
+              </div>
+              <br>
+    
+              
+              
+              <br><br><br>
+              <!-- /.input group -->
+            </div>
+            
+        
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+        <!-- /.card-body -->
+      </div>
+
+    </div><!-- /.container-fluid -->
+    
+  </section>
+
+<!-- Full screen modal -->
+<div class="modal fade modal-fullscreen-xl" id="modal-fullscreen-xl" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog-full" role="document">
+    <div class="modal-content-full">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body-full">
+      teste
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" style="display: none;" aria-hidden="true">
+  <form id="formTarefas" method="POST"  enctype="multipart/form-data">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+        <button type="button" class="close" onclick="fecharModal('exampleModalCenter')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>This is a vertically centered modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="fecharModal('exampleModalCenter')">Fechar</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+  </form>
+</div>
+
+<div class="modal fade" id="modalEditTask" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="TitleEdit"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+     
+      <div class="modal-body">
+        <div class="row">
+        <div class="col-12 col-sm-12 col-md-6">
+        <div class="form-group">
+        <label>Título da Tarefa:</label>
+      
+        <div class="input-group">
+            <div class="input-group-prepend">
+            <span class="input-group-text"><i style="color: #000000" class="fa fa-sticky-note"></i></span>
+            </div>
+            <input type="text" value="" id="tituloTarefa_edit"  class="form-control" name="tituloTarefa">
+        </div>
+        <!-- /.input group -->
+        </div>
+      </div>
+
+      <!-- <div class="col-12 col-sm-12 col-md-6">
+        <div class="form-group">
+        <label>Alterar Status:</label>
+      
+        <div class="input-group">
+
+            <select style="width: 100%;"  class="form-control" id="direcao_backlog" name="direcao_backlog" required>
+            
+                 <option selected value="0"></option>
+                 <option value="1">A Fazer</option>
+                 <option value="2">Revisão</option>
+
+
+
+              </select>
+        </div>
+    
+        </div>
+      </div> -->
+
+      <input style="display: none;" type="text" value="" id="tarefa_edit_id"  class="form-control" name="tarefa_edit_id">
+
+      <div class="col-12 col-sm-12 col-md-4">
+        <div class="form-group">
+        <label>Designar Usuário:</label>
+      
+        <div class="input-group">
+
+            <select style="width: 100%;"  class="form-control select2" id="designar_usuario_edit" name="designar_usuario_edit" required>
+                {% for usuario in usuarios %}
+                 <option value="{{usuario.id}}">{{usuario.first_name}}</option>
+                {% endfor %}
+              </select>
+        </div>
+        <!-- /.input group -->
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-12 col-md-4">
+        <div class="form-group">
+        <label>Prioridade:</label>
+      
+        <div class="input-group">
+            <div class="input-group-prepend">
+            <span class="input-group-text"><i style="color: #000000" class="fa fa-clock"></i></span>
+            </div>
+            <select  class="form-control" id="prioridade_edit" name="prioridade_edit">
+                <option selected value="1">Normal</option>
+                <option value="2">Prioridade</option>
+              </select>
+        </div>
+        <!-- /.input group -->
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-12 col-md-4">
+        <div class="form-group">
+        <label>Prazo para Entrega:</label>
+
+        <div class="input-group">
+            <div class="input-group-prepend">
+            <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+            </div>
+            <input type="date" id="prazo_entrega_edit"   class="form-control" name="prazo_entrega_edit">
+        </div>
+        <!-- /.input group -->
+        </div>
+      </div>
+      
+      <input style="display: none;" type="text" id="entregavel_id_edit"   class="form-control" name="entregavel_id" value="{{entregavel.id}}">
+
+      <div class="col-12 col-sm-12 col-md-12">
+        <div class="col-md-12">
+          <div class="card card-dark card-outline">
+            <div class="card-header">
+              <h3 class="card-title">Descrição da Tarefa:</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+            
+              <div class="form-group">
+                  <textarea  id="descricao_tarefa_edit" name="descricao_tarefa_edit" class="form-control summernote" style="height: 300px">
+                    
+                  </textarea>
+              </div>
+            
+            </div>
+            <!-- /.card-body -->
+          
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+
+      </div>
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        <button type="button"n onclick="editarTarefa()" class="btn btn-primary">Salvar Alterações</button>
+      </div>
+ 
+    </div>
+  </div>
+</div>
+
+
+
+  <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+  <script>
+
+    function buscaSolicitacaoModal(solicitacaoId){
+   
+        url = '/ajax/load-ajax-solicitacao-modal'
+        
+        $.ajax({
+        url: url,
+        data: {'idEvento':solicitacaoId},
+
+        success: function(data) {
+          
+          $("#modal-fullscreen-xl").html(data);
+          $("#modal-fullscreen-xl").modal('show')
+        },
+        error: function(xhr, status, error) {
+          Swal.fire({
+                icon: 'error',
+                title: 'Ops!',
+                text: 'Não foi possível obter resultados!'
+              });
+        }
+      });
+      }
+  
+    function modalTarefas(entregavelId){
+        url = '/ajax/load-ajax-tarefas-modal'
+        
+        $.ajax({
+        url: url,
+        data: {'entregavelId':entregavelId},
+
+        success: function(data) {
+
+          $("#exampleModalCenter").html(data);
+          $("#exampleModalCenter").modal('show')
+        },
+        error: function(xhr, status, error) {
+          Swal.fire({
+                icon: 'error',
+                title: 'Ops!',
+                text: 'Não foi possível obter resultados!'
+              });
+        }
+      });
+      }
+  
+    function editarTarefa(){
+      url = '/ajax/editar-tarefa'
+
+      var XCSRFToken = '{{ csrf_token }}';
+
+      tarefa_id = $("#tarefa_edit_id").val()
+      tarefa_titulo = $("#tituloTarefa_edit").val()
+      tarefa_usuario = $("#designar_usuario_edit").val()
+      tarefa_prioridade = $("#prioridade_edit").val();
+      tarefa_prazo_entrega = $("#prazo_entrega_edit").val()
+      tarefa_descricao = $("#descricao_tarefa_edit").val()
+      direcao_backlog = $("#direcao_backlog").val()
+      dataForm = {"tarefa_id":tarefa_id,"tarefa_titulo":tarefa_titulo,"tarefa_usuario":tarefa_usuario,"tarefa_prioridade":tarefa_prioridade,"tarefa_prazo_entrega":tarefa_prazo_entrega,"tarefa_descricao":tarefa_descricao,"direcao_backlog":direcao_backlog}
+      $.ajax({
+                url: url,
+                type: "post",
+                data: dataForm,  // Use formData aqui
+                headers: { "X-CSRFToken": XCSRFToken, },
+                success: function (data) {
+                    $("#tbl_tarefas").html(data);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Tarefa Editada!',
+                        text: "Tarefa foi editada com sucesso!"
+                    });
+                    
+
+                },
+                error: function (data) {
+                    if (data.responseJSON && data.responseJSON.error_message) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Ops!',
+                            text: data.responseJSON.error_message
+                        });
+                    }  
+                }
+            });
+    }
+  </script>
+  {% endblock %}

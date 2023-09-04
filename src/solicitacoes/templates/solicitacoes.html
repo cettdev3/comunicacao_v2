@@ -1,0 +1,2457 @@
+{% extends 'menu.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+.invalid-field {
+    border: 1px solid red; /* Adicione uma borda vermelha aos campos */
+}
+
+
+  table {
+  
+  border: 1px solid #eee;
+  border-collapse: collapse;
+  text-align: left;
+  width: 100%;
+  align-items: center;
+  font-family: 'Open Sans', sans-serif;
+  }
+  
+  table thead th {
+  
+  padding: 10px;
+  font-size: 1em;
+  color: #000;
+  font-weight: 600;
+  }
+  
+  table tbody tr td {
+  
+  display: table-cell;
+  font-weight: 400;
+  padding: 10px;
+  text-align: left;
+  position: relative;
+  }
+  
+  table tbody tr {
+  
+  border: none;
+  display: table-row;
+  }
+  
+  table tbody tr:nth-child(odd) {
+  
+  background: #f2f2f2;
+  }
+  
+  table tbody tr td button {
+  
+  display: inline-block;
+  padding: 10px 15px;
+  position: initial;
+  transform: translate(0);
+  width: auto;
+  }
+  
+  table tbody tr td button {
+  
+  background: #4CAF50;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(34, 34, 34, 0.2);
+  color: #fff;
+  font-weight: 700;;
+  padding: 10px 0;
+  width: 100%;
+  }
+  
+  table thead {
+  
+  display: table-header-group;
+  font-weight: 500;
+  }
+  
+  
+  table tbody tr td:before {
+  
+  display: none;
+  }
+  
+  table tbody tr td button:hover, table tbody tr td button:focus {
+  
+  background: #0C504B;
+  color: #ffffff;
+  cursor: pointer;
+  }
+  
+  @media all and (max-width: 800px) {
+  
+  table tbody tr td {
+  
+      display: block;
+      text-align: center;
+  }
+  
+  table tbody tr td:before {
+  
+      content: attr(data-title);
+      position: absolute;
+      left: 15px;
+      display: block;
+      font-weight: 600;
+      font-size: 1em;
+  }
+  
+  table {
+  
+      border: none;
+  }
+  
+  table thead {
+  
+      display: none;
+  }
+  
+  table tbody tr {
+  
+      margin-bottom: 10px;
+      display: block;
+      border: 1px solid #dad6eb;
+  }
+  
+
+  }
+  .spinner {
+animation: spin 1s linear infinite;
+}
+
+#spinner-background {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.5); /* cor de fundo escuro */
+z-index: 9999;
+}
+
+#spinner-container {
+
+position: fixed;
+top: 50%;
+left: 50%;
+width: 100%;
+height: 100%;
+
+z-index: 9999;
+}
+
+@keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+
+
+}
+  </style>
+   <div id="spinner-background" style="display:none;">
+    <div id="spinner-container">
+      <i class="fa fa-spinner spinner" style="color: #ffffff; font-size: 100px;"></i>
+    </div>
+  </div>
+
+   <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Solicitação</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Solicitações</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+<section class="content">
+    <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+   <div class="container-fluid">
+      <!-- Small boxes (Stat box) -->
+      <div class="card">
+        <div class="card-header" style="background-color: #fafafa;">
+          <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="fa fa-plus"></i> Evento(s)</h3>
+
+        </div>
+        <!-- /.card-header -->
+    
+            {% csrf_token %}
+            <div class="card-body">
+              {% if messages %}
+              {% for message in messages%}
+              <div {% if message.tags %} class="{{ message.tags }}"{% endif %} style="text-align: center;" role="alert">
+              {{message}}
+              </div>
+              {% endfor %}
+              {% endif  %}
+             
+     
+                    <div class="container-fluid">
+                        <!-- Small boxes (Stat box) -->
+                        <form id="form_eventos" method="POST"  enctype="multipart/form-data">
+                          {% csrf_token %}
+                          <div class="row">
+
+                            <div class="card" style="width: 100%;">
+                                <div class="card-header" style="background-color: #fafafa;">
+                                    <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-info-circle"></i> Informações Gerais</h3>
+                                    
+                                    <!-- <div class="custom-control custom-checkbox" style="float: right;">
+                                     
+                                      <input class="custom-control-input" type="checkbox" id="solicitacao_critica" name="solicitacao_critica" onchange="toggleDateLimit()">
+                                      <label for="solicitacao_critica" class="custom-control-label">Prioridade na Solicitação</label>
+                                      </div> -->
+                                </div>
+                         
+                                    <div class="card-body">
+                                      
+                                        <div class="form-group">
+
+                                            <div class="row">
+                                                <div class="col-12 col-sm-12 col-md-9">
+                                                    <div class="form-group">
+                                                      <label>Informe o Evento:</label>
+                                    
+                                                      <div class="input-group">
+
+                                                        <select  class="form-control select2" id="eventos_gerais" name="eventos_gerais" required>
+                                                            <option selected></option>
+                                                            {% for evento in eventos %}
+                                                            {% if evento.cidade.nome %}
+                                                            <option value="{{evento.id}}">{{evento.tipo_formatado}} de {{evento.data_inicio|date:'d/m/Y'}} até {{evento.data_fim|date:'d/m/Y'}} em {{evento.cidade.nome}}</option>
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                            <option value="und">Destinar Unidade</option>
+                                                          </select>
+                                                      </div>
+                                                      <!-- /.input group -->
+                                                    </div>
+                                                  </div>
+
+                                                  <div class="col-3 col-sm-3 col-md-1">
+                                                    <div class="form-group">
+                                                      <label> </label>
+                                                      <div class="custom-control custom-radio">
+                                                        <input class="custom-control-input" type="radio" id="customRadio1" name="tipo_und" value="1" required>
+                                                        <label for="customRadio1" class="custom-control-label">EFG</label>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+
+                                                  <div class="col-3 col-sm-3 col-md-1">
+                                                    <div class="form-group">
+                                                      <label> </label>
+                                                      <div class="custom-control custom-radio">
+                                                        <input class="custom-control-input" type="radio" id="customRadio2" name="tipo_und" value="2" required>
+                                                        <label for="customRadio2" class="custom-control-label">COTEC</label>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+
+                                                  <div class="col-3 col-sm-3 col-md-1">
+                                                    <div class="form-group">
+                                                      <label> </label>
+                                                      <div class="custom-control custom-radio">
+                                                        <input class="custom-control-input" type="radio" id="customRadio3" name="tipo_und" value="3" required checked>
+                                                        <label for="customRadio3" class="custom-control-label">CETT</label>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                            </div>
+
+                                            <div id="dados_eventos_gerais" class="row">
+                                                <div class="col-12 col-sm-12 col-md-6">
+                                                    <div class="form-group">
+                                                    <label>Data Inicial:</label>
+                                    
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+                                                        </div>
+                                                        <input readonly type="date" id="data_inicial" required   class="form-control" name="data_inicial">
+                                                    </div>
+                                                    <!-- /.input group -->
+                                                    </div>
+                                                </div>
+                                              
+                                                <div class="col-12 col-sm-12 col-md-6">
+                                                  <div class="form-group">
+                                                  <label>Data Final:</label>
+                                  
+                                                  <div class="input-group">
+                                                      <div class="input-group-prepend">
+                                                      <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+                                                      </div>
+                                                      <input readonly type="date" required id="data_final"  class="form-control" name="data_final">
+                                                  </div>
+                                                  <!-- /.input group -->
+                                                  </div>
+                                              </div>
+
+                                              <div class="col-12 col-sm-12 col-md-12">
+                                                <div class="form-group">
+                                                <label>Local do Evento:</label>
+                                              
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+                                                    </div>
+                                                    <input type="text" value="" required id="local_evento"  class="form-control" name="local_evento">
+                                                </div>
+                                                <!-- /.input group -->
+                                                </div>
+                                              </div>
+
+
+                                            </div>
+                                            <!---Fim dos dados do evento-->
+                                            <div class="row">
+                                              
+                                              <div class="col-12 col-sm-12 col-md-12">
+                                                <div class="form-group">
+                                                <label>Público do Evento:</label>
+                                              
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i style="color: #000000" class="fa fa-users"></i></span>
+                                                    </div>
+                                                    <input type="text" value="" id="publico_evento"  class="form-control" name="publico_evento">
+                                                </div>
+                                                <!-- /.input group -->
+                                                </div>
+                                              </div>
+                                              
+                                              <!---PROGRAMAÇÃO ADICIONAL-->
+                                              <div class="col-12 col-sm-12 col-md-12">
+                                              <div class="card" style="width: 100%;">
+                                                        <div class="card-header" style="background-color: #fafafa;">
+                                                          <div class="custom-control custom-checkbox">
+                                                            <input class="custom-control-input" type="checkbox" id="customCheckbox2" name="programacao_evento">
+                                                            <label for="customCheckbox2" class="custom-control-label">Registrar Programação</label>
+                                                          
+                                                          
+                                                            </div>
+                                                            
+                                                      
+                                                        </div>
+                                                      
+                                                          <div class="card-body">
+                                                            <div class="form-group" id="programacao_adicional" >
+                                                              <div class="row">
+                                                                <div class="col-12 col-sm-12 col-md-2">
+                                                                  <div class="form-group">
+                                                                    
+                                                                  <label>Data:</label>
+                                                  
+                                                                  <div class="input-group">
+                                                                      <div class="input-group-prepend">
+                                                                      <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+                                                                      </div>
+                                                                      <input type="date"  class="form-control" name="data_programacao">
+                                                                  </div>
+                                                                  <!-- /.input group -->
+                                                                  </div>
+                                                                </div>
+          
+                                                                <div class="col-12 col-sm-12 col-md-2">
+                                                                  <div class="form-group">
+                                                                  <label>Hora:</label>
+                                                  
+                                                                  <div class="input-group">
+                                                                      <div class="input-group-prepend">
+                                                                      <span class="input-group-text"><i style="color: #000000" class="fa fa-clock"></i></span>
+                                                                      </div>
+                                                                      <input type="time"  class="form-control" name="hora_programacao">
+                                                                  </div>
+                                                                  <!-- /.input group -->
+                                                                  </div>
+                                                                </div>
+      
+                                                                <div class="col-12 col-sm-12 col-md-2">
+                                                                  <div class="form-group">
+                                                                  <label>Hora Final:</label>
+                                                  
+                                                                  <div class="input-group">
+                                                                      <div class="input-group-prepend">
+                                                                      <span class="input-group-text"><i style="color: #000000" class="fa fa-clock"></i></span>
+                                                                      </div>
+                                                                      <input type="time"  class="form-control" name="hora_programacao_final">
+                                                                  </div>
+                                                                  <!-- /.input group -->
+                                                                  </div>
+                                                                </div>
+          
+                                                                <div class="col-12 col-sm-12 col-md-5">
+                                                                  <div class="form-group">
+                                                                  <label>Atividade:</label>
+                                                                 
+                                                                  <div class="input-group">
+                                                                      <div class="input-group-prepend">
+                                                                      <span class="input-group-text"><i style="color: #000000" class="fa fa-sticky-note"></i></span>
+                                                                      </div>
+                                                                      
+                                                                      <input type="text"  class="form-control" name="atividade_programacao">
+                                                                  </div>
+                                                                  
+                                                                  <!-- /.input group -->
+                                                                  </div>
+                                                                </div>
+
+                                                                <div class="col-12 col-sm-12 col-md-1">
+                                                                  <div class="form-group">
+                                                                  <label> </label>
+                                                                 
+                                                                  <div class="input-group">
+                                                         
+                                                                      <a  id="add_programacao"  style=" width: 100%;" class="btn bg-warning">
+                                        
+                                                                        <i class="fas fa-plus"></i> <B>ADD</B>
+                                                                      </a>
+                                                                        <!-- <button style="border: 2px solid #00055a; background-color: #0C504B; color: #ffffff; width: 25%; float: right; border-radius: 50%;" type="button" id="add_programacao" class="btn-xs btn-block">
+                                                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                                                        </button> -->
+                                                                 
+                                                                  </div>
+                                                                  
+                                                                  <!-- /.input group -->
+                                                                  </div>
+                                                                </div>
+
+                                                        
+          
+                                                        
+          
+                                                              </div>
+                                                            </div>
+                                                          
+                                                      
+                                                      
+                                                          </div>
+
+                                                          
+                                                          <!-- /.card-body -->
+                                                      
+                                                        </div>
+                                              </div>
+
+                                        </div>
+                            
+                                    </div>
+                                    <!-- /.card-body -->
+                        
+                            </div>
+
+                          </div>
+                          
+                          
+                          <div class="card" style="width: 100%;">
+                            <div class="card-header" style="background-color: #fafafa;">
+                                <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-info-circle"></i> Ações de Comunicação</h3>
+                                
+                            </div>
+                     
+                                <div class="card-body">
+                                      <div class="row">
+                                        <!---------------------------------------------------------------------------------------------------------------->
+                                        <!--------------------------------------SAVE THE DATE------------------------------------------------------------->
+                                        <!---------------------------------------------------------------------------------------------------------------->
+                                        <div class="col-12 col-sm-12 col-md-12">
+                                          <div class="card" style="width: 100%;">
+                                              <div class="card-header" style="background-color: #fafafa;">
+                                                  <div class="custom-control custom-checkbox">
+                                                      <input class="custom-control-input" type="checkbox" id="save_the_date" name="save_the_date" >
+                                                      <label for="save_the_date" class="custom-control-label">Save The Date</label>
+                                                      
+                                                    </div>
+                                                
+                                              </div>
+                                                
+                                              <div class="card-body">
+                                                <div class="form-group" id="save_the_date_container" >
+                                                    <div class="row">
+                                                              
+                                                    <div class="card" style="width: 100%;">
+                                                      <div class="card-header" style="background-color: #fafafa;">
+                                                          <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i>  Novo Entregável - Save The Date</h3>
+                                                          <div class="col-12 col-sm-12 col-md-1" style="float: right;">
+                                                            <small>
+                                                              <a  id="add_savethedate"  style="float: right; font-size: 10px;" class="btn bg-warning">
+                                
+                                                                <i class="fas fa-plus"></i> <B>ADD</B>
+                                                              </a>
+                                   
+                                                            </small>
+                                                        </div>
+                                                      </div>
+                                              
+                                                      <div class="card-body">
+                                                        <div class="row">
+                                                          <div class="col-12 col-sm-12 col-md-6">
+                                                            <div class="form-group">
+                                                              
+                                                            <label>Estilo de Criação</label>
+                                            
+                                                              <div class="input-group">
+                                                                <div class="input-group-prepend">
+                                                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                                </div>
+                                                                <select  class="form-control" id="pecas_save_the_date" name="pecas_save_the_date">
+                                                                  <option value="nova_criacao">Nova Identidade Visual</option>
+                                                                  <option value="arte_existente">Utilizar Arte Existente</option>
+                                                                </select>
+                                                              </div>
+                                                              <!-- /.input group -->
+                                                              </div>
+                                                            </div>
+
+                                                      <div class="col-12 col-sm-12 col-md-6">
+                                                        <div class="form-group">
+                                                        <label>Prazo:</label>
+                                        
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+                                                            </div>
+                                                            <input type="date" id="prazo_save_the_date"   class="form-control" name="prazo_save_the_date">
+                                                        </div>
+                                                        <!-- /.input group -->
+                                                        </div>
+                                                      </div>
+                                                    
+
+                                                    <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_save_the_date_space" style="display: none;">
+                                                      
+                                                    </div>
+
+                                                    <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_save_the_date" style="display: none;">
+                                                      <div class="form-group">
+                                                      <label>Exemplo de Arte:</label>
+                                      
+                                                      <div class="input-group">
+                                                          <div class="input-group-prepend">
+                                                          <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                          </div>
+                                                          <input type="file" name="exemploarte_save_the_date" id="exemploarte_save_the_date" class="form-control" >
+                                                      </div>
+                                                      <!-- /.input group -->
+                                                      </div>
+                                                    </div>
+
+                                                    <div class="col-12 col-sm-12 col-md-6">
+                                                      <div class="form-group">
+                                                      <label>Categoria do Produto:</label>
+                                      
+                                                      <div class="input-group">
+                                                          <div class="input-group-prepend">
+                                                          <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                          </div>
+                                                          <select  class="form-control" id="tipoproduto_save_the_date" name="tipoproduto_save_the_date">
+                                                            <option value="">Selecione o Tipo</option>
+                                                            <option value="1">Digital</option>
+                                                            <option value="2">Impresso</option>
+                                                            <option value="3">Audiovisual</option>
+                                                            <option value="4">Cobertura de Evento</option>
+                                                            <option value="5">Produção de Audiovisual (Orçamentos e Execuções)</option>
+                                                          </select>
+                                                      </div>
+                                                      <!-- /.input group -->
+                                                      </div>
+                                                    </div>
+
+                                                    <div class="col-12 col-sm-12 col-md-6" id="categoria_field_save_the_date">
+                                                    <div class="form-group">
+                                                    <label>Tipo do Produto:</label>
+                                    
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                        </div>
+                                                        <select  class="form-control" id="categoriaproduto_save_the_date" name="categoriaproduto_save_the_date">
+                                                          <option value=""></option>
+                                                        </select>
+                                                    </div>
+                                                    <!-- /.input group -->
+                                                    </div>
+                                                    </div>
+
+                                                    <div class="col-12 col-sm-12 col-md-12" id="descricao_field_save_the_date" style="display: none;">
+                                                  <div class="col-md-12">
+                                                    <div class="card card-dark card-outline">
+                                                      <div class="card-header">
+                                                        <h3 class="card-title">Descrição Produção de Audiovisual (Orçamentos e Execuções)</h3>
+                                                      </div>
+                                                      <!-- /.card-header -->
+                                                      <div class="card-body">
+                                                      
+                                                        <div class="form-group">
+                                                            <textarea name="descricao_save_the_date" class="form-control summernote" style="height: 300px">
+                                                              
+                                                            </textarea>
+                                                        </div>
+                                                      
+                                                      </div>
+                                                      <!-- /.card-body -->
+                                                    
+                                                    </div>
+                                                    <!-- /.card -->
+                                                  </div>
+                                                    </div>
+
+                                                    <div class="col-12 col-sm-12 col-md-12" id="observacao_field_save_the_date">
+                                                      <div class="col-md-12">
+                                                        <div class="card card-dark card-outline">
+                                                          <div class="card-header">
+                                                            <h3 class="card-title">Observações</h3>
+                                                          </div>
+                                                          <!-- /.card-header -->
+                                                          <div class="card-body">
+                                                          
+                                                            <div class="form-group">
+                                                                <textarea name="obs_save_the_date" class="form-control summernote" style="height: 300px">
+                                                                  
+                                                                </textarea>
+                                                            </div>
+                                                          
+                                                          </div>
+                                                          <!-- /.card-body -->
+                                                        
+                                                        </div>
+                                                        <!-- /.card -->
+                                                      </div>
+                                                    </div>
+
+                                                                </div>
+                                                      </div>
+                                                      </div>
+                                                    </div>
+
+                                              </div>
+                                                
+                                              </div>
+                                        </div>
+                                        </div>
+                                        
+                                        <!---------------------------------------------------------------------------------------------------------------->
+                                        <!-----------------------------------------DIVULGAÇÃO------------------------------------------------------------->
+                                        <!---------------------------------------------------------------------------------------------------------------->
+                                        <div class="col-12 col-sm-12 col-md-12">
+                                          <div class="card" style="width: 100%;">
+                                              <div class="card-header" style="background-color: #fafafa;">
+                                                  <div class="custom-control custom-checkbox">
+                                                      <input class="custom-control-input" type="checkbox" id="divulgacao_check" name="divulgacao_check" >
+                                                      <label for="divulgacao_check" class="custom-control-label">Divulgação</label>
+                                                    </div>
+                                                
+                                              </div>
+                                                
+                                              <div class="card-body">
+                                                <div class="form-group" id="divulgacao_check_container" >
+                                                  <div class="row">
+
+                                                    <div class="card" style="width: 100%;">
+                                                      <div class="card-header" style="background-color: #fafafa;">
+                                                          <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i>  Novo Entregável - Divulgação</h3>
+                                                          <div class="col-12 col-sm-12 col-md-1" style="float: right;">
+                                                            <small>
+                                                              <a  id="add_divulgacao"  style="float: right; font-size: 10px;" class="btn bg-warning">
+                                
+                                                                <i class="fas fa-plus"></i> <B>ADD</B>
+                                                              </a>
+                                   
+                                                            </small>
+                                                        </div>
+                                                      </div>
+                                                      <div class="card-body">
+                                                        <div class="row">
+
+                                                    <div class="col-12 col-sm-12 col-md-6">
+                                                      <div class="form-group">
+                                                          <label>Estilo de Criação</label>
+                                                          <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                            </div>
+                                                            <select  class="form-control" id="pecas_divulgacao" name="pecas_divulgacao">
+                                                                <option value="nova_criacao">Nova Identidade Visual</option>
+                                                                <option value="arte_existente">Utilizar Arte Existente</option>
+                                                            </select>
+                                                          </div>
+                                                          <!-- /.input group -->
+                                                      </div>
+                                                    </div>
+
+                                                    <div class="col-12 col-sm-12 col-md-6">
+                                                      <div class="form-group">
+                                                          <label>Prazo:</label>
+                                                          <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+                                                            </div>
+                                                            <input type="date" id="prazo_divulgacao"  class="form-control" name="prazo_divulgacao">
+                                                          </div>
+                                                          <!-- /.input group -->
+                                                      </div>
+                                                    </div>
+                                                    <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_divulgacao_space" style="display: none;">
+                                                      
+                                                    </div>
+                                                    <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_divulgacao" style="display: none;">
+                                                      <div class="form-group">
+                                                          <label>Exemplo de Arte:</label>
+                                                          <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                            </div>
+                                                            <input type="file" name="exemploarte_divulgacao" id="exemploarte_divulgacao" class="form-control" >
+                                                          </div>
+                                                          <!-- /.input group -->
+                                                      </div>
+                                                    </div>
+
+                                                  
+                                                    
+                                                    <div class="col-12 col-sm-12 col-md-6">
+                                                      <div class="form-group">
+                                                          <label>Categoria do Produto:</label>
+                                                          <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                            </div>
+                                                            <select  class="form-control" id="tipoproduto_divulgacao" name="tipoproduto_divulgacao">
+                                                                <option value="">Selecione o Tipo</option>
+                                                                <option value="1">Digital</option>
+                                                                <option value="2">Impresso</option>
+                                                                <option value="3">Audiovisual</option>
+                                                                <option value="4">Cobertura de Evento</option>
+                                                                <option value="5">Produção de Audiovisual (Orçamentos e Execuções)</option>
+                                                            </select>
+                                                          </div>
+                                                          <!-- /.input group -->
+                                                      </div>
+                                                    </div>
+                                                    <div class="col-12 col-sm-12 col-md-6" id="categoria_field_divulgacao">
+                                                      <div class="form-group">
+                                                          <label>Tipo do Produto:</label>
+                                                          <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                            </div>
+                                                            <select  class="form-control" id="categoriaproduto_divulgacao" name="categoriaproduto_divulgacao">
+                                                                <option value=""></option>
+                                                            </select>
+                                                          </div>
+                                                          <!-- /.input group -->
+                                                      </div>
+                                                    </div>
+                                                    <div class="col-12 col-sm-12 col-md-12" id="descricao_field_divulgacao" style="display: none;">
+                                                      <div class="col-md-12">
+                                                          <div class="card card-dark card-outline">
+                                                            <div class="card-header">
+                                                                <h3 class="card-title">Descrição Produção de Audiovisual (Orçamentos e Execuções) </h3>
+                                                            </div>
+                                                            <!-- /.card-header -->
+                                                            <div class="card-body">
+                                                                <div class="form-group">
+                                                                  <textarea id="descricao_divulgacao" name="descricao_divulgacao" class="form-control summernote" style="height: 300px">
+                                                                  </textarea>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.card-body -->
+                                                          
+                                                            <!-- /.card-footer -->
+                                                          </div>
+                                                          <!-- /.card -->
+                                                      </div>
+                                                    </div>
+
+                                                    <div class="col-12 col-sm-12 col-md-12" id="observacao_divulgacao">
+                                                      <div class="col-md-12">
+                                                        <div class="card card-dark card-outline">
+                                                          <div class="card-header">
+                                                            <h3 class="card-title">Observações</h3>
+                                                          </div>
+                                                          <!-- /.card-header -->
+                                                          <div class="card-body">
+                                                          
+                                                            <div class="form-group">
+                                                                <textarea name="obs_divulgacao" class="form-control summernote" style="height: 300px">
+                                                                  
+                                                                </textarea>
+                                                            </div>
+                                                          
+                                                          </div>
+                                                          <!-- /.card-body -->
+                                                        
+                                                        </div>
+                                                        <!-- /.card -->
+                                                      </div>
+                                                  </div>
+                                                </div>
+                                                  </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              
+                                                      
+
+                                              </div>
+                                                
+                                        </div>
+                                       
+
+                                        <!---------------------------------------------------------------------------------------------------------------->
+                                        <!-----------------------------------------PROGRAMAÇÃO------------------------------------------------------------>
+                                        <!---------------------------------------------------------------------------------------------------------------->
+                                        <div class="col-12 col-sm-12 col-md-12">
+                                          <div class="card" style="width: 100%;">
+                                              <div class="card-header" style="background-color: #fafafa;">
+                                                  <div class="custom-control custom-checkbox">
+                                                      <input class="custom-control-input" type="checkbox" id="programacao_check" name="programacao_check" >
+                                                      <label for="programacao_check" class="custom-control-label">Programação</label>
+                                                    </div>
+                                                
+                                              </div>
+                                                
+                                              <div class="card-body">
+                                                <div class="form-group" id="programacao_check_container" >
+                                                  <div class="row">
+
+                                                    <div class="card" style="width: 100%;">
+                                                      <div class="card-header" style="background-color: #fafafa;">
+                                                          <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i>  Novo Entregável - Programação</h3>
+                                                          <div class="col-12 col-sm-12 col-md-1" style="float: right;">
+                                                            <small>
+                                                              <a  id="add_programacao_entregavel"  style="float: right; font-size: 10px;" class="btn bg-warning">
+                                
+                                                                <i class="fas fa-plus"></i> <B>ADD</B>
+                                                              </a>
+                                   
+                                                            </small>
+                                                        </div>
+                                                      </div>
+                                                      <div class="card-body">
+                                                        <div class="row">
+                                                          <div class="col-12 col-sm-12 col-md-6">
+                                                            <div class="form-group">
+                                                                <label>Estilo de Criação</label>
+                                                                <div class="input-group">
+                                                                  <div class="input-group-prepend">
+                                                                      <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                                  </div>
+                                                                  <select  class="form-control" id="pecas_programacao" name="pecas_programacao">
+                                                                      <option value="nova_criacao">Nova Identidade Visual</option>
+                                                                      <option value="arte_existente">Utilizar Arte Existente</option>
+                                                                  </select>
+                                                                </div>
+                                                                <!-- /.input group -->
+                                                            </div>
+                                                          </div>
+      
+                                                          <div class="col-12 col-sm-12 col-md-6">
+                                                            <div class="form-group">
+                                                                <label>Prazo:</label>
+                                                                <div class="input-group">
+                                                                  <div class="input-group-prepend">
+                                                                      <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+                                                                  </div>
+                                                                  <input type="date" id="prazo_programacao"  class="form-control" name="prazo_programacao">
+                                                                </div>
+                                                                <!-- /.input group -->
+                                                            </div>
+                                                          </div>
+                                                          <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_programacao_space" style="display: none;">
+                                                          
+                                                          </div>
+                                                          <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_programacao" style="display: none;">
+                                                            <div class="form-group">
+                                                                <label>Exemplo de Arte:</label>
+                                                                <div class="input-group">
+                                                                  <div class="input-group-prepend">
+                                                                      <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                                  </div>
+                                                                  <input type="file" name="exemploarte_programacao" id="exemploarte_programacao" class="form-control" >
+                                                                </div>
+                                                                <!-- /.input group -->
+                                                            </div>
+                                                          </div>
+                                                          <div class="col-12 col-sm-12 col-md-6">
+                                                            <div class="form-group">
+                                                                <label>Categoria do Produto:</label>
+                                                                <div class="input-group">
+                                                                  <div class="input-group-prepend">
+                                                                      <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                                  </div>
+                                                                  <select  class="form-control" id="tipoproduto_programacao" name="tipoproduto_programacao">
+                                                                      <option value="">Selecione o Tipo</option>
+                                                                      <option value="1">Digital</option>
+                                                                      <option value="2">Impresso</option>
+                                                                      <option value="3">Audiovisual</option>
+                                                                      <option value="4">Cobertura de Evento</option>
+                                                                      <option value="5">Produção de Audiovisual (Orçamentos e Execuções)</option>
+                                                                  </select>
+                                                                </div>
+                                                                <!-- /.input group -->
+                                                            </div>
+                                                          </div>
+                                                          <div class="col-12 col-sm-12 col-md-6" id="categoria_field_programacao">
+                                                            <div class="form-group">
+                                                                <label>Tipo do Produto:</label>
+                                                                <div class="input-group">
+                                                                  <div class="input-group-prepend">
+                                                                      <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                                  </div>
+                                                                  <select  class="form-control" id="categoriaproduto_programacao" name="categoriaproduto_programacao">
+                                                                      <option value=""></option>
+                                                                  </select>
+                                                                </div>
+                                                                <!-- /.input group -->
+                                                            </div>
+                                                          </div>
+                                                          <div class="col-12 col-sm-12 col-md-12" id="descricao_field_programacao" style="display: none;">
+                                                            <div class="col-md-12">
+                                                                <div class="card card-dark card-outline">
+                                                                  <div class="card-header">
+                                                                      <h3 class="card-title">Produção de Audiovisual (Orçamentos e Execuções) </h3>
+                                                                  </div>
+                                                                  <!-- /.card-header -->
+                                                                  <div class="card-body">
+                                                                      <div class="form-group">
+                                                                        <textarea id="descricao_programacao" name="descricao_programacao" class="form-control summernote" style="height: 300px">
+                                                                        </textarea>
+                                                                      </div>
+                                                                  </div>
+                                                                  <!-- /.card-body -->
+                                                                
+                                                                  <!-- /.card-footer -->
+                                                                </div>
+                                                                <!-- /.card -->
+                                                            </div>
+                                                          </div>
+      
+                                                          <div class="col-12 col-sm-12 col-md-12" id="observacao_programacao">
+                                                            <div class="col-md-12">
+                                                              <div class="card card-dark card-outline">
+                                                                <div class="card-header">
+                                                                  <h3 class="card-title">Observações</h3>
+                                                                </div>
+                                                                <!-- /.card-header -->
+                                                                <div class="card-body">
+                                                                
+                                                                  <div class="form-group">
+                                                                      <textarea name="obs_programacao" class="form-control summernote" style="height: 300px">
+                                                                        
+                                                                      </textarea>
+                                                                  </div>
+                                                                
+                                                                </div>
+                                                                <!-- /.card-body -->
+                                                              
+                                                              </div>
+                                                              <!-- /.card -->
+                                                            </div>
+                                                        </div>
+                                                      </div>
+                                                        </div>
+      
+                                                    </div>
+                                                      
+                                                </div>
+                                              </div>
+                                                        </div>
+                                                      </div>
+                                        </div>
+                                                
+                                        <!---------------------------------------------------------------------------------------------------------------->
+                                        <!-----------------------------------------------STAND------------------------------------------------------------>
+                                        <!---------------------------------------------------------------------------------------------------------------->
+                                        <div class="col-12 col-sm-12 col-md-12">
+                                          <div class="card" style="width: 100%;">
+                                              <div class="card-header" style="background-color: #fafafa;">
+                                                  <div class="custom-control custom-checkbox">
+                                                      <input class="custom-control-input" type="checkbox" id="stand_check" name="stand_check" >
+                                                      <label for="stand_check" class="custom-control-label">Stand</label>
+                                                    </div>
+                                                
+                                              </div>
+                                                
+                                              <div class="card-body">
+                                                <div class="form-group" id="stand_check_container" >
+                                                  <div class="row">
+                                                    <div class="card" style="width: 100%;">
+                                                      <div class="card-header" style="background-color: #fafafa;">
+                                                          <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i>  Novo Entregável - Stand</h3>
+                                                          <div class="col-12 col-sm-12 col-md-1" style="float: right;">
+                                                            <small>
+                                                              <a  id="add_stand"  style="float: right; font-size: 10px;" class="btn bg-warning">
+                                
+                                                                <i class="fas fa-plus"></i> <B>ADD</B>
+                                                              </a>
+                                   
+                                                            </small>
+                                                        </div>
+                                                      </div>
+                                                      <div class="card-body">
+                                                        <div class="row">
+                                                          <div class="col-12 col-sm-12 col-md-6">
+                                                            <div class="form-group">
+                                                                <label>Estilo de Criação</label>
+                                                                <div class="input-group">
+                                                                  <div class="input-group-prepend">
+                                                                      <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                                  </div>
+                                                                  <select  class="form-control" id="pecas_stand" name="pecas_stand">
+                                                                      <option value="nova_criacao">Nova Identidade Visual</option>
+                                                                      <option value="arte_existente">Utilizar Arte Existente</option>
+                                                                  </select>
+                                                                </div>
+                                                                <!-- /.input group -->
+                                                            </div>
+                                                          </div>
+      
+                                                          <div class="col-12 col-sm-12 col-md-6">
+                                                            <div class="form-group">
+                                                                <label>Prazo:</label>
+                                                                <div class="input-group">
+                                                                  <div class="input-group-prepend">
+                                                                      <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+                                                                  </div>
+                                                                  <input type="date" id="prazo_stand"   class="form-control" name="prazo_stand">
+                                                                </div>
+                                                                <!-- /.input group -->
+                                                            </div>
+                                                          </div>
+      
+                                                          <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_stand_space" style="display: none;">
+                                                          
+                                                          </div>
+                                                          <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_stand" style="display: none;">
+                                                            <div class="form-group">
+                                                                <label>Exemplo de Arte:</label>
+                                                                <div class="input-group">
+                                                                  <div class="input-group-prepend">
+                                                                      <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                                  </div>
+                                                                  <input type="file" name="exemploarte_stand" id="exemploarte_stand" class="form-control" >
+                                                                </div>
+                                                                <!-- /.input group -->
+                                                            </div>
+                                                          </div>
+      
+                                                          <div class="col-12 col-sm-12 col-md-6">
+                                                            <div class="form-group">
+                                                                <label>Categoria do Produto:</label>
+                                                                <div class="input-group">
+                                                                  <div class="input-group-prepend">
+                                                                      <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                                  </div>
+                                                                  <select  class="form-control" id="tipoproduto_stand" name="tipoproduto_stand">
+                                                                      <option value="">Selecione o Tipo</option>
+                                                                      <option value="1">Digital</option>
+                                                                      <option value="2">Impresso</option>
+                                                                      <option value="3">Audiovisual</option>
+                                                                      <option value="4">Cobertura de Evento</option>
+                                                                      <option value="5">Produção de Audiovisual (Orçamentos e Execuções)</option>
+                                                                  </select>
+                                                                </div>
+                                                                <!-- /.input group -->
+                                                            </div>
+                                                          </div>
+      
+                                                          <div class="col-12 col-sm-12 col-md-6" id="categoria_field_stand">
+                                                            <div class="form-group">
+                                                                <label>Tipo do Produto:</label>
+                                                                <div class="input-group">
+                                                                  <div class="input-group-prepend">
+                                                                      <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                                  </div>
+                                                                  <select  class="form-control" id="categoriaproduto_stand" name="categoriaproduto_stand">
+                                                                      <option value=""></option>
+                                                                  </select>
+                                                                </div>
+                                                                <!-- /.input group -->
+                                                            </div>
+                                                          </div>
+                                                          
+                                                          <div class="col-12 col-sm-12 col-md-12" id="descricao_field_stand" style="display: none;">
+                                                            <div class="col-md-12">
+                                                              <div class="card card-dark card-outline">
+                                                                  <div class="card-header">
+                                                                    <h3 class="card-title">Produção de Audiovisual (Orçamentos e Execuções) </h3>
+                                                                  </div>
+                                                                  <!-- /.card-header -->
+                                                                  <div class="card-body">
+                                                                    <div class="form-group">
+                                                                        <textarea id="descricao_stand" name="descricao_stand" class="form-control summernote" style="height: 300px">
+                                                                        </textarea>
+                                                                    </div>
+                                                                  </div>
+                                                                  <!-- /.card-body -->
+                                                                
+                                                                  <!-- /.card-footer -->
+                                                              </div>
+                                                              <!-- /.card -->
+                                                            </div>
+      
+                                                          </div>
+      
+                                                          <div class="col-12 col-sm-12 col-md-12" id="observacao_stand">
+                                                            <div class="col-md-12">
+                                                              <div class="card card-dark card-outline">
+                                                                <div class="card-header">
+                                                                  <h3 class="card-title">Observações</h3>
+                                                                </div>
+                                                                <!-- /.card-header -->
+                                                                <div class="card-body">
+                                                                
+                                                                  <div class="form-group">
+                                                                      <textarea name="obs_stand" class="form-control summernote" style="height: 300px">
+                                                                        
+                                                                      </textarea>
+                                                                  </div>
+                                                                
+                                                                </div>
+                                                                <!-- /.card-body -->
+                                                              
+                                                              </div>
+                                                              <!-- /.card -->
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                                    
+                                          
+                                                  </div>
+
+                                        </div>
+                                                
+                                          </div>
+                                        </div>
+
+                                        </div>
+
+                                      </div>
+                                </div>
+                      </div>
+
+                         
+
+                            <div class="input-group">
+                                <button style="border: 2px solid #d4d4d4; background-color: #fafafa; color: #000000;" type="button" onclick="realizaSolicitacao()" class="btn btn-block btn-lg"><i class="fa fa-check-circle" aria-hidden="true"></i> Enviar Solicitação para Análise</button>
+                            </div>
+                            <!-- /.row (main row) -->
+                        </form>
+                      </div>
+                    </div>
+                      </div><!-- /.container-fluid -->
+                </div>
+                
+            </div>
+
+
+    </div>
+      <!-- /.row -->
+</section>
+
+
+        <!-- /.row (main row) -->
+      </div><!-- /.container-fluid -->
+      <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<script>
+
+$("#eventos_gerais").on("change", function() {
+      var idEvento = $(this).val();
+      console.log(idEvento)
+      url = '/ajax/dados-gerais-evento'
+      
+      $.ajax({
+      url: url,
+      data: {'idEvento':idEvento},
+      
+      beforeSend: function() {
+          // exibe o spinner com fundo escuro enquanto aguarda a resposta
+          $('#spinner-background').show();
+        },
+      success: function(data) {
+
+        $("#dados_eventos_gerais").html(data);
+      },
+      complete: function() {
+          // esconde o spinner com fundo escuro quando a resposta é recebida
+          $('#spinner-background').hide();
+        },
+      error: function(xhr, status, error) {
+        Swal.fire({
+              icon: 'error',
+              title: 'Ops!',
+              text: 'Não foi possível obter resultados!'
+            });
+      }
+    });
+
+ });
+
+ var categorias = {
+      "1": ["Post", "Card P/ Instagram", "Card P/ Stories", "Banner P/ Site", "Outros"],
+      "2": ["Adesivo", "Anúncio de jornal", "Banner", "Cartaz", "Outdoor", "Panfletos", "Outros"],
+      "3": ["Filme para TV (duração)", "Filme para Reels", "Filme para Stories", "Spot de rádio/Streaming", "Carro de som	", "Videos para telas de TV", "Outros"],
+      "4": ["Foto", "Vídeo", "Jornalista"],
+      "5": ["teste"]
+      // Adicione outras opções aqui
+  };
+
+//------------------------------------------------------------------------------- ADICIONA PROGRAMAÇÃO
+var count_programacao = 1;
+$('#add_programacao').click(function() {
+    count_programacao++;
+
+      var novoInput = '<div class="row"><div class="col-12 col-sm-12 col-md-2"> 	<div class="form-group"><label>Data:</label> <div class="input-group"> <div class="input-group-prepend"> <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span> </div> <input required type="date"  class="form-control" name="data_programacao'+count_programacao+'"> 	</div> 	<!-- /.input group --> 	</div></div>    <div class="col-12 col-sm-12 col-md-2">  <div class="form-group">  <label>Hora:</label> <div class="input-group"> <div class="input-group-prepend"> <span class="input-group-text"><i style="color: #000000" class="fa fa-clock"></i></span> </div> <input required type="time"  class="form-control" name="hora_programacao'+count_programacao+'"> 	</div> 	<!-- /.input group --> 	</div></div>    <div class="col-12 col-sm-12 col-md-2">  <div class="form-group">  <label>Hora Final:</label><div class="input-group"> <div class="input-group-prepend"> <span class="input-group-text"><i style="color: #000000" class="fa fa-clock"></i></span></div> <input required type="time"  class="form-control" name="hora_programacao_final'+count_programacao+'"> 	</div> 	<!-- /.input group --> 	</div>  </div>    <div class="col-12 col-sm-12 col-md-5"> 	<div class="form-group"> 	<label>Atividade:</label>  	<div class="input-group"> 		<div class="input-group-prepend"> 		<span class="input-group-text"><i style="color: #000000" class="fa fa-sticky-note"></i></span> 		</div> 		<input required type="text"  class="form-control" name="atividade_programacao'+count_programacao+'"> 	</div> 	 	<!-- /.input group --> 	</div>   </div> 	 	<div class="col-12 col-sm-12 col-md-1" >       <div class="form-group" >          <label> </label>          <div class="input-group">             <div class="input-group" style="float: right;"> <button style="border: 2px solid #7c0000; background-color: #ef0000; color: #ffffff;" type="button" class="btn btn-block remove-input"><i class="fa fa-trash" aria-hidden="true"></i></button>    </div>          </div>          <!-- /.input group -->        </div>    </div>   </div>'
+    $("#programacao_adicional").append(novoInput);
+    
+    $(document).on('click', '.remove-input', function() {
+      $(this).closest('.row').remove();
+    });
+    
+    
+  });
+
+//------------------------------------------------------------------------------- ADICIONA SAVE THE DATE
+var count_savethedate = 1;
+function handleTipoProdutoChange_SaveTheDate(count) {
+    $('#tipoproduto_save_the_date' + count).change(function() {
+        var categoriaproduto_save_the_date = $("#categoriaproduto_save_the_date" + count);
+        var categoria_field_save_the_date = $("#categoria_field_save_the_date" + count);
+        var descricao_field_save_the_date = $("#descricao_field_save_the_date" + count);
+        var descricao_save_the_date = $("#descricao_save_the_date" + count);
+
+        var selectedValue = $(this).val();
+
+        if (selectedValue === "5") {
+            categoria_field_save_the_date.hide();
+            descricao_field_save_the_date.show();
+            categoriaproduto_save_the_date.val('');
+        } else {
+            descricao_save_the_date.summernote('reset');
+            var options = categorias[selectedValue] || [];
+
+            categoriaproduto_save_the_date.empty();
+
+            options.forEach(function(option) {
+                categoriaproduto_save_the_date.append($("<option>", {
+                    value: option,
+                    text: option
+                }));
+            });
+
+            categoria_field_save_the_date.show();
+            descricao_field_save_the_date.hide();
+        }
+    });
+}
+
+function handlePecasChange_SaveTheDate(count) {
+    $('#pecas_save_the_date' + count).change(function() {
+        var campoArte = $("#exemploarte_save_the_date" + count);
+        var selectedValue = $(this).val();
+        var show_exemple_arte_save_the_date = $("#show_exemple_arte_save_the_date" + count);
+        var show_exemple_arte_save_the_date_space = $("#show_exemple_arte_save_the_date_space" + count);
+
+        if (selectedValue === "arte_existente") {
+            show_exemple_arte_save_the_date.show();
+            show_exemple_arte_save_the_date_space.show();
+  
+        } else {
+            show_exemple_arte_save_the_date.hide();
+            show_exemple_arte_save_the_date_space.hide();
+        }
+    });
+}
+
+$('#add_savethedate').click(function() {
+    count_savethedate++;
+
+    var novoInput = `
+        <div class="row">
+            <div class="card" style="width: 100%;">
+                <div class="card-header" style="background-color: #fafafa;">
+                  <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i>  Novo Entregável - Save The Date</h3>
+                  <div class="col-12 col-sm-12 col-md-1" style="float: right;">
+                      <small>
+                        <a style="float: right; font-size: 10px;" class="btn bg-danger remove-input">
+                        <i class="fas fa-trash"></i> <B>REMOVER</B>
+                        </a>
+                        <!-- <button style="border: 2px solid #00055a; background-color: #0C504B; color: #ffffff; width: 25%; float: right; border-radius: 50%;" type="button" id="remove-input" class="btn-xs btn-block remove-input">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button> -->
+                      </small>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                      <div class="col-12 col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label>Estilo de Criação</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                              </div>
+                              <select required  class="form-control" id="pecas_save_the_date`+ count_savethedate +`" name="pecas_save_the_date`+ count_savethedate +`">
+                                  <option value="nova_criacao">Nova Identidade Visual</option>
+                                  <option value="arte_existente">Utilizar Arte Existente</option>
+                              </select>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label>Prazo:</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+                              </div>
+                              <input required type="date" id="prazo_save_the_date`+ count_savethedate +`"   class="form-control" name="prazo_save_the_date`+ count_savethedate +`">
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_save_the_date_space`+ count_savethedate +`" style="display: none;">
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_save_the_date`+ count_savethedate +`" style="display: none;">
+                        <div class="form-group">
+                            <label>Exemplo de Arte:</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                              </div>
+                              <input type="file" name="exemploarte_save_the_date`+ count_savethedate +`" id="exemploarte_save_the_date`+ count_savethedate +`" class="form-control" >
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label>Categoria do Produto:</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                              </div>
+                              <select required  class="form-control" id="tipoproduto_save_the_date`+ count_savethedate +`" name="tipoproduto_save_the_date`+ count_savethedate +`">
+                                  <option value="">Selecione o Tipo</option>
+                                  <option value="1">Digital</option>
+                                  <option value="2">Impresso</option>
+                                  <option value="3">Audiovisual</option>
+                                  <option value="4">Cobertura de Evento</option>
+                                  <option value="5">Produção de Audiovisual (Orçamentos e Execuções)</option>
+                              </select>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6" id="categoria_field_save_the_date`+ count_savethedate +`">
+                        <div class="form-group">
+                            <label>Tipo do Produto:</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                              </div>
+                              <select class="form-control" id="categoriaproduto_save_the_date`+ count_savethedate +`" name="categoriaproduto_save_the_date`+ count_savethedate +`">
+                                  <option value=""></option>
+                              </select>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-12" id="descricao_field_save_the_date`+ count_savethedate +`" style="display: none;">
+                        <div class="col-md-12">
+                            <div class="card card-dark card-outline">
+                              <div class="card-header">
+                                  <h3 class="card-title">Descrição Produção de Audiovisual (Orçamentos e Execuções)</h3>
+                              </div>
+                              <!-- /.card-header -->
+                              <div class="card-body">
+                                  <div class="form-group">
+                                    <textarea name="descricao_save_the_date`+ count_savethedate +`" class="form-control summernote" style="height: 300px">
+                                    </textarea>
+                                  </div>
+                              </div>
+                              <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-12" id="observacao_field_save_the_date`+ count_savethedate +`">
+                        <div class="col-md-12">
+                            <div class="card card-dark card-outline">
+                              <div class="card-header">
+                                  <h3 class="card-title">Observações</h3>
+                              </div>
+                              <!-- /.card-header -->
+                              <div class="card-body">
+                                  <div class="form-group">
+                                    <textarea name="obs_save_the_date`+ count_savethedate +`" class="form-control summernote" style="height: 300px">
+                                    </textarea>
+                                  </div>
+                              </div>
+                              <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                      </div>
+                  </div>
+                </div>
+            </div>
+          </div>`;
+
+    $("#save_the_date_container").append(novoInput);
+    $('.summernote').summernote();
+
+    // Chame as funções de manipuladores de eventos para o novo campo
+    handleTipoProdutoChange_SaveTheDate(count_savethedate);
+    handlePecasChange_SaveTheDate(count_savethedate);
+});
+
+$(document).on('click', '.remove-input', function() {
+    $(this).closest('.row').remove();
+});
+
+
+//------------------------------------------------------------------------------- ADICIONA DIVULGAÇÃO
+var count_divulgacao = 1;
+function handleTipoProdutoChange_Divulgacao(count) {
+    $('#tipoproduto_divulgacao' + count).change(function() {
+        var categoriaproduto_divulgacao = $("#categoriaproduto_divulgacao" + count);
+        var categoria_field_divulgacao = $("#categoria_field_divulgacao" + count);
+        var descricao_field_divulgacao = $("#descricao_field_divulgacao" + count);
+        var descricao_divulgacao = $("#descricao_divulgacao" + count);
+
+        var selectedValue = $(this).val();
+
+        if (selectedValue === "5") {
+            categoria_field_divulgacao.hide();
+            descricao_field_divulgacao.show();
+            categoriaproduto_divulgacao.val('');
+        } else {
+            descricao_divulgacao.summernote('reset');
+            var options = categorias[selectedValue] || [];
+
+            categoriaproduto_divulgacao.empty();
+
+            options.forEach(function(option) {
+                categoriaproduto_divulgacao.append($("<option>", {
+                    value: option,
+                    text: option
+                }));
+            });
+
+            categoria_field_divulgacao.show();
+            descricao_field_divulgacao.hide();
+        }
+    });
+}
+
+function handlePecasChange_Divulgacao(count) {
+    $('#pecas_divulgacao' + count).change(function() {
+        var campoArte = $("#exemploarte_divulgacao" + count);
+        var selectedValue = $(this).val();
+        var show_exemple_arte_divulgacao = $("#show_exemple_arte_divulgacao" + count);
+        var show_exemple_arte_divulgacao_space = $("#show_exemple_arte_divulgacao_space" + count);
+
+        if (selectedValue === "arte_existente") {
+            show_exemple_arte_divulgacao.show();
+            show_exemple_arte_divulgacao_space.show();
+
+        } else {
+            show_exemple_arte_divulgacao.hide();
+            show_exemple_arte_divulgacao_space.hide();
+        }
+    });
+}
+
+$('#add_divulgacao').click(function() {
+  console.log('teste')
+    count_divulgacao++;
+    // var novoInput = '<div class="row"><div class="col-12 col-sm-12 col-md-3">  <div class="form-group"><label>Data:</label> <div class="input-group"> <div class="input-group-prepend"> <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span> </div> <input type="date"  class="form-control" name="data_programacao'+count_programacao+'">  </div>  <!-- /.input group -->  </div></div>    <div class="col-12 col-sm-12 col-md-3">  <div class="form-group">  <label>Hora:</label> <div class="input-group"> <div class="input-group-prepend"> <span class="input-group-text"><i style="color: #000000" class="fa fa-clock"></i></span> </div> <input type="time"  class="form-control" name="hora_programacao'+count_programacao+'">  </div>  <!-- /.input group -->  </div></div>    <div class="col-12 col-sm-12 col-md-5">  <div class="form-group">  <label>Atividade:</label> <div class="input-group"> <div class="input-group-prepend"> <span class="input-group-text"><i style="color: #000000" class="fa fa-sticky-note"></i></span> </div> <input type="text"  class="form-control" name="atividade_programacao'+count_programacao+'">  </div>   <!-- /.input group -->  </div></div>    <div class="col-12 col-sm-12 col-md-1" >  <div class="form-group" >  <label> </label> <div class="input-group">    <div class="input-group" style="float: right;"> <button style="border: 2px solid #7c0000; background-color: #ef0000; color: #ffffff;" type="button" class="btn btn-block remove-input"><i class="fa fa-trash" aria-hidden="true"></i></button>    </div>  </div>   <!-- /.input group -->  </div></div>  </div>';
+    var novoInput = `
+        <div class="row">
+            <div class="card" style="width: 100%;">
+                <div class="card-header" style="background-color: #fafafa;">
+                  <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i>  Novo Entregável - Divulgação</h3>
+                  <div class="col-12 col-sm-12 col-md-1" style="float: right;">
+                      <small>
+                        <a style="float: right; font-size: 10px;" class="btn bg-danger remove-input">
+                        <i class="fas fa-trash"></i> <B>REMOVER</B>
+                        </a>
+                        <!-- <button style="border: 2px solid #00055a; background-color: #0C504B; color: #ffffff; width: 25%; float: right; border-radius: 50%;" type="button" id="remove-input" class="btn-xs btn-block remove-input">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button> -->
+                      </small>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                      <div class="col-12 col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label>Estilo de Criação</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                              </div>
+                              <select required  class="form-control" id="pecas_divulgacao`+ count_divulgacao +`" name="pecas_divulgacao`+ count_divulgacao +`">
+                                  <option value="nova_criacao">Nova Identidade Visual</option>
+                                  <option value="arte_existente">Utilizar Arte Existente</option>
+                              </select>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label>Prazo:</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+                              </div>
+                              <input required type="date" id="prazo_divulgacao`+ count_divulgacao +`"   class="form-control" name="prazo_divulgacao`+ count_divulgacao +`">
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_divulgacao_space`+ count_divulgacao +`" style="display: none;">
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_divulgacao`+ count_divulgacao +`" style="display: none;">
+                        <div class="form-group">
+                            <label>Exemplo de Arte:</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                              </div>
+                              <input type="file" name="exemploarte_divulgacao`+ count_divulgacao +`" id="exemploarte_divulgacao`+ count_divulgacao +`" class="form-control" >
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label>Categoria do Produto:</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                              </div>
+                              <select required  class="form-control" id="tipoproduto_divulgacao`+ count_divulgacao +`" name="tipoproduto_divulgacao`+ count_divulgacao +`">
+                                  <option value="">Selecione o Tipo</option>
+                                  <option value="1">Digital</option>
+                                  <option value="2">Impresso</option>
+                                  <option value="3">Audiovisual</option>
+                                  <option value="4">Cobertura de Evento</option>
+                                  <option value="5">Produção de Audiovisual (Orçamentos e Execuções)</option>
+                              </select>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6" id="categoria_field_divulgacao`+ count_divulgacao +`">
+                        <div class="form-group">
+                            <label>Tipo do Produto:</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                              </div>
+                              <select class="form-control" id="categoriaproduto_divulgacao`+ count_divulgacao +`" name="categoriaproduto_divulgacao`+ count_divulgacao +`">
+                                  <option value=""></option>
+                              </select>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-12" id="descricao_field_divulgacao`+ count_divulgacao +`" style="display: none;">
+                        <div class="col-md-12">
+                            <div class="card card-dark card-outline">
+                              <div class="card-header">
+                                  <h3 class="card-title">Descrição Produção de Audiovisual (Orçamentos e Execuções)</h3>
+                              </div>
+                              <!-- /.card-header -->
+                              <div class="card-body">
+                                  <div class="form-group">
+                                    <textarea name="descricao_divulgacao`+ count_divulgacao +`" class="form-control summernote" style="height: 300px">
+                                    </textarea>
+                                  </div>
+                              </div>
+                              <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-12" id="observacao_field_divulgacao`+ count_divulgacao +`">
+                        <div class="col-md-12">
+                            <div class="card card-dark card-outline">
+                              <div class="card-header">
+                                  <h3 class="card-title">Observações</h3>
+                              </div>
+                              <!-- /.card-header -->
+                              <div class="card-body">
+                                  <div class="form-group">
+                                    <textarea name="obs_divulgacao`+ count_divulgacao +`" class="form-control summernote" style="height: 300px">
+                                    </textarea>
+                                  </div>
+                              </div>
+                              <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                      </div>
+                  </div>
+                </div>
+            </div>
+          </div>`
+    
+      $("#divulgacao_check_container").append(novoInput);
+      
+      $('.summernote').summernote();
+    
+      handleTipoProdutoChange_Divulgacao(count_divulgacao);
+      handlePecasChange_Divulgacao(count_divulgacao);
+
+    
+});
+
+$(document).on('click', '.remove-input', function() {
+  $(this).closest('.row').remove();
+});
+
+
+//------------------------------------------------------------------------------- ADICIONA PROGRAMAÇÃO
+var count_programacao = 1;
+function handleTipoProdutoChange_Programacao(count) {
+    $('#tipoproduto_programacao' + count).change(function() {
+        var categoriaproduto_programacao = $("#categoriaproduto_programacao" + count);
+        var categoria_field_programacao = $("#categoria_field_programacao" + count);
+        var descricao_field_programacao = $("#descricao_field_programacao" + count);
+        var descricao_programacao = $("#descricao_programacao" + count);
+
+        var selectedValue = $(this).val();
+
+        if (selectedValue === "5") {
+            categoria_field_programacao.hide();
+            descricao_field_programacao.show();
+            categoriaproduto_programacao.val('');
+        } else {
+            descricao_programacao.summernote('reset');
+            var options = categorias[selectedValue] || [];
+
+            categoriaproduto_programacao.empty();
+
+            options.forEach(function(option) {
+                categoriaproduto_programacao.append($("<option>", {
+                    value: option,
+                    text: option
+                }));
+            });
+
+            categoria_field_programacao.show();
+            descricao_field_programacao.hide();
+        }
+    });
+}
+
+function handlePecasChange_Programacao(count) {
+    $('#pecas_programacao' + count).change(function() {
+        var campoArte = $("#exemploarte_programacao" + count);
+        var selectedValue = $(this).val();
+        var show_exemple_arte_programacao = $("#show_exemple_arte_programacao" + count);
+        var show_exemple_arte_programacao_space = $("#show_exemple_arte_programacao_space" + count);
+
+        if (selectedValue === "arte_existente") {
+            show_exemple_arte_programacao.show();
+            show_exemple_arte_programacao_space.show();
+
+        } else {
+            show_exemple_arte_programacao.hide();
+            show_exemple_arte_programacao_space.hide();
+        }
+    });
+}
+
+$('#add_programacao_entregavel').click(function() {
+  console.log('teste')
+    count_programacao++;
+    // var novoInput = '<div class="row"><div class="col-12 col-sm-12 col-md-3">  <div class="form-group"><label>Data:</label> <div class="input-group"> <div class="input-group-prepend"> <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span> </div> <input type="date"  class="form-control" name="data_programacao'+count_programacao+'">  </div>  <!-- /.input group -->  </div></div>    <div class="col-12 col-sm-12 col-md-3">  <div class="form-group">  <label>Hora:</label> <div class="input-group"> <div class="input-group-prepend"> <span class="input-group-text"><i style="color: #000000" class="fa fa-clock"></i></span> </div> <input type="time"  class="form-control" name="hora_programacao'+count_programacao+'">  </div>  <!-- /.input group -->  </div></div>    <div class="col-12 col-sm-12 col-md-5">  <div class="form-group">  <label>Atividade:</label> <div class="input-group"> <div class="input-group-prepend"> <span class="input-group-text"><i style="color: #000000" class="fa fa-sticky-note"></i></span> </div> <input type="text"  class="form-control" name="atividade_programacao'+count_programacao+'">  </div>   <!-- /.input group -->  </div></div>    <div class="col-12 col-sm-12 col-md-1" >  <div class="form-group" >  <label> </label> <div class="input-group">    <div class="input-group" style="float: right;"> <button style="border: 2px solid #7c0000; background-color: #ef0000; color: #ffffff;" type="button" class="btn btn-block remove-input"><i class="fa fa-trash" aria-hidden="true"></i></button>    </div>  </div>   <!-- /.input group -->  </div></div>  </div>';
+    var novoInput = `
+        <div class="row">
+            <div class="card" style="width: 100%;">
+                <div class="card-header" style="background-color: #fafafa;">
+                  <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i>  Novo Entregável - Programação</h3>
+                  <div class="col-12 col-sm-12 col-md-1" style="float: right;">
+                      <small>
+                        <a style="float: right; font-size: 10px;" class="btn bg-danger remove-input">
+                        <i class="fas fa-trash"></i> <B>REMOVER</B>
+                        </a>
+                        <!-- <button style="border: 2px solid #00055a; background-color: #0C504B; color: #ffffff; width: 25%; float: right; border-radius: 50%;" type="button" id="remove-input" class="btn-xs btn-block remove-input">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button> -->
+                      </small>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                      <div class="col-12 col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label>Estilo de Criação</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                              </div>
+                              <select required class="form-control" id="pecas_programacao`+ count_programacao +`" name="pecas_programacao`+ count_programacao +`">
+                                  <option value="nova_criacao">Nova Identidade Visual</option>
+                                  <option value="arte_existente">Utilizar Arte Existente</option>
+                              </select>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label>Prazo:</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+                              </div>
+                              <input required type="date" id="prazo_programacao`+ count_programacao +`"   class="form-control" name="prazo_programacao`+ count_programacao +`">
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_programacao_space`+ count_programacao +`" style="display: none;">
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_programacao`+ count_programacao +`" style="display: none;">
+                        <div class="form-group">
+                            <label>Exemplo de Arte:</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                              </div>
+                              <input type="file" name="exemploarte_programacao`+ count_programacao +`" id="exemploarte_programacao`+ count_programacao +`" class="form-control" >
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label>Categoria do Produto:</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                              </div>
+                              <select class="form-control" id="tipoproduto_programacao`+ count_programacao +`" name="tipoproduto_programacao`+ count_programacao +`">
+                                  <option value="">Selecione o Tipo</option>
+                                  <option value="1">Digital</option>
+                                  <option value="2">Impresso</option>
+                                  <option value="3">Audiovisual</option>
+                                  <option value="4">Cobertura de Evento</option>
+                                  <option value="5">Produção de Audiovisual (Orçamentos e Execuções)</option>
+                              </select>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6" id="categoria_field_programacao`+ count_programacao +`">
+                        <div class="form-group">
+                            <label>Tipo do Produto:</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                              </div>
+                              <select  class="form-control" id="categoriaproduto_programacao`+ count_programacao +`" name="categoriaproduto_programacao`+ count_programacao +`">
+                                  <option value=""></option>
+                              </select>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-12" id="descricao_field_programacao`+ count_programacao +`" style="display: none;">
+                        <div class="col-md-12">
+                            <div class="card card-dark card-outline">
+                              <div class="card-header">
+                                  <h3 class="card-title">Descrição Produção de Audiovisual (Orçamentos e Execuções)</h3>
+                              </div>
+                              <!-- /.card-header -->
+                              <div class="card-body">
+                                  <div class="form-group">
+                                    <textarea name="descricao_programacao`+ count_programacao +`" class="form-control summernote" style="height: 300px">
+                                    </textarea>
+                                  </div>
+                              </div>
+                              <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-12" id="observacao_field_programacao`+ count_programacao +`">
+                        <div class="col-md-12">
+                            <div class="card card-dark card-outline">
+                              <div class="card-header">
+                                  <h3 class="card-title">Observações</h3>
+                              </div>
+                              <!-- /.card-header -->
+                              <div class="card-body">
+                                  <div class="form-group">
+                                    <textarea name="obs_programacao`+ count_programacao +`" class="form-control summernote" style="height: 300px">
+                                    </textarea>
+                                  </div>
+                              </div>
+                              <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                      </div>
+                  </div>
+                </div>
+            </div>
+          </div>`
+    
+      $("#programacao_check_container").append(novoInput);
+      
+      $('.summernote').summernote();
+
+      handleTipoProdutoChange_Programacao(count_programacao);
+      handlePecasChange_Programacao(count_programacao);
+
+    
+});
+
+$(document).on('click', '.remove-input', function() {
+  $(this).closest('.row').remove();
+});
+
+//------------------------------------------------------------------------------- ADICIONA STAND
+var count_stand = 1;
+function handleTipoProdutoChange_Stand(count) {
+    $('#tipoproduto_stand' + count).change(function() {
+        var categoriaproduto_stand = $("#categoriaproduto_stand" + count);
+        var categoria_field_stand = $("#categoria_field_stand" + count);
+        var descricao_field_stand = $("#descricao_field_stand" + count);
+        var descricao_stand = $("#descricao_stand" + count);
+
+        var selectedValue = $(this).val();
+
+        if (selectedValue === "5") {
+            categoria_field_stand.hide();
+            descricao_field_stand.show();
+            categoriaproduto_stand.val('');
+        } else {
+            descricao_stand.summernote('reset');
+            var options = categorias[selectedValue] || [];
+
+            categoriaproduto_stand.empty();
+
+            options.forEach(function(option) {
+                categoriaproduto_stand.append($("<option>", {
+                    value: option,
+                    text: option
+                }));
+            });
+
+            categoria_field_stand.show();
+            descricao_field_stand.hide();
+        }
+    });
+}
+
+function handlePecasChange_Stand(count) {
+    $('#pecas_stand' + count).change(function() {
+        var campoArte = $("#exemploarte_stand" + count);
+        var selectedValue = $(this).val();
+        var show_exemple_arte_stand = $("#show_exemple_arte_stand" + count);
+        var show_exemple_arte_stand_space = $("#show_exemple_arte_stand_space" + count);
+
+        if (selectedValue === "arte_existente") {
+            show_exemple_arte_stand.show();
+            show_exemple_arte_stand_space.show();
+
+        } else {
+            show_exemple_arte_stand.hide();
+            show_exemple_arte_stand_space.hide();
+        }
+    });
+}
+
+$('#add_stand').click(function() {
+  console.log('teste')
+    count_stand++;
+    // var novoInput = '<div class="row"><div class="col-12 col-sm-12 col-md-3">  <div class="form-group"><label>Data:</label> <div class="input-group"> <div class="input-group-prepend"> <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span> </div> <input type="date"  class="form-control" name="data_programacao'+count_programacao+'">  </div>  <!-- /.input group -->  </div></div>    <div class="col-12 col-sm-12 col-md-3">  <div class="form-group">  <label>Hora:</label> <div class="input-group"> <div class="input-group-prepend"> <span class="input-group-text"><i style="color: #000000" class="fa fa-clock"></i></span> </div> <input type="time"  class="form-control" name="hora_programacao'+count_programacao+'">  </div>  <!-- /.input group -->  </div></div>    <div class="col-12 col-sm-12 col-md-5">  <div class="form-group">  <label>Atividade:</label> <div class="input-group"> <div class="input-group-prepend"> <span class="input-group-text"><i style="color: #000000" class="fa fa-sticky-note"></i></span> </div> <input type="text"  class="form-control" name="atividade_programacao'+count_programacao+'">  </div>   <!-- /.input group -->  </div></div>    <div class="col-12 col-sm-12 col-md-1" >  <div class="form-group" >  <label> </label> <div class="input-group">    <div class="input-group" style="float: right;"> <button style="border: 2px solid #7c0000; background-color: #ef0000; color: #ffffff;" type="button" class="btn btn-block remove-input"><i class="fa fa-trash" aria-hidden="true"></i></button>    </div>  </div>   <!-- /.input group -->  </div></div>  </div>';
+    var novoInput = `
+        <div class="row">
+            <div class="card" style="width: 100%;">
+                <div class="card-header" style="background-color: #fafafa;">
+                  <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i>  Novo Entregável - Stand</h3>
+                  <div class="col-12 col-sm-12 col-md-1" style="float: right;">
+                      <small>
+                        <a  id="add_stand`+count_stand+`"  style="float: right; font-size: 10px;" class="btn bg-danger remove-input">
+                        <i class="fas fa-trash"></i> <B>REMOVER</B>
+                        </a>
+                        <!-- <button style="border: 2px solid #00055a; background-color: #0C504B; color: #ffffff; width: 25%; float: right; border-radius: 50%;" type="button" id="remove-input" class="btn-xs btn-block remove-input">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button> -->
+                      </small>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                      <div class="col-12 col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label>Estilo de Criação</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                              </div>
+                              <select required class="form-control" id="pecas_stand`+ count_stand +`" name="pecas_stand`+ count_stand +`">
+                                  <option value="nova_criacao">Nova Identidade Visual</option>
+                                  <option value="arte_existente">Utilizar Arte Existente</option>
+                              </select>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label>Prazo:</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+                              </div>
+                              <input required type="date" id="prazo_stand`+ count_stand +`"   class="form-control" name="prazo_stand`+ count_stand +`">
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_stand_space`+ count_stand +`" style="display: none;">
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_stand`+ count_stand +`" style="display: none;">
+                        <div class="form-group">
+                            <label>Exemplo de Arte:</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                              </div>
+                              <input type="file" name="exemploarte_stand`+ count_stand +`" id="exemploarte_stand`+ count_stand +`" class="form-control" >
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label>Categoria do Produto:</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                              </div>
+                              <select required class="form-control" id="tipoproduto_stand`+ count_stand +`" name="tipoproduto_stand`+ count_stand +`">
+                                  <option value="">Selecione o Tipo</option>
+                                  <option value="1">Digital</option>
+                                  <option value="2">Impresso</option>
+                                  <option value="3">Audiovisual</option>
+                                  <option value="4">Cobertura de Evento</option>
+                                  <option value="5">Produção de Audiovisual (Orçamentos e Execuções)</option>
+                              </select>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-6" id="categoria_field_stand`+ count_stand +`">
+                        <div class="form-group">
+                            <label>Tipo do Produto:</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                              </div>
+                              <select  class="form-control" id="categoriaproduto_stand`+ count_stand +`" name="categoriaproduto_stand`+ count_stand +`">
+                                  <option value=""></option>
+                              </select>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-12" id="descricao_field_stand`+ count_stand +`" style="display: none;">
+                        <div class="col-md-12">
+                            <div class="card card-dark card-outline">
+                              <div class="card-header">
+                                  <h3 class="card-title">Descrição Produção de Audiovisual (Orçamentos e Execuções)</h3>
+                              </div>
+                              <!-- /.card-header -->
+                              <div class="card-body">
+                                  <div class="form-group">
+                                    <textarea name="descricao_stand`+ count_stand +`" class="form-control summernote" style="height: 300px">
+                                    </textarea>
+                                  </div>
+                              </div>
+                              <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-12" id="observacao_field_stand`+ count_stand +`">
+                        <div class="col-md-12">
+                            <div class="card card-dark card-outline">
+                              <div class="card-header">
+                                  <h3 class="card-title">Observações</h3>
+                              </div>
+                              <!-- /.card-header -->
+                              <div class="card-body">
+                                  <div class="form-group">
+                                    <textarea  name="obs_stand`+ count_stand +`" class="form-control summernote" style="height: 300px">
+                                    </textarea>
+                                  </div>
+                              </div>
+                              <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                      </div>
+                  </div>
+                </div>
+            </div>
+          </div>`
+    
+      $("#stand_check_container").append(novoInput);
+      
+      $('.summernote').summernote();
+        
+      handleTipoProdutoChange_Stand(count_stand);
+      handlePecasChange_Stand(count_stand);
+    
+});
+$(document).on('click', '.remove-input', function() {
+  $(this).closest('.row').remove();
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////SAVE THE DATE
+  var tipoproduto_save_the_date = $("#tipoproduto_save_the_date");
+  var categoriaproduto_save_the_date = $("#categoriaproduto_save_the_date");
+
+  var categoria_field_save_the_date = $("#categoria_field_save_the_date");
+  var descricao_field_save_the_date = $("#descricao_field_save_the_date");
+  var descricao_save_the_date = $("#descricao_save_the_date");
+
+  var pecas_save_the_date = $("#pecas_save_the_date");
+  var show_exemple_arte_save_the_date = $("#show_exemple_arte_save_the_date");
+  var show_exemple_arte_save_the_date_space = $("#show_exemple_arte_save_the_date_space");
+      
+  pecas_save_the_date.on("change", function() {
+      var selectedValue = $(this).val();
+      var campoArte = $('#exemploarte_save_the_date')
+      if (selectedValue === "arte_existente") {
+        show_exemple_arte_save_the_date.show();
+        show_exemple_arte_save_the_date_space.show();
+        
+      } else {
+        show_exemple_arte_save_the_date.hide();
+        show_exemple_arte_save_the_date_space.hide();
+        
+      }
+  });
+  
+  tipoproduto_save_the_date.on("change", function() {
+        
+    var selectedValue = $(this).val();
+    console.log(selectedValue)
+    if (selectedValue === "5") {
+      categoria_field_save_the_date.hide();
+      descricao_field_save_the_date.show();
+
+    }else{
+      descricao_save_the_date.summernote('reset');
+      var options = categorias[selectedValue] || [];
+
+      categoriaproduto_save_the_date.empty();
+
+      options.forEach(function(option) {
+        categoriaproduto_save_the_date.append($("<option>", {
+            value: option,
+            text: option
+        }));
+      });
+      categoria_field_save_the_date.show();
+      descricao_field_save_the_date.hide();
+    }
+
+});
+  
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////DIVULGACAO
+  var tipoproduto_divulgacao = $("#tipoproduto_divulgacao");
+  var categoriaproduto_divulgacao = $("#categoriaproduto_divulgacao");
+
+  var categoria_field_divulgacao = $("#categoria_field_divulgacao");
+  var descricao_field_divulgacao = $("#descricao_field_divulgacao");
+  var descricao_divulgacao = $("#descricao_divulgacao");
+
+  var pecas_divulgacao = $("#pecas_divulgacao");
+  var show_exemple_arte_divulgacao = $("#show_exemple_arte_divulgacao");
+  var show_exemple_arte_divulgacao_space = $("#show_exemple_arte_divulgacao_space");
+      
+  pecas_divulgacao.on("change", function() {
+      var selectedValueDivulgacao = $(this).val();
+      
+      if (selectedValueDivulgacao === "arte_existente") {
+        show_exemple_arte_divulgacao.show();
+        show_exemple_arte_divulgacao_space.show();
+      } else {
+        show_exemple_arte_divulgacao.hide();
+        show_exemple_arte_divulgacao_space.hide();
+      }
+  });
+  
+  tipoproduto_divulgacao.on("change", function() {
+        
+    var selectedValue = $(this).val();
+    if (selectedValue === "5") {
+      categoria_field_divulgacao.hide();
+      descricao_field_divulgacao.show();
+
+    }else{
+      descricao_divulgacao.summernote('reset');
+      var options = categorias[selectedValue] || [];
+
+      categoriaproduto_divulgacao.empty();
+
+      options.forEach(function(option) {
+        categoriaproduto_divulgacao.append($("<option>", {
+            value: option,
+            text: option
+        }));
+      });
+      categoria_field_divulgacao.show();
+      descricao_field_divulgacao.hide();
+    }
+
+});
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////PROGRAMACAO
+  var tipoproduto_programacao = $("#tipoproduto_programacao");
+  var categoriaproduto_programacao = $("#categoriaproduto_programacao");
+
+  var categoria_field_programacao = $("#categoria_field_programacao");
+  var descricao_field_programacao = $("#descricao_field_programacao");
+  var descricao_programacao = $("#observacao_field_programacao");
+
+  var pecas_programacao = $("#pecas_programacao");
+  var show_exemple_arte_programacao = $("#show_exemple_arte_programacao");
+  var show_exemple_arte_programacao_space = $("#show_exemple_arte_programacao_space");
+      
+  pecas_programacao.on("change", function() {
+      var selectedValueprogramacao = $(this).val();
+      
+      if (selectedValueprogramacao === "arte_existente") {
+        show_exemple_arte_programacao.show();
+        show_exemple_arte_programacao_space.show();
+      } else {
+        show_exemple_arte_programacao.hide();
+        show_exemple_arte_programacao_space.hide();
+      }
+  });
+  
+  tipoproduto_programacao.on("change", function() {
+        
+    var selectedValue = $(this).val();
+    console.log(selectedValue)
+    if (selectedValue === "5") {
+      categoria_field_programacao.hide();
+      descricao_field_programacao.show();
+
+    }else{
+      descricao_programacao.summernote('reset');
+      var options = categorias[selectedValue] || [];
+
+      categoriaproduto_programacao.empty();
+
+      options.forEach(function(option) {
+        categoriaproduto_programacao.append($("<option>", {
+            value: option,
+            text: option
+        }));
+      });
+      categoria_field_programacao.show();
+      descricao_field_programacao.hide();
+    }
+
+});
+ 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////STAND
+  var tipoproduto_stand = $("#tipoproduto_stand");
+  var categoriaproduto_stand = $("#categoriaproduto_stand");
+
+  var categoria_field_stand = $("#categoria_field_stand");
+  var descricao_field_stand = $("#descricao_field_stand");
+  var descricao_stand = $("#observacao_field_stand");
+
+  var pecas_stand = $("#pecas_stand");
+  var show_exemple_arte_stand = $("#show_exemple_arte_stand");
+  var show_exemple_arte_stand_space = $("#show_exemple_arte_stand_space");
+      
+  pecas_stand.on("change", function() {
+      var selectedValuestand = $(this).val();
+      
+      if (selectedValuestand === "arte_existente") {
+        show_exemple_arte_stand.show();
+        show_exemple_arte_stand_space.show();
+      } else {
+        show_exemple_arte_stand.hide();
+        show_exemple_arte_stand_space.hide();
+      }
+  });
+  
+  tipoproduto_stand.on("change", function() {
+        
+    var selectedValue = $(this).val();
+    console.log(selectedValue)
+    if (selectedValue === "5") {
+      categoria_field_stand.hide();
+      descricao_field_stand.show();
+
+    }else{
+      descricao_stand.summernote('reset');
+      var options = categorias[selectedValue] || [];
+
+      categoriaproduto_stand.empty();
+
+      options.forEach(function(option) {
+        categoriaproduto_stand.append($("<option>", {
+            value: option,
+            text: option
+        }));
+      });
+      categoria_field_stand.show();
+      descricao_field_stand.hide();
+    }
+
+});
+ 
+
+
+  
+  ////////////////////////////////////////////////////////////////////////////////////////////////////// CHECKBOX DE EXIBIÇÕES
+  var checkbox2 = document.getElementById("customCheckbox2");
+  var descricaoInput2 = document.querySelector("div[id=programacao_adicional]");
+  var descricaoFormGroup2 = descricaoInput2.closest(".card-body");
+  checkbox2.addEventListener("change", function() {
+    var isChecked = $(this).prop('checked');
+    if (this.checked) {
+      descricaoFormGroup2.classList.remove("d-none");
+   
+    } else {
+      console.log('entrou 2')
+      descricaoFormGroup2.classList.add("d-none");
+
+      
+    }
+
+
+    });
+  
+  var save_the_date = document.getElementById("save_the_date");
+  var save_the_date_container = document.querySelector("div[id=save_the_date_container]");
+  var save_the_date_card = save_the_date_container.closest(".card-body");
+
+  save_the_date.addEventListener("change", function() {
+    if (this.checked) {
+      save_the_date_card.classList.remove("d-none");
+
+    } else {
+      console.log('entrou 2')
+      save_the_date_card.classList.add("d-none");
+      
+      
+    }
+
+
+    });
+
+  var divulgacao_check = document.getElementById("divulgacao_check");
+  var divulgacao_check_container = document.querySelector("div[id=divulgacao_check_container]");
+  var divulgacao_check_card = divulgacao_check_container.closest(".card-body");
+
+  divulgacao_check.addEventListener("change", function() {
+    var isChecked = $(this).prop('checked');
+
+    if (this.checked) {
+      divulgacao_check_card.classList.remove("d-none");
+     
+    } else {
+      divulgacao_check_card.classList.add("d-none");
+
+    }
+
+
+    });
+
+  var programacao_check = document.getElementById("programacao_check");
+  var programacao_check_container = document.querySelector("div[id=programacao_check_container]");
+  var programacao_check_card = programacao_check_container.closest(".card-body");
+
+  programacao_check.addEventListener("change", function() {
+    if (this.checked) {
+      programacao_check_card.classList.remove("d-none");
+
+    } else {
+      console.log('entrou 2')
+      programacao_check_card.classList.add("d-none");
+      
+    }
+
+
+    });
+
+  var stand_check = document.getElementById("stand_check");
+  var stand_check_container = document.querySelector("div[id=stand_check_container]");
+  var stand_check_card = stand_check_container.closest(".card-body");
+
+  stand_check.addEventListener("change", function() {
+    var isChecked = $(this).prop('checked');
+    if (this.checked) {
+      stand_check_card.classList.remove("d-none");
+     
+    } else {
+      stand_check_card.classList.add("d-none");
+      
+    }
+
+
+    });
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+  ////////////////////////////////////////////////////////////////////////////////////////////////////// DEFINE TODOS COMO HIDE
+  descricaoFormGroup2.classList.add("d-none");
+  save_the_date_card.classList.add("d-none");
+  divulgacao_check_card.classList.add("d-none");
+  programacao_check_card.classList.add("d-none");
+  stand_check_card.classList.add("d-none");
+
+});
+function realizaSolicitacao(user_id, solicitacao_id) {
+    const url = "/ajax/realiza-solicitacao";
+    var form = document.getElementById("form_eventos");
+    var formData = new FormData(form);  // Use FormData para incluir campos de arquivo
+
+    var XCSRFToken = '{{ csrf_token }}';
+    var formIsValid = true;
+
+
+
+    // Percorra todos os elementos obrigatórios do formulário
+    $("#form_eventos [required]").each(function() {
+        if (!$(this).val()) {
+            console.log($(this))
+            formIsValid = false;
+            $(this).addClass("invalid-field");
+        } else {
+
+            $(this).removeClass("invalid-field");
+        }
+    });
+
+    if (formIsValid) {
+        $.ajax({
+            url: url,
+            type: "post",
+            data: formData,  // Use formData aqui
+            processData: false,  // Não processar dados
+            contentType: false,  // Não definir tipo de conteúdo
+            headers: { "X-CSRFToken": XCSRFToken },
+            success: function (data) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Solicitação Realizada!',
+                    text: 'Sua solicitação foi realizada com sucesso!'
+                });
+                console.log('')
+                window.location.href = 'dashboard';
+            },
+            error: function (data) {
+                if (data.responseJSON && data.responseJSON.error_message) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ops!',
+                        text: data.responseJSON.error_message
+                    });
+                }  
+            }
+        });
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Ops!',
+            text: 'Por favor, preencha todos os campos obrigatórios.'
+        });
+    }
+}
+
+
+
+
+// function realizaSolicitacao(user_id,solicitacao_id){
+//     const url = "/ajax/realiza-solicitacao";
+//     var formData = $("#form_eventos").serialize();
+   
+//     var XCSRFToken = '{{ csrf_token }}'
+//     if ($("#form_eventos")[0].checkValidity()) {
+
+//       $.ajax({
+          
+//           url: url,
+//           type:"post",
+//           data: formData,
+//           headers: { "X-CSRFToken":  XCSRFToken },
+//           success: function (data) {
+//             Swal.fire({
+//                 icon: 'success',
+//                 title: 'Solicitação Realizada!',
+//                 text: 'Sua solicitação foi realizada com sucesso!'
+//               });
+//               window.location.href = 'solicitacao';   
+//           },
+//           error: function (data) {
+//             if (data.responseJSON && data.responseJSON.error_message) {
+//               Swal.fire({
+//                   icon: 'error',
+//                   title: 'Ops!',
+//                   text: data.responseJSON.error_message
+//               });
+//           }  
+//           }
+//       });
+//     }else{
+//       Swal.fire({
+//             icon: 'error',
+//             title: 'Ops!',
+//             text: 'Por favor, preencha todos os campos obrigatórios.'
+//         });
+//     }
+// }
+</script>
+        
+        
+{% endblock %}

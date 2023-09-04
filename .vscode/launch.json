@@ -6,7 +6,7 @@
             "type": "python",
             "request": "launch",
             "stopOnEntry": false,
-            "program": "${workspaceRoot}/comunicacao/src/manage.py",
+            "program": "${workspaceRoot}/src/manage.py",
             "args": [
                 "runserver",
                 "0.0.0.0:8000"

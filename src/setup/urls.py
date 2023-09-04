@@ -22,12 +22,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('login.urls')),
     path('', include('dashboard.urls')),
-    path('', include('solicitacoes.urls')),
-    path('', include('gerir_time.urls')),
-    path('', include('design.urls')),
-    path('', include('api.urls')),
     path('', include('menu.urls')),
-    path('', include('form_solicitacoes.urls')),
+    path('', include('solicitacoes.urls')),
+
 
 
     #path('', include('api.urls')),
