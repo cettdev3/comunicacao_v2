@@ -1,0 +1,85 @@
+<div class="col-12 col-sm-12 col-md-6">
+    <div class="form-group">
+    <label>Data Inicial:</label>
+    <div class="input-group">
+        <div class="input-group-prepend">
+        <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+        </div>
+        <input readonly type="date" value="{{evento.data_inicio|date:'Y-m-d'}}" id="data_inicial" required   class="form-control" name="data_inicial">
+    </div>
+    <!-- /.input group -->
+    </div>
+</div>
+
+<div class="col-12 col-sm-12 col-md-6">
+  <div class="form-group">
+  <label>Data Final:</label>
+
+  <div class="input-group">
+      <div class="input-group-prepend">
+      <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+      </div>
+      <input readonly type="date" value="{{evento.data_fim|date:'Y-m-d'}}" required id="data_final"  class="form-control" name="data_final">
+  </div>
+  <!-- /.input group -->
+  </div>
+</div>
+
+<div class="col-12 col-sm-12 col-md-12">
+  
+        <div class="card" style="width: 100%;">
+            <div class="card-header" style="background-color: #fafafa;">
+            
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-4">
+                        <h3 class="card-title" style="color:#000000; font-weight: bold;">
+                            <i class="nav-icon fa fa-info-circle"></i> Local do Evento</h3>
+                    </div>
+                
+                </div>
+            </div>
+
+            <div class="card-body" >
+                <div class="form-group">
+                    <div class="row">
+                        
+                        <div class="col-12 col-sm-12 col-md-3">
+                            <span><b>Logradouro:</b><br>{% if evento.logradouro %} {{evento.logradouro}} {% else %} Não Informado {% endif %}</span> 
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-3">
+                            <span><b>Bairro:</b><br>{% if evento.bairro %} {{evento.bairro}} {% else %} Não Informado {% endif %}</span> 
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-3">
+                            <span><b>Complemento:</b><br>{% if evento.complemento %} {{evento.complemento}} {% else %} Não Informado {% endif %}</span> 
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-3">
+                            <span><b>Cidade:</b><br>{% if evento.cidade.nome %} {{evento.cidade.nome}} {% else %} Não Informado {% endif %}</span> 
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12" style="margin-top: 20px;">
+                           <div style="width: 100%; text-align: center; background-color: #FAFAFA; padding: 10px;"><b>Unidades Relacionadas</b></div>
+                        </div>
+
+                        {% for unidade in evento.escolas %}
+                        <div class="col-12 col-sm-12 col-md-2">
+                       
+                            <a class="badge badge-warning" style="width: 100%; margin-top: 10px;">
+                                 <b>{{unidade.nome}}</b>
+                              </a>
+      
+                           
+                        </div>
+                        {% endfor %}
+                
+                    </div>
+
+                    
+                <input style="display: none;" name="eventos_json" id="eventos_json" value="{{evento}}">
+                </div>
+            
+            </div>
+
+        </div>
+</div>
+
+
+
