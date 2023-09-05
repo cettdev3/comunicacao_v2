@@ -25,9 +25,13 @@ class Solicitacoes(models.Model):
         if total_entregaveis  > 0 and self.status != 4:
             self.status = 2
             self.save()
-        else:
+        elif total_entregaveis == 0 and self.status == 2:
             self.status = 3
             self.save()
+        else:
+            self.status = 1
+            self.save()
+
     
         return  self.status
     
@@ -68,7 +72,7 @@ class Solicitacoes(models.Model):
 class Entregaveis(models.Model):
     choices_tipo = [('1','SAVE THE DATE'),('2','DIVULGAÇÃO'),('3','PROGRAMAÇÃO'),('4','STAND')]
     choices_tipo_produto = [('1','DIGITAL'),('2','IMPRESSO'),('3','AUDIOVISUAL'),('4','COBERTURA DE EVENTO'),('5','PRODUÇÃO DE ÁUDIO VISUAL (ORÇAMENTOS E EXECUÇÕES)')]
-    choices_status = [('0','AGUARDANDO ENTREGAS'),('1','EM APROVAÇÃO'),('2','APROVADO PELO CLIENTE')]
+    choices_status = [('0','AGUARDANDO ENTREGAS'),('1','EM APROVAÇÃO'),('2','APROVADO PELO CLIENTE'),('3','DEVOLVIDA')]
     id = models.AutoField(primary_key=True)
     evento = models.ForeignKey(Solicitacoes,on_delete=models.CASCADE)
     prazo = models.DateField()

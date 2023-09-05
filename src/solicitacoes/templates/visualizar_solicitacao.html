@@ -189,36 +189,36 @@
               <div class="row">
                 <div class="col-lg-4 col-12">
 
-                    <div class="small-box" style="background-color: #ffffff; color: #17A2B8">
+                    <div class="small-box" style="background-color: #ffffff; color: #000000">
                       <div class="inner" style="text-align: center;">
                         <h4>{{ solicitacao.get_projeto_display }}</h4>
                       </div>
                    
-                      <div style="background-color: #17A2B8;color: #FFF; cursor: pointer;" class="small-box-footer">PROJETO</div>
+                      <div style="background-color: #000000;color: #FFF; cursor: pointer;" class="small-box-footer">PROJETO</div>
                     </div>
                  
                   </div>
             
                   <div class="col-lg-4 col-12">
             
-                    <div class="small-box" style="background-color: #ffffff; color: #17A2B8">
+                    <div class="small-box" style="background-color: #ffffff; color: #000000">
                       <div class="inner" style="text-align: center;">
                         <h4>{{ solicitacao.data_solicitacao|date:'d/m/Y' }}</h4>
                       </div>
                    
-                      <div style="background-color: #17A2B8;color: #FFF;" class="small-box-footer">DATA DA SOLICITAÇÃO</div>
+                      <div style="background-color: #000000;color: #FFF;" class="small-box-footer">DATA DA SOLICITAÇÃO</div>
                     </div>
                  
                   </div>
             
                   <div class="col-lg-4 col-12">
             
-                    <div class="small-box" style="background-color: #ffffff; color: #17A2B8">
+                    <div class="small-box" style="background-color: #ffffff; color: #000000">
                       <div class="inner" style="text-align: center;">
                         <h4>{{ solicitacao.criado_por.first_name }}</h4>
                       </div>
                    
-                      <div style="background-color: #17A2B8;color: #FFF;" class="small-box-footer">SOLICITANTE</div>
+                      <div style="background-color: #000000;color: #FFF;" class="small-box-footer">SOLICITANTE</div>
                     </div>
                  
                   </div>
@@ -389,7 +389,7 @@
                                   {% for entregavel in entregaveis %}
                                     <div class="col-12 col-sm-12 col-md-12">
                                         <div id="accordion">
-                                            <div {% if entregavel.status == "0" %} class="card card-warning" {% elif entregavel.status == "1" %} class="card card-danger" {% else %} class="card card-success" {% endif %}>
+                                            <div {% if entregavel.status == "0" %} class="card card-warning" {% elif entregavel.status == "1" %} class="card card-dark" {% elif entregavel.status == "3" %} class="card card-danger" {% else %} class="card card-success" {% endif %}>
                                                 <div class="card-header">
                                                     <h4 class="card-title w-100">
                                                         <a style=" font-size: 20px;" class="d-block w-100" data-toggle="collapse" href="#collapse{{ forloop.counter }}" aria-expanded="true">
@@ -410,17 +410,33 @@
                                                     <div class="card-body">
 
                                                       <div class="row" style="margin-bottom: 3%;">
-                                                        <div class="col-lg-2 col-12">
-                                                            <button type="button" class="btn btn-block btn-success"><i class="bi bi-check2-circle"></i> Aprovado pelo Cliente</button>
+
+                                                        {% if entregavel.status == '1' %}
+                                                        <div class="col-lg-3 col-12">
+                                                            <button type="button" class="btn btn-block btn-dark"><i class="bi bi-check2-circle"></i> Aprovado pelo Cliente</button>
                                                         </div>
-                                                        <div class="col-lg-2 col-12">
-                                                            <button type="button" class="btn btn-block btn-dark"><i class="bi bi-search"></i> Solicitar Revisão</button>
-                                                        </div>
-                                                        <div class="col-lg-2 col-12">
+                                                       {% endif %}
+
+                                                       {% if entregavel.tarefas_relacionadas %}
+                                                       <div class="col-lg-3 col-12">
                                                             <button type="button" class="btn btn-block btn-dark"><i class="bi bi-eye-fill"></i> Visualizar Demanda</button>
                                                         </div>
-                                                      </div>
+                                                        {% endif %}
 
+                                                        {% if not entregavel.tarefas_relacionadas %}
+                                                        <div class="col-lg-3 col-12">
+                                                            <button type="button" class="btn btn-block btn-dark"><i class="bi bi-arrow-counterclockwise"></i> Devolver Entregável</button>
+                                                        </div>
+                                                        {% endif %}
+                                                       
+                                                       
+                                                        <div class="col-lg-3 col-12">
+                                                            <button onclick="modalTarefas('{{entregavel.id}}','{{ forloop.counter }}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-people-fill"></i> Designar Usuário</button>
+                                                        </div>
+                                            
+                                                      </div>
+                                                   
+                                                  
 
                                                         <div class="row">
                                                         <div class="col-lg-2 col-12">
@@ -502,17 +518,7 @@
                                                           </div>
                                                         </div>
                     
-                                                        <div class="col-lg-2 col-12">
-                                                          <div class="form-group">
-                                                              
-                                                              <div class="input-group">
-                                                                <button onclick="modalTarefas('{{entregavel.id}}','{{ forloop.counter }}')" type="button" class="btn btn-block bg-gradient-dark"><b> <i class="fas fa-user"></i> Designar Usuário</b></button>
-                                                                
-                                                            
-                                                              </div>
-                                                              <!-- /.input group -->
-                                                          </div>
-                                                        </div>
+                                                     
                     
                                                        
                                                         {% if entregavel.descricao_audio_visual %}
@@ -584,7 +590,8 @@
                                                           </div>
                                                         </div>
                                                         {% endif %}
-                    
+                                                        
+                                                        {% if entregavel.tarefas_relacionadas %}
                                                         <div class="col-12 col-sm-12 col-md-12">
                                                           <div class="card" style="width: 100%;">
                                                               <div class="card-header" style="background-color: #fafafa;">
@@ -599,6 +606,7 @@
                                                                     <tr>
                                                                       <th>#</th>
                                                                       <th>Data da Solicitação</th>
+                                                                      <th>Título</th>
                                                                       <th>Prazo de Entrega</th>
                                                                       <th>Data da Entrega</th>
                                                                       <th>Usuário Designado</th>
@@ -617,6 +625,7 @@
                                           
                                                                        <td>#{{tarefa.id}}</td>
                                                                        <td>{{tarefa.data_tarefa|date:'d/m/Y'}}</td>
+                                                                       <td>{{tarefa.titulo_tarefa}}</td>
                                                                        <td>{{tarefa.prazo_entrega|date:'d/m/Y'}}</td>
                                                                        <td>{% if tarefa.data_entrega %} {{tarefa.data_entrega|date:'d/m/Y'}} {%else%} Aguardando Entrega {% endif %}</td>
                                                                        <td>{{tarefa.usuario.first_name}}</td>
@@ -645,6 +654,7 @@
                                                               </div>
                                                           </div>
                                                         </div>
+                                                        {% endif %}
                                                       </div>
                                                     </div>
                                                 </div>
@@ -753,7 +763,7 @@
           
             <input type="text" value="" id="tituloTarefa_edit"  class="form-control" name="tituloTarefa">
             <input style="display: none;" type="text" value="" id="id_entregavel"  class="form-control" name="id_entregavel">
-            <input style="display: block;" type="text" value="" id="num_tbl"  class="form-control" name="num_tbl">
+            <input style="display: none;" type="text" value="" id="num_tbl"  class="form-control" name="num_tbl">
         </div>
         <!-- /.input group -->
         </div>
@@ -896,6 +906,11 @@
     function modalTarefas(entregavelId,counter_loop){
         document.getElementById('id_entregavel').value = entregavelId
         document.getElementById('num_tbl').value = counter_loop
+
+        url = '/ajax/get-task-ocupad'
+
+        
+
         $("#modalEditTask").modal("show")
     }
 </script>
