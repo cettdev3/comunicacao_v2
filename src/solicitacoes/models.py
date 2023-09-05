@@ -15,11 +15,29 @@ class Solicitacoes(models.Model):
     publico_evento = models.TextField()
     criado_por = models.ForeignKey(User,on_delete=models.CASCADE)
     data_solicitacao = models.DateField(default=timezone.now)
-    status = models.IntegerField(choices=choices_status, blank=False, null=False)
+    status = models.IntegerField(choices=choices_status, blank=False, null=False,default=1)
+
+
+    
+    @property
+    def status_solicitacao(self):
+        total_entregaveis = self.entregaveis_set.exclude(status=2).count()
+        if total_entregaveis  > 0 and self.status != 4:
+            self.status = 2
+            self.save()
+        else:
+            self.status = 3
+            self.save()
+    
+        return  self.status
+    
 
     def get_status_display(self):
+        self.status_solicitacao()
         return dict(self.choices_status)[str(self.status)]
     
+   
+
     @property
     def entregaveis_totais(self):
         total_entregaveis = self.entregaveis_set.count()
@@ -27,12 +45,12 @@ class Solicitacoes(models.Model):
 
     @property
     def entregaveis_concluidos(self):
-        entregaveis_concluidos = self.entregaveis_set.filter(status=1).count()
+        entregaveis_concluidos = self.entregaveis_set.filter(status=2).count()
         return entregaveis_concluidos
 
     @property
     def entregaveis_pendentes(self):
-        entregaveis_pendentes = self.entregaveis_set.exclude(status=1).count()
+        entregaveis_pendentes = self.entregaveis_set.exclude(status=2).count()
         return entregaveis_pendentes
 
 
@@ -42,6 +60,7 @@ class Solicitacoes(models.Model):
     def get_status_display(self):
         return dict(self.choices_status)[str(self.status)]
     
+
     
     class  Meta:
         db_table = 'solicitacoes'
@@ -49,8 +68,7 @@ class Solicitacoes(models.Model):
 class Entregaveis(models.Model):
     choices_tipo = [('1','SAVE THE DATE'),('2','DIVULGAÇÃO'),('3','PROGRAMAÇÃO'),('4','STAND')]
     choices_tipo_produto = [('1','DIGITAL'),('2','IMPRESSO'),('3','AUDIOVISUAL'),('4','COBERTURA DE EVENTO'),('5','PRODUÇÃO DE ÁUDIO VISUAL (ORÇAMENTOS E EXECUÇÕES)')]
-    choices_status = [('0','AGUARDANDO ENTREGAS'),('1','EM APROVAÇÃO'),('2','EM REVISÃO'),('3','APROVADO PELO CLIENTE')]
-
+    choices_status = [('0','AGUARDANDO ENTREGAS'),('1','EM APROVAÇÃO'),('2','APROVADO PELO CLIENTE')]
     id = models.AutoField(primary_key=True)
     evento = models.ForeignKey(Solicitacoes,on_delete=models.CASCADE)
     prazo = models.DateField()
@@ -65,6 +83,16 @@ class Entregaveis(models.Model):
     motivo_revisao = models.TextField(default='')
     status = models.IntegerField(choices=choices_status, blank=False, null=False,default=0)
 
+    @property
+    def status_entregaveis(self):
+        total_tarefas = self.tarefas_set.exclude(status=2).count()
+        if total_tarefas  > 0:
+            self.status = 0
+            self.save()
+        elif total_tarefas == 0 and self.status == 0:
+            self.status = 1
+            self.save()
+
     def get_status_display(self):
         return dict(self.choices_status)[str(self.status)]
 
@@ -74,7 +102,7 @@ class Entregaveis(models.Model):
     def get_tipoproduto_display(self):
         return dict(self.choices_tipo_produto)[str(self.tipo_produto)]
     
-
+   
     
     class  Meta:
         db_table = 'entregaveis'
@@ -89,3 +117,27 @@ class Programacao_Adicional(models.Model):
 
     class  Meta:
         db_table = 'programacao_adicional'
+
+class Tarefas(models.Model):
+    choices_status = [('0','AGUARDANDO ENTREGAS'),('1','EM REVISÃO'),('2','ENTREGUE')]
+    choices_prioridade = [('1','NORMAL'),('2','PRIORIDADE')]
+    id = models.AutoField(primary_key=True)
+    entregavel = models.ForeignKey(Entregaveis,models.CASCADE)
+    titulo_tarefa = models.TextField()
+    data_tarefa = models.DateField(default=timezone.now)
+    prazo_entrega = models.DateField()
+    data_entrega = models.DateField(null=True,blank=True)
+    descricao_tarefa = models.TextField()
+    descricao_entrega = models.TextField()
+    usuario = models.ForeignKey(User,models.CASCADE)
+    usuario_designou = models.ForeignKey(User,models.CASCADE,related_name='usuario_designou')
+    prioridade = models.IntegerField(choices=choices_prioridade, blank=False, null=False,default=0)
+    status = models.IntegerField(choices=choices_status,blank=False, null=False,default='0')
+
+    def get_prioridade_display(self):
+        return dict(self.choices_prioridade)[str(self.prioridade)]
+    
+    def get_status_display(self):
+        return dict(self.choices_status)[str(self.status)]
+    class  Meta:
+        db_table = 'tarefas'

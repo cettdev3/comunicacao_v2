@@ -11,8 +11,10 @@ from django.utils.html import linebreaks
 from datetime import datetime
 from .utils import get_token_api_eventos,get_all_eventos,get_evento
 import datetime
-from .models import Entregaveis,Solicitacoes,Programacao_Adicional
-from .serializers import Solicitacao_Serializar
+from .models import Entregaveis,Solicitacoes,Programacao_Adicional,Tarefas
+from .serializers import Solicitacao_Serializar,Tarefas_Serializar,Entregaveis_Serializar
+from django.contrib.auth.models import User
+
 @login_required(login_url='/')
 def Form_Solicitacoes(request):
 
@@ -27,8 +29,21 @@ def Visualizar_Solicitacao(request,codigo):
     solicitacao['data_solicitacao'] = datetime.datetime.strptime(solicitacao['data_solicitacao'], '%Y-%m-%d').date()
     
     programacao_adicional = Programacao_Adicional.objects.filter(solicitacao_id=codigo).all()
+
+
     entregaveis = Entregaveis.objects.filter(evento_id=codigo).all()
-    context = {'solicitacao':solicitacao,'entregaveis':entregaveis,'programacao_adicional':programacao_adicional}
+    entregaveis = Entregaveis_Serializar(entregaveis,many=True).data
+    tarefas_por_entregavel = {}
+
+    for entregavel in entregaveis:
+        entregavel['prazo'] = datetime.datetime.strptime(entregavel['prazo'], '%Y-%m-%d').date()
+        entregavel['data_solicitacao'] = datetime.datetime.strptime(entregavel['data_solicitacao'], '%Y-%m-%d').date()
+        tarefas_relacionadas = Tarefas.objects.filter(entregavel_id=entregavel['id']).all()
+
+        entregavel['tarefas_relacionadas'] = tarefas_relacionadas
+
+    usuarios = User.objects.all()
+    context = {'solicitacao':solicitacao,'entregaveis':entregaveis,'programacao_adicional':programacao_adicional,'usuarios':usuarios,'tarefas_por_entregavel': tarefas_por_entregavel}
     return render(request,'visualizar_solicitacao.html',context)
 
 @login_required(login_url='/')
@@ -162,10 +177,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 criado_por_id = userid
 
                                 )
-                            if eventos_entregaveis:
-                                evento = Solicitacoes.objects.get(pk=solicitacao.id)
-                                evento.status = 1
-                                evento.save()
+     
                             
                         else:
                             index = dado[-1]
@@ -209,11 +221,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 criado_por_id = userid
                                 )
                             
-                            if eventos_entregaveis:
-                                evento = Solicitacoes.objects.get(pk=solicitacao.id)
-                                evento.status = 1
-                                evento.save()
-
+ 
             #VERIFICA DIVULGAÇÃO
             indice = 0
             if divulgacao_check:
@@ -258,10 +266,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 observacao = obs_divulgacao,
                                 criado_por_id = userid
                                 )
-                            if eventos_entregaveis:
-                                evento = Solicitacoes.objects.get(pk=solicitacao.id)
-                                evento.status = 1
-                                evento.save()
+             
                         else:
                             index = dado[-1]
                             prazo_divulgacao = request.POST.get('prazo_divulgacao'+str(index),None)
@@ -302,11 +307,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 observacao = obs_divulgacao,
                                 criado_por_id = userid
                                 )
-                            
-                            if eventos_entregaveis:
-                                evento = Solicitacoes.objects.get(pk=solicitacao.id)
-                                evento.status = 1
-                                evento.save()
+
            
             #VERIFICA PROGRAMAÇÃO
             indice = 0
@@ -352,11 +353,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 observacao = obs_programacao,
                                 criado_por_id = userid
                                 )
-                            
-                            if eventos_entregaveis:
-                                evento = Solicitacoes.objects.get(pk=solicitacao.id)
-                                evento.status = 1
-                                evento.save()
+               
                         else:
                             index = dado[-1]
                             prazo_programacao = request.POST.get('prazo_programacao'+str(index),None)
@@ -398,10 +395,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 criado_por_id = userid
                                 )
                             
-                            if eventos_entregaveis:
-                                evento = Solicitacoes.objects.get(pk=solicitacao.id)
-                                evento.status = 1
-                                evento.save()
+                  
             
             #VERIFICA STAND
             indice = 0
@@ -449,10 +443,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 criado_por_id = userid 
                                 )
                             
-                            if eventos_entregaveis:
-                                evento = Solicitacoes.objects.get(pk=solicitacao.id)
-                                evento.status = 1
-                                evento.save()
+                   
                         else:
                             index = dado[-1]
                             prazo_stand = request.POST.get('prazo_stand'+str(index),None)
@@ -494,12 +485,36 @@ def Ajax_Realiza_Solicitacao(request):
                                 criado_por_id = userid
                                 )
                             
-                            if eventos_entregaveis:
-                                evento = Solicitacoes.objects.get(pk=solicitacao.id)
-                                evento.status = 1
-                                evento.save()
+                    
             
             return JsonResponse({"success_message": "Solicitação Realizada!"}) 
         
     except Exception as e:
          return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)
+
+@login_required(login_url='/')
+def Ajax_Cria_Tarefa(request):
+   
+    try:
+        tituloTarefa = request.POST.get('titulo',None)
+        designar_usuario = request.POST.get('usuario',None)
+        prioridade = request.POST.get('prioridade',None)
+        prazo_entrega = request.POST.get('prazo_entrega',None)
+        descricao_tarefa = request.POST.get('descricao_tarefa',None)
+        entregavel_id = request.POST.get('idEntregavel',None)
+
+        tarefas = Tarefas.objects.create(
+            titulo_tarefa = tituloTarefa,
+            descricao_tarefa = descricao_tarefa,
+            status = 0,
+            usuario_id = designar_usuario,
+            usuario_designou_id = request.user.id,
+            entregavel_id = entregavel_id,
+            prazo_entrega = prazo_entrega,
+            prioridade = prioridade,
+    )
+        tarefas = Tarefas.objects.filter(entregavel_id = entregavel_id ).all()
+
+        return render(request,'ajax/ajax_load_tbl_tarefas.html',{'tarefas':tarefas})
+    except Exception as e:
+        return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)

@@ -360,7 +360,7 @@
                                             <th>Atividade</th>
                                           </tr>
                                         </thead>
-                                        <tbody id="tbl_tarefas">
+                                        <tbody>
                 
                                             {% for programacao in programacao_adicional %}
                                             <tr>
@@ -389,12 +389,12 @@
                                   {% for entregavel in entregaveis %}
                                     <div class="col-12 col-sm-12 col-md-12">
                                         <div id="accordion">
-                                            <div {% if entregavel.status == '1' %} class="card card-success" {% else %} class="card card-warning" {% endif %}>
+                                            <div {% if entregavel.status == "0" %} class="card card-warning" {% elif entregavel.status == "1" %} class="card card-danger" {% else %} class="card card-success" {% endif %}>
                                                 <div class="card-header">
                                                     <h4 class="card-title w-100">
                                                         <a style=" font-size: 20px;" class="d-block w-100" data-toggle="collapse" href="#collapse{{ forloop.counter }}" aria-expanded="true">
                                                            #{{entregavel.id}} {{entregavel.get_tipoentregavel_display}} - PRAZO ATÉ (<b>{{entregavel.prazo|date:'d/m/Y'}}</b>) - {{entregavel.get_status_display}}
-                                                       {% if entregavel.status == '1' %}
+                                                       {% if entregavel.status == '2' %}
                                                        <span style="float: right; font-size: 20px;" class="bi bi-check2-circle"></span>
                                                        {% else %}
                                                        <span style="float: right; font-size: 20px;" class="bi bi-hourglass-bottom"></span>
@@ -408,7 +408,21 @@
                                                 </div>
                                                 <div id="collapse{{ forloop.counter }}" class="collapse" data-parent="#accordion" style="">
                                                     <div class="card-body">
-                                                      <div class="row">
+
+                                                      <div class="row" style="margin-bottom: 3%;">
+                                                        <div class="col-lg-2 col-12">
+                                                            <button type="button" class="btn btn-block btn-success"><i class="bi bi-check2-circle"></i> Aprovado pelo Cliente</button>
+                                                        </div>
+                                                        <div class="col-lg-2 col-12">
+                                                            <button type="button" class="btn btn-block btn-dark"><i class="bi bi-search"></i> Solicitar Revisão</button>
+                                                        </div>
+                                                        <div class="col-lg-2 col-12">
+                                                            <button type="button" class="btn btn-block btn-dark"><i class="bi bi-eye-fill"></i> Visualizar Demanda</button>
+                                                        </div>
+                                                      </div>
+
+
+                                                        <div class="row">
                                                         <div class="col-lg-2 col-12">
                                                           <div class="form-group">
                                                               <label>Tipo do Entregável:</label>
@@ -424,7 +438,7 @@
                                                               <!-- /.input group -->
                                                           </div>
                                                         </div>
-                    
+                                                        
                                                         <div class="col-lg-2 col-12">
                                                           <div class="form-group">
                                                               <label>Categoria do Produto:</label>
@@ -492,7 +506,7 @@
                                                           <div class="form-group">
                                                               
                                                               <div class="input-group">
-                                                                <button onclick="modalTarefas('{{entregavel.id}}')" type="button" class="btn btn-block bg-gradient-warning"><b> <i class="fas fa-plus"></i> ADICIONAR TAREFAS</b></button>
+                                                                <button onclick="modalTarefas('{{entregavel.id}}','{{ forloop.counter }}')" type="button" class="btn btn-block bg-gradient-dark"><b> <i class="fas fa-user"></i> Designar Usuário</b></button>
                                                                 
                                                             
                                                               </div>
@@ -584,9 +598,10 @@
                                                                   <thead>
                                                                     <tr>
                                                                       <th>#</th>
-                                                                      <th>Usuário</th>
-                                                                      <th>Título</th>
+                                                                      <th>Data da Solicitação</th>
                                                                       <th>Prazo de Entrega</th>
+                                                                      <th>Data da Entrega</th>
+                                                                      <th>Usuário Designado</th>
                                                                       <th>Prioridade</th>
                                                                       <th>Status</th>
                                                                      
@@ -594,25 +609,29 @@
                                                                       
                                                                     </tr>
                                                                   </thead>
-                                                                  <tbody id="tbl_tarefas">
-                                          
-                                                                      {% for tarefa in entregavel.tarefas_relacionadas %}
+                                                                  <tbody id="tbl_tarefas_{{ forloop.counter }}">
+                                                          
+                                                                   {% for tarefa in entregavel.tarefas_relacionadas %}
+
                                                                       <tr>
                                           
                                                                        <td>#{{tarefa.id}}</td>
-                                                                       <td>{{tarefa.usuario_designado.first_name}}</td>
-                                                                       <td>{{tarefa.titulo_tarefa}}</td>
+                                                                       <td>{{tarefa.data_tarefa|date:'d/m/Y'}}</td>
                                                                        <td>{{tarefa.prazo_entrega|date:'d/m/Y'}}</td>
+                                                                       <td>{% if tarefa.data_entrega %} {{tarefa.data_entrega|date:'d/m/Y'}} {%else%} Aguardando Entrega {% endif %}</td>
+                                                                       <td>{{tarefa.usuario.first_name}}</td>
                                                                        <td>{% if tarefa.prioridade == 1 %}   <span class="badge bg-primary" style="padding: 5px; width: 100%;"> {{tarefa.get_prioridade_display}}</span> {% else %} <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{tarefa.get_prioridade_display}}</span>{% endif %}</td>
+                                                                       
                                                                        <td>
-                                                                          {% if tarefa.status == 1 %}
+                                                                        {% if tarefa.status == 0 %}
+                                                                        <span class="badge bg-warning" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
+
+                                                                          {% elif tarefa.status == 1 %}
                                                                           <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
                                                                          
                                                                           {% elif tarefa.status == 2 %}
-                                                                          <span class="badge bg-warning" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
-                                                                          {% elif tarefa.status == 3 %}
                                                                           <span class="badge bg-success" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
-                                                                          {% endif %}
+                                                                        {% endif %}
                                                                        </td>
                     
                                                                  
@@ -718,7 +737,7 @@
   <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="TitleEdit"></h5>
+        <h5 class="modal-title" id="TitleEdit">Designar Usuário</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -726,41 +745,22 @@
      
       <div class="modal-body">
         <div class="row">
-        <div class="col-12 col-sm-12 col-md-6">
+        <div class="col-12 col-sm-12 col-md-12">
         <div class="form-group">
         <label>Título da Tarefa:</label>
       
         <div class="input-group">
-            <div class="input-group-prepend">
-            <span class="input-group-text"><i style="color: #000000" class="fa fa-sticky-note"></i></span>
-            </div>
+          
             <input type="text" value="" id="tituloTarefa_edit"  class="form-control" name="tituloTarefa">
+            <input style="display: none;" type="text" value="" id="id_entregavel"  class="form-control" name="id_entregavel">
+            <input style="display: block;" type="text" value="" id="num_tbl"  class="form-control" name="num_tbl">
         </div>
         <!-- /.input group -->
         </div>
       </div>
 
-      <!-- <div class="col-12 col-sm-12 col-md-6">
-        <div class="form-group">
-        <label>Alterar Status:</label>
-      
-        <div class="input-group">
 
-            <select style="width: 100%;"  class="form-control" id="direcao_backlog" name="direcao_backlog" required>
-            
-                 <option selected value="0"></option>
-                 <option value="1">A Fazer</option>
-                 <option value="2">Revisão</option>
-
-
-
-              </select>
-        </div>
-    
-        </div>
-      </div> -->
-
-      <input style="display: none;" type="text" value="" id="tarefa_edit_id"  class="form-control" name="tarefa_edit_id">
+      <input style="display: none;" type="text" value="" id="entregavel_id"  class="form-control" name="entregavel_id">
 
       <div class="col-12 col-sm-12 col-md-4">
         <div class="form-group">
@@ -783,9 +783,7 @@
         <label>Prioridade:</label>
       
         <div class="input-group">
-            <div class="input-group-prepend">
-            <span class="input-group-text"><i style="color: #000000" class="fa fa-clock"></i></span>
-            </div>
+          
             <select  class="form-control" id="prioridade_edit" name="prioridade_edit">
                 <option selected value="1">Normal</option>
                 <option value="2">Prioridade</option>
@@ -800,16 +798,14 @@
         <label>Prazo para Entrega:</label>
 
         <div class="input-group">
-            <div class="input-group-prepend">
-            <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
-            </div>
+          
             <input type="date" id="prazo_entrega_edit"   class="form-control" name="prazo_entrega_edit">
         </div>
         <!-- /.input group -->
         </div>
       </div>
       
-      <input style="display: none;" type="text" id="entregavel_id_edit"   class="form-control" name="entregavel_id" value="{{entregavel.id}}">
+     
 
       <div class="col-12 col-sm-12 col-md-12">
         <div class="col-md-12">
@@ -838,14 +834,71 @@
     </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-        <button type="button"n onclick="editarTarefa()" class="btn btn-primary">Salvar Alterações</button>
+        <button type="button"n onclick="designarUsuario()" class="btn btn-primary">Designar Usuário</button>
       </div>
  
     </div>
   </div>
 </div>
 
+<script>
+    function designarUsuario(){
+        var titulo_tarefa = $("#tituloTarefa_edit").val()
+        var usuario_designado = $("#designar_usuario_edit").val()
+        console.log(usuario_designado)
+        var prioridade = $("#prioridade_edit").val()
+        var prazo_entrega = $("#prazo_entrega_edit").val()
+        var descricao = $("#descricao_tarefa_edit").val()
+        var entregavelId = $("#id_entregavel").val()
+        var tbl = $("#num_tbl").val()
 
+        var XCSRFToken = '{{ csrf_token }}';
+        url = '/ajax/criar-tarefas'
+        
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                "titulo": titulo_tarefa,
+                "usuario": usuario_designado,
+                "prioridade": prioridade,
+                "prazo_entrega": prazo_entrega,
+                "descricao_tarefa": descricao,
+                "idEntregavel": entregavelId
+            },
+            headers: { "X-CSRFToken": XCSRFToken },
+            success: function (data) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Tarefa Criada!',
+                    text: "Tarefa criada e designada com sucesso!"
+                }).then((result) => {
+                    // Ação a ser realizada após o botão "OK" ser clicado
+                    if (result.isConfirmed) {
+                        // Redirecionar ou atualizar a página aqui
+                        location.reload(); // Isso atualizará a página
+                    }
+                });
+            },
+            error: function (data) {
+                if (data.responseJSON && data.responseJSON.error_message) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ops!',
+                        text: data.responseJSON.error_message
+                    });
+                }
+            }
+        });
+
+    }
+
+    function modalTarefas(entregavelId,counter_loop){
+        document.getElementById('id_entregavel').value = entregavelId
+        document.getElementById('num_tbl').value = counter_loop
+        $("#modalEditTask").modal("show")
+    }
+</script>
 
   <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
 
