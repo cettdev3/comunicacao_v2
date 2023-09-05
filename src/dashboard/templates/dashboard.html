@@ -266,7 +266,7 @@
                     <tbody id="resultados">
           
                       {% for solicitacao in solicitacoes %}
-                        <tr style="cursor: pointer;" onclick="buscaSolicitacaoModal('{{solicitacao.id}}')">
+                        <tr style="cursor: pointer;" onclick="acessarSolicitacao('{{solicitacao.id}}')">
                          <td>#{{solicitacao.id}}</td>
                          <td>
       
@@ -501,6 +501,10 @@
 
   <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
   <script>
+
+    function acessarSolicitacao(solicitacaoId){
+      window.location.href = "/solicitacoes/visualizar/"+solicitacaoId;
+    }
 
     function buscaSolicitacaoModal(solicitacaoId){
    

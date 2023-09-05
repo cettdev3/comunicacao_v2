@@ -9,6 +9,8 @@ from django.http import JsonResponse
 import json as j
 from django.contrib.auth.models import User
 from django.db import transaction
+from solicitacoes.models import Solicitacoes
+from solicitacoes.serializers import Solicitacao_Serializar
 
 # Create your views here.
 @login_required(login_url='/')
@@ -17,5 +19,8 @@ def Dashboard(request):
     infoUserLog = Usuarios.objects.filter(user=request.user.id).values()
     data_atual = datetime.date.today()
     
-   
-    return render(request,'dashboard.html')
+    solicitacoes = Solicitacoes.objects.all()
+    solicitacoes = Solicitacao_Serializar(solicitacoes,many=True).data
+    for solicitacao in solicitacoes:
+        solicitacao['data_solicitacao'] = datetime.datetime.strptime(solicitacao['data_solicitacao'], '%Y-%m-%d').date()
+    return render(request,'dashboard.html',{'solicitacoes':solicitacoes})

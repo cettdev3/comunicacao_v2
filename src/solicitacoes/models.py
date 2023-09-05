@@ -5,8 +5,8 @@ from datetime import datetime, timedelta
 
 # Create your models here.
 class Solicitacoes(models.Model):
-    choices_projeto = [(1,'EFG'),(2,'COTEC'),(3,'CETT')]
-    choices_status = [(1,'Solicitação Criada'),(2,'Aguardando Entregas'),(3,'Concluída'),(4,'Devolvida')]
+    choices_projeto = [('1','EFG'),('2','COTEC'),('3','CETT')]
+    choices_status = [('1','Solicitação Criada'),('2','Aguardando Entregas'),('3','Concluída'),('4','Devolvida')]
 
     id = models.AutoField(primary_key=True)
     evento_json = models.JSONField()
@@ -16,6 +16,25 @@ class Solicitacoes(models.Model):
     criado_por = models.ForeignKey(User,on_delete=models.CASCADE)
     data_solicitacao = models.DateField(default=timezone.now)
     status = models.IntegerField(choices=choices_status, blank=False, null=False)
+
+    def get_status_display(self):
+        return dict(self.choices_status)[str(self.status)]
+    
+    @property
+    def entregaveis_totais(self):
+        total_entregaveis = self.entregaveis_set.count()
+        return total_entregaveis
+
+    @property
+    def entregaveis_concluidos(self):
+        entregaveis_concluidos = self.entregaveis_set.filter(status=1).count()
+        return entregaveis_concluidos
+
+    @property
+    def entregaveis_pendentes(self):
+        entregaveis_pendentes = self.entregaveis_set.exclude(status=1).count()
+        return entregaveis_pendentes
+
 
     def get_projeto_display(self):
         return dict(self.choices_projeto)[str(self.tipo_projeto)]

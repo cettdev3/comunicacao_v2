@@ -12,24 +12,24 @@ from datetime import datetime
 from .utils import get_token_api_eventos,get_all_eventos,get_evento
 import datetime
 from .models import Entregaveis,Solicitacoes,Programacao_Adicional
-
+from .serializers import Solicitacao_Serializar
 @login_required(login_url='/')
 def Form_Solicitacoes(request):
 
     token = get_token_api_eventos()
     eventos = get_all_eventos(token)
 
+    return render(request, 'solicitacoes.html',{'eventos':eventos})
 
-    data_atual = datetime.date.today()
-    eventos_futuros = []
-    if eventos:
-        for evento in eventos:
-            evento['data_fim'] = datetime.datetime.strptime(evento['data_fim'], '%Y-%m-%d').date()
-            evento['data_inicio'] = datetime.datetime.strptime(evento['data_inicio'], '%Y-%m-%d').date()
-            
-            if evento['data_fim'] >= data_atual:
-                eventos_futuros.append(evento)
-    return render(request, 'solicitacoes.html',{'eventos':eventos_futuros})
+def Visualizar_Solicitacao(request,codigo):
+    solicitacao = Solicitacoes.objects.filter(id=codigo).first()
+    solicitacao = Solicitacao_Serializar(solicitacao).data
+    solicitacao['data_solicitacao'] = datetime.datetime.strptime(solicitacao['data_solicitacao'], '%Y-%m-%d').date()
+    
+    programacao_adicional = Programacao_Adicional.objects.filter(solicitacao_id=codigo).all()
+    entregaveis = Entregaveis.objects.filter(evento_id=codigo).all()
+    context = {'solicitacao':solicitacao,'entregaveis':entregaveis,'programacao_adicional':programacao_adicional}
+    return render(request,'visualizar_solicitacao.html',context)
 
 @login_required(login_url='/')
 def Dados_Gerais_Evento(request):
@@ -50,7 +50,7 @@ def Dados_Gerais_Evento(request):
 @login_required(login_url='/')
 def Ajax_Realiza_Solicitacao(request):
     dadosForm = request.POST
-
+    print(dadosForm)
     try:
         with transaction.atomic():
 
@@ -69,7 +69,7 @@ def Ajax_Realiza_Solicitacao(request):
             token = get_token_api_eventos()
             json_evento = get_evento(token,idEvento)
             # json_string = str(json_evento).replace("'", "\"")
-
+            print(request.user.id)
 
             #ANTES VERIFICA SE A SOLICITAÇÃO JÁ EXISTE
             solicitacao = Solicitacoes.objects.filter(evento_json__id = idEvento).first()
@@ -77,13 +77,11 @@ def Ajax_Realiza_Solicitacao(request):
                 print(solicitacao.id)
             else:
                 #CRIA A SOLICITACAO
-                cria_solicitacao = Solicitacoes.objects.create(
+                solicitacao = Solicitacoes.objects.create(
                     tipo_projeto = tipoUnidade, 
                     publico_evento = publicoEvento,
                     criado_por_id = userid,
                     evento_json = json_evento,
-                    status = 2
-   
                 )
 
             #VERIFICA PROGRAMAÇÃO
@@ -153,7 +151,7 @@ def Ajax_Realiza_Solicitacao(request):
 
                             
                             eventos_entregaveis = Entregaveis.objects.create(
-                                evento_id = cria_solicitacao.id,
+                                evento_id = solicitacao.id,
                                 prazo = prazo_save_the_date,
                                 exemplo_arte = exemploarte_save_the_date_url,
                                 tipo_entregavel = 1,
@@ -165,7 +163,7 @@ def Ajax_Realiza_Solicitacao(request):
 
                                 )
                             if eventos_entregaveis:
-                                evento = Solicitacoes.objects.get(pk=cria_solicitacao.id)
+                                evento = Solicitacoes.objects.get(pk=solicitacao.id)
                                 evento.status = 1
                                 evento.save()
                             
@@ -200,7 +198,7 @@ def Ajax_Realiza_Solicitacao(request):
 
 
                             eventos_entregaveis = Entregaveis.objects.create(
-                                evento_id = cria_solicitacao.id,
+                                evento_id = solicitacao.id,
                                 prazo = prazo_save_the_date,
                                 exemplo_arte = exemploarte_save_the_date_url,
                                 tipo_entregavel = 1,
@@ -212,8 +210,8 @@ def Ajax_Realiza_Solicitacao(request):
                                 )
                             
                             if eventos_entregaveis:
-                                evento = Solicitacoes.objects.get(pk=cria_solicitacao.id)
-                                evento.status = 2
+                                evento = Solicitacoes.objects.get(pk=solicitacao.id)
+                                evento.status = 1
                                 evento.save()
 
             #VERIFICA DIVULGAÇÃO
@@ -250,7 +248,7 @@ def Ajax_Realiza_Solicitacao(request):
 
                             
                             eventos_entregaveis = Entregaveis.objects.create(
-                                evento_id = cria_solicitacao.id,
+                                evento_id = solicitacao.id,
                                 prazo = prazo_divulgacao,
                                 exemplo_arte = exemploarte_divulgacao_url,
                                 tipo_entregavel = 2,
@@ -261,7 +259,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 criado_por_id = userid
                                 )
                             if eventos_entregaveis:
-                                evento = Solicitacoes.objects.get(pk=cria_solicitacao.id)
+                                evento = Solicitacoes.objects.get(pk=solicitacao.id)
                                 evento.status = 1
                                 evento.save()
                         else:
@@ -294,7 +292,7 @@ def Ajax_Realiza_Solicitacao(request):
 
                             
                             eventos_entregaveis = Entregaveis.objects.create(
-                                evento_id = cria_solicitacao.id,
+                                evento_id = solicitacao.id,
                                 prazo = prazo_divulgacao,
                                 exemplo_arte = exemploarte_divulgacao_url,
                                 tipo_entregavel = 2,
@@ -306,7 +304,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 )
                             
                             if eventos_entregaveis:
-                                evento = Solicitacoes.objects.get(pk=cria_solicitacao.id)
+                                evento = Solicitacoes.objects.get(pk=solicitacao.id)
                                 evento.status = 1
                                 evento.save()
            
@@ -344,7 +342,7 @@ def Ajax_Realiza_Solicitacao(request):
 
                             
                             eventos_entregaveis = Entregaveis.objects.create(
-                                evento_id = cria_solicitacao.id,
+                                evento_id = solicitacao.id,
                                 prazo = prazo_programacao,
                                 exemplo_arte = exemploarte_programacao_url,
                                 tipo_entregavel = 3,
@@ -356,7 +354,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 )
                             
                             if eventos_entregaveis:
-                                evento = Solicitacoes.objects.get(pk=cria_solicitacao.id)
+                                evento = Solicitacoes.objects.get(pk=solicitacao.id)
                                 evento.status = 1
                                 evento.save()
                         else:
@@ -389,7 +387,7 @@ def Ajax_Realiza_Solicitacao(request):
 
                             
                             eventos_entregaveis = Entregaveis.objects.create(
-                                evento_id = cria_solicitacao.id,
+                                evento_id = solicitacao.id,
                                 prazo = prazo_programacao,
                                 exemplo_arte = exemploarte_programacao_url,
                                 tipo_entregavel = 3,
@@ -401,7 +399,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 )
                             
                             if eventos_entregaveis:
-                                evento = Solicitacoes.objects.get(pk=cria_solicitacao.id)
+                                evento = Solicitacoes.objects.get(pk=solicitacao.id)
                                 evento.status = 1
                                 evento.save()
             
@@ -440,7 +438,7 @@ def Ajax_Realiza_Solicitacao(request):
 
                             
                             eventos_entregaveis = Entregaveis.objects.create(
-                                evento_id = cria_solicitacao.id,
+                                evento_id = solicitacao.id,
                                 prazo = prazo_stand,
                                 exemplo_arte = exemploarte_stand_url,
                                 tipo_entregavel = 4,
@@ -452,7 +450,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 )
                             
                             if eventos_entregaveis:
-                                evento = Solicitacoes.objects.get(pk=cria_solicitacao.id)
+                                evento = Solicitacoes.objects.get(pk=solicitacao.id)
                                 evento.status = 1
                                 evento.save()
                         else:
@@ -485,7 +483,7 @@ def Ajax_Realiza_Solicitacao(request):
 
                             
                             eventos_entregaveis = Entregaveis.objects.create(
-                                evento_id = cria_solicitacao.id,
+                                evento_id = solicitacao.id,
                                 prazo = prazo_stand,
                                 exemplo_arte = exemploarte_stand_url,
                                 tipo_entregavel = 3,
@@ -497,7 +495,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 )
                             
                             if eventos_entregaveis:
-                                evento = Solicitacoes.objects.get(pk=cria_solicitacao.id)
+                                evento = Solicitacoes.objects.get(pk=solicitacao.id)
                                 evento.status = 1
                                 evento.save()
             
