@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from solicitacoes.models import Tarefas
 from django.db import transaction
 from django.http import JsonResponse
-
+import datetime
 # Create your views here.
 @login_required(login_url='/')
 def Backlog(request):
@@ -16,7 +16,7 @@ def Ajax_View_Task(request):
     print(request.GET)
     idtask = request.GET['tarefaId']
     tarefa = Tarefas.objects.filter(id=idtask).first()
-
+    
     
     return render(request, 'ajax/ajax_view_task.html', {'tarefa': tarefa})
 
@@ -25,11 +25,14 @@ def Ajax_Move_Task(request):
     try:
         with transaction.atomic():
 
-            idtask = request.GET['taskId']
-            step = request.GET['step']
-
+            idtask = request.POST['taskId']
+            step = request.POST['step']
+            entrega = request.POST.get('entrega')
             tarefa = Tarefas.objects.get(id=idtask)
+            if entrega:
+                tarefa.descricao_entrega = entrega
             tarefa.status  = step
+
             tarefa.save()
 
             tarefas = Tarefas.objects.filter(usuario_id=request.user.id).all()

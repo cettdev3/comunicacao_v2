@@ -353,9 +353,14 @@ function MoveTarefa(taskId,step){
 
     url = '/ajax/move-task'
     entrega = $("#entrega_backlog").val()
+    
     console.log(entrega)
+    var XCSRFToken = '{{ csrf_token }}'
+
     $.ajax({
     url: url,
+    type:"post",
+    headers: { "X-CSRFToken":  XCSRFToken },
     data: {'taskId':taskId,'step':step,'entrega':entrega},
 
     success: function(data) {
