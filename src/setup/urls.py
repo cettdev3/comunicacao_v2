@@ -24,6 +24,7 @@ urlpatterns = [
     path('', include('dashboard.urls')),
     path('', include('menu.urls')),
     path('', include('solicitacoes.urls')),
+    path('', include('backlog.urls')),
 
 
 

@@ -49,12 +49,8 @@ INSTALLED_APPS = [
     'login',
     'menu',
     'dashboard',
-    'api',
     'solicitacoes',
-    'gerir_time',
-    'design',
-    'rest_framework',
-    'notifications',
+    'backlog'
 
 
 
