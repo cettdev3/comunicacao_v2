@@ -1,0 +1,260 @@
+<form id="formTarefas" method="POST"  enctype="multipart/form-data">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">{{tarefa.titulo_tarefa}}</h5>
+        <button type="button" class="close" onclick="fecharModal('exampleModalCenter')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12 col-sm-12 col-md-3">
+            <div class="form-group">
+              
+            <label>Data da Solicitação:</label>
+
+              <div class="input-group">
+               
+               {{tarefa.data_criacao|date:'d/m/Y'}}
+              </div>
+              <!-- /.input group -->
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-3">
+              <div class="form-group">
+                
+              <label>Prazo de Entrega::</label>
+  
+                <div class="input-group">
+                 
+                 {{tarefa.prazo_entrega|date:'d/m/Y'}}
+                </div>
+                <!-- /.input group -->
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-12 col-md-3">
+                <div class="form-group">
+                  
+                <label>Solicitante:</label>
+    
+                  <div class="input-group">
+                   
+                   {{tarefa.usuario_designou.first_name}}
+                  </div>
+                  <!-- /.input group -->
+                  </div>
+                </div>
+
+                <div class="col-12 col-sm-12 col-md-3">
+                  <div class="form-group">
+                    
+                  <label>Prioridade:</label>
+      
+                    <div class="input-group">
+                     
+                      {% if tarefa.prioridade == 1 %}   <span class="badge bg-primary" style="padding: 5px;"> {{tarefa.get_prioridade_display}}</span> {% else %} <span class="badge bg-danger" style="padding: 5px;"> {{tarefa.get_prioridade_display}}</span>{% endif %}
+                    </div>
+                    <!-- /.input group -->
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                              
+                      <div class="input-group">
+  
+                          <div class="card" style="width: 100%;">
+                              <div class="card-header" style="background-color: #fafafa;">
+                                <label for="">Tarefa:</label>
+                                
+                              </div>
+                                
+                              <div class="card-body">
+                              <div class="row">
+                                {{tarefa.descricao_tarefa|safe}}
+                              </div>
+                              </div>
+                          </div>
+          
+
+                      
+                      </div>
+                      <!-- /.input group -->
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-12">
+                      <div class="form-group">
+                          <label>Tipo do Entregável:</label>
+                          <div class="input-group">
+                            {% if tarefa.entregavel.get_tipoentregavel_display %}
+                            {{tarefa.entregavel.get_tipoentregavel_display}}
+                            {% else %}
+                            Não Informado
+                            {% endif %}
+                            
+                        
+                          </div>
+                          <!-- /.input group -->
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-12">
+                      <div class="form-group">
+                          <label>Categoria do Produto:</label>
+                          <div class="input-group">
+                            {% if tarefa.entregavel.get_tipoproduto_display %}
+                            {{tarefa.entregavel.get_tipoproduto_display}}
+                            {% else %}
+                            Não Informado
+                            {% endif %}
+                            
+                        
+                          </div>
+                          <!-- /.input group -->
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-12">
+                      <div class="form-group">
+                          <label>Tipo do Produto:</label>
+                          <div class="input-group">
+                            {% if tarefa.entregavel.categoria_produto %}
+                            {{tarefa.entregavel.categoria_produto}}
+                            {% else %}
+                            Não Informado
+                            {% endif %}
+                            
+                        
+                          </div>
+                          <!-- /.input group -->
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-12">
+                      <div class="form-group">
+                          <label>Data da Solicitação:</label>
+                          <div class="input-group">
+                            {% if tarefa.entregavel.data_solicitacao %}
+                            {{tarefa.entregavel.data_solicitacao|date:'d/m/Y'}}
+                            {% else %}
+                            Não Informado
+                            {% endif %}
+                            
+                        
+                          </div>
+                          <!-- /.input group -->
+                      </div>
+                    </div>
+                  
+                   
+                    {% if tarefa.entregavel.descricao_audio_visual %}
+                    <div class="col-12 col-sm-12 col-md-12">
+                      <div class="card" style="width: 100%;">
+                          <div class="card-header" style="background-color: #fafafa;">
+                            <label for="">Descrição Audiovisual</label>
+                            
+                          </div>
+                            
+                          <div class="card-body">
+                           <div class="row">
+                            {% if tarefa.entregavel.descricao_audio_visual %}
+                            {{tarefa.entregavel.descricao_audio_visual|safe}}
+                            {% else %}
+                            Sem descrições
+                            {% endif %}
+                           </div>
+                          </div>
+                      </div>
+                    </div>
+
+                   
+                    {% endif %}
+
+                    {% if tarefa.entregavel.observacao %}
+                    <div class="col-12 col-sm-12 col-md-12">
+                      <div class="card" style="width: 100%;">
+                          <div class="card-header" style="background-color: #fafafa;">
+                            <label for="">Observações Gerais</label>
+                            
+                          </div>
+                            
+                          <div class="card-body">
+                           <div class="row" style="width: 100%;">
+                            {% if tarefa.entregavel.observacao %}
+                            {{tarefa.entregavel.observacao|safe}}
+                            {% else %}
+                            Sem observações
+                            {% endif %}
+                           </div>
+                          </div>
+                      </div>
+                    </div>
+
+                   
+                    {% endif %}
+
+                    {% if tarefa.entregavel.exemplo_arte %}
+                    <div class="col-12 col-sm-12 col-md-12">
+                      <div class="card" style="width: 100%;">
+                          <div class="card-header" style="background-color: #fafafa;">
+                            <label for="">Exemplos de Artes</label>
+                            
+                          </div>
+                            
+                          <div class="card-body">
+                           <div class="row">
+                            <div class="col-sm-2">
+                              
+                              <a style="width: 100%;" href="{{entregavel.exemplo_arte}}" data-toggle="lightbox" data-title="Exemplo de Arte" data-gallery="gallery">
+                                <img src="{{entregavel.exemplo_arte}}" class="img-fluid mb-2" alt="white sample"/>
+                              </a>
+
+                            </div>
+                           </div>
+
+                          </div>
+                      </div>
+                    </div>
+                    {% endif %}
+
+                    {% if tarefa.status == 1 %}
+
+                    <div class="col-12 col-sm-12 col-md-12">
+                      <div class="card" style="width: 100%;">
+                          <div class="card-header" style="background-color: #fafafa;">
+                            <label for="">Entrega: <span class=" badge bg-warning" ><i class="bi bi-info-circle-fill"></i> <b>Para adicionar imagens, arraste e solte :)</b></span></label>
+                            
+                          </div>
+                            
+                          <div class="card-body">
+                         
+                            <textarea name="entrega_backlog" id="entrega_backlog" class=" summernote" rows="10"></textarea>
+                        
+                          </div>
+                      </div>
+                    </div>
+                    {% endif %}
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="fecharModal('exampleModalCenter')">Fechar</button>
+        {% if tarefa.status == 0 %}
+        <button type="button" onclick="MoveTarefa('{{tarefa.id}}',1)" class="btn btn-primary"> <i class="bi bi-arrow-90deg-right"></i> Mover para Fazendo</button>
+        {% elif tarefa.status == 1 %}
+        <button type="button" onclick="MoveTarefa('{{tarefa.id}}',0)" class="btn btn-primary"> <i class="bi bi-arrow-90deg-left"></i> Voltar para A Fazer</button>
+        <button type="button" onclick="MoveTarefa('{{tarefa.id}}',3)" class="btn btn-success"> <i class="bi bi-check-lg"></i> Concluir Tarefa</button>
+
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  </form>
+
+  <script>
+     $('.summernote').summernote();
+  </script>

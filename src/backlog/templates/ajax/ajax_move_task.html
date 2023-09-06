@@ -1,0 +1,124 @@
+<div class="row">
+                                      
+  <div class="col-12 col-sm-12 col-md-3" >
+    <div class="card card-row card-secondary">
+      <div class="card-header">
+        <h3 class="card-title">
+          A Fazer
+        </h3>
+      </div>
+      <div class="card-body">
+        {% for tarefa in tarefas %}
+          {% if tarefa.status == 0 %}
+          <div class="card card-secondary card-outline">
+            <div class="card-header">
+              <h5 class="card-title"><b>#{{tarefa.id}} Prazo: {{tarefa.prazo_entrega|date:'d/m/Y'}} </b></h5>
+              <div class="card-tools">
+                <span  class="btn btn-tool btn-link"> {% if tarefa.prioridade == 1 %} <span class="badge bg-danger">URGENTE</span>{% endif %}</span>
+                <a onclick="modalTarefa('{{tarefa.id}}')" class="btn btn-tool">
+                  <i class="bi bi-eye-fill"></i>
+                </a>
+              </div>
+            </div>
+            <div class="card-body">
+              {{tarefa.titulo_tarefa}}
+            </div>
+          </div>
+          {% endif %}
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-12 col-md-3" >
+    <div class="card card-row card-info">
+      <div class="card-header">
+        <h3 class="card-title">
+          Fazendo
+        </h3>
+      </div>
+      <div class="card-body">
+        {% for tarefa in tarefas %}
+          {% if tarefa.status == 1 %}
+          <div class="card card-secondary card-outline">
+            <div class="card-header">
+              <h5 class="card-title"><b>#{{tarefa.id}} Prazo: {{tarefa.prazo_entrega|date:'d/m/Y'}} </b></h5>
+              <div class="card-tools">
+                <span  class="btn btn-tool btn-link"> {% if tarefa.prioridade == 1 %} <span class="badge bg-danger">URGENTE</span>{% endif %}</span>
+                <a onclick="modalTarefa('{{tarefa.id}}')" class="btn btn-tool">
+                  <i class="bi bi-eye-fill"></i>
+                </a>
+              </div>
+            </div>
+            <div class="card-body">
+              {{tarefa.titulo_tarefa}}
+            </div>
+          </div>
+          {% endif %}
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-12 col-md-3" >
+    <div class="card card-row card-danger">
+      <div class="card-header">
+        <h3 class="card-title">
+          Para Revisão
+        </h3>
+      </div>
+      <div class="card-body">
+        {% for tarefa in tarefas %}
+          {% if tarefa.status == 2 %}
+          <div class="card card-secondary card-outline">
+            <div class="card-header">
+              <h5 class="card-title"><b>#{{tarefa.id}} Prazo: {{tarefa.prazo_entrega|date:'d/m/Y'}} </b></h5>
+              <div class="card-tools">
+                <span  class="btn btn-tool btn-link"> {% if tarefa.prioridade == 1 %} <span class="badge bg-danger">URGENTE</span>{% endif %}</span>
+                <a onclick="modalTarefa('{{tarefa.id}}')" class="btn btn-tool">
+                  <i class="bi bi-eye-fill"></i>
+                </a>
+              </div>
+            </div>
+            <div class="card-body">
+              {{tarefa.titulo_tarefa}}
+            </div>
+          </div>
+          {% endif %}
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+  
+
+  <div class="col-12 col-sm-12 col-md-3" >
+    <div class="card card-row card-success">
+      <div class="card-header">
+        <h3 class="card-title">
+          Feito
+        </h3>
+      </div>
+      <div class="card-body">
+        {% for tarefa in tarefas %}
+          {% if tarefa.status == 3 %}
+          <div class="card card-secondary card-outline">
+            <div class="card-header">
+              <h5 class="card-title"><b>#{{tarefa.id}} Prazo: {{tarefa.prazo_entrega|date:'d/m/Y'}} </b></h5>
+              <div class="card-tools">
+                <span  class="btn btn-tool btn-link"> {% if tarefa.prioridade == 1 %} <span class="badge bg-danger">URGENTE</span>{% endif %}</span>
+                <a onclick="modalTarefa('{{tarefa.id}}')" class="btn btn-tool">
+                  <i class="bi bi-eye-fill"></i>
+                </a>
+              </div>
+            </div>
+            <div class="card-body">
+              {{tarefa.titulo_tarefa}}
+            </div>
+          </div>
+          {% endif %}
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</div>

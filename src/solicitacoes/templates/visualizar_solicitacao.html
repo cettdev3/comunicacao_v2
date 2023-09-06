@@ -636,9 +636,12 @@
                                                                         <span class="badge bg-warning" style="padding: 5px; width: 100%;"> {{entregavel.tarefas_relacionadas.get_status_display}}</span>
 
                                                                           {% elif entregavel.tarefas_relacionadas.status == 1 %}
-                                                                          <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{entregavel.tarefas_relacionadas.get_status_display}}</span>
+                                                                          <span class="badge bg-warning" style="padding: 5px; width: 100%;"> {{entregavel.tarefas_relacionadas.get_status_display}}</span>
                                                                          
                                                                           {% elif entregavel.tarefas_relacionadas.status == 2 %}
+                                                                          <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{entregavel.tarefas_relacionadas.get_status_display}}</span>
+
+                                                                          {% elif entregavel.tarefas_relacionadas.status == 3 %}
                                                                           <span class="badge bg-success" style="padding: 5px; width: 100%;"> {{entregavel.tarefas_relacionadas.get_status_display}}</span>
                                                                         {% endif %}
                                                                        </td>

@@ -89,7 +89,7 @@ class Entregaveis(models.Model):
 
     @property
     def status_entregaveis(self):
-        total_tarefas = self.tarefas_set.exclude(status=2).count()
+        total_tarefas = self.tarefas_set.exclude(status=3).count()
         if total_tarefas  > 0:
             self.status = 0
             self.save()
@@ -123,7 +123,7 @@ class Programacao_Adicional(models.Model):
         db_table = 'programacao_adicional'
 
 class Tarefas(models.Model):
-    choices_status = [('0','AGUARDANDO ENTREGAS'),('1','EM REVISÃO'),('2','ENTREGUE')]
+    choices_status = [('0','A FAZER'),('1','FAZENDO'),('2','EM REVISÃO'),('3','FEITO')]
     choices_prioridade = [('1','NORMAL'),('2','PRIORIDADE')]
     choices_tipo = [('1','NORMAL'),('2','REVISÃO')]
 
