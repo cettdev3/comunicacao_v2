@@ -396,6 +396,8 @@
                                                            #{{entregavel.id}} {{entregavel.get_tipoentregavel_display}} - PRAZO ATÉ (<b>{{entregavel.prazo|date:'d/m/Y'}}</b>) - {{entregavel.get_status_display}}
                                                        {% if entregavel.status == '4' %}
                                                        <span style="float: right; font-size: 20px;" class="bi bi-check2-circle"></span>
+                                                       {% elif entregavel.status == '3' %}
+                                                       <span style="float: right; font-size: 20px;" class="bi bi-arrow-repeat"></span>
                                                        {% else %}
                                                        <span style="float: right; font-size: 20px;" class="bi bi-hourglass-bottom"></span>
                       
@@ -408,7 +410,7 @@
                                                 </div>
                                                 <div id="collapse{{ forloop.counter }}" class="collapse" data-parent="#accordion" style="">
                                                     <div class="card-body">
-                                                      {% if entregavel.status != '0' %}
+                                               
                                                       <div class="row" style="margin-bottom: 3%;">
 
 
@@ -417,10 +419,10 @@
                                                           <button onclick="enviaAprovacao('{{entregavel.id}}',4)" type="button" class="btn btn-block btn-dark"><i class="bi bi-check2-circle"></i> Marcar como Recebido</button>
                                                       </div>
                                                       <div class="col-lg-3 col-12">
-                                                          <button onclick="enviaAprovacao('{{entregavel.id}}',4)" type="button" class="btn btn-block btn-dark"><i class="bi bi-arrow-counterclockwise"></i> Devolver p/ Correções</button>
+                                                          <button onclick="devolveComunicacao('{{entregavel.id}}',4)" type="button" class="btn btn-block btn-dark"><i class="bi bi-arrow-counterclockwise"></i> Devolver p/ Correções</button>
                                                       </div>
                                                        <div class="col-lg-3 col-12">
-                                                            <button type="button" class="btn btn-block btn-dark"><i class="bi bi-eye-fill"></i> Visualizar Entregas</button>
+                                                            <button onclick="modalTarefa('{{entregavel.tarefas_relacionadas.id}}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-eye-fill"></i> Visualizar Entregas</button>
                                                         </div>
                                                         {% endif %}
                                                        
@@ -430,15 +432,15 @@
                                                         </div>
 
                                                         <div class="col-lg-3 col-12">
-                                                          <button onclick="enviaAprovacao('{{entregavel.id}}',2)" type="button" class="btn btn-block btn-dark"><i class="bi bi-card-text"></i> Solicitar Revisão de Tarefa</button>
+                                                          <button onclick="revisaoTask('{{entregavel.tarefas_relacionadas.id}}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-card-text"></i> Solicitar Revisão de Tarefa</button>
                                                         </div>
-                                                        {%  elif entregavel.status == '1' or entregavel.status == '4' %}
+                                                        {%  elif entregavel.status == '0' or entregavel.status == '4' or entregavel.status == '3' %}
                                                         <div class="col-lg-3 col-12">
                                                             <button onclick="modalTarefas('{{entregavel.id}}','{{ forloop.counter }}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-people-fill"></i> Designar Usuário</button>
                                                         </div>
                                                         {% endif %}
                                                       </div>
-                                                      {% endif %}
+                                           
                                                   
 
                                                         <div class="row">
@@ -661,6 +663,15 @@
                                                           </div>
                                                         </div>
                                                         {% endif %}
+                                                        {% if entregavel.motivo_revisao and entregavel.status != '4' %}
+                                                        <div class="col-12 col-sm-12 col-md-12">
+                                                          <div class="alert alert-danger alert-dismissible">
+                            
+                                                            <h5><i class="bi bi-arrow-repeat"></i> Entregável Devolvido! </h5>
+                                                              {{entregavel.motivo_revisao|safe}}
+                                                          </div>
+                                                        </div>
+                                                      {% endif %}
                                                       </div>
                                                     </div>
                                                 </div>
@@ -727,26 +738,65 @@
   </div>
 </div>
 
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" style="display: none;" aria-hidden="true">
-  <form id="formTarefas" method="POST"  enctype="multipart/form-data">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
+<div class="modal fade" id="revisaoTask" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
-        <button type="button" class="close" onclick="fecharModal('exampleModalCenter')">
+        <h5 class="modal-title" id="TitleEdit">Solicitar Revisão de Tarefa</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+     
       <div class="modal-body">
-        <p>This is a vertically centered modal.</p>
+        <div class="row">
+        
+      <input style="display: block;" type="text" value="" id="task_id"  class="form-control" name="task_id">
+
+
+      <div class="col-12 col-sm-12 col-md-12">
+        <div class="form-group">
+        <label>Novo Prazo de Entrega:</label>
+
+        <div class="input-group">
+          
+            <input type="date" id="novo_prazo_entrega"   class="form-control" name="novo_prazo_entrega">
+        </div>
+        <!-- /.input group -->
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" onclick="fecharModal('exampleModalCenter')">Fechar</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+      
+     
+
+      <div class="col-12 col-sm-12 col-md-12">
+
+          <div class="card card-dark card-outline">
+            <div class="card-header">
+              <h3 class="card-title">Descrição da Tarefa:</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+            
+              <div class="form-group">
+                  <textarea  id="nova_descricao_tarefa" name="nova_descricao_tarefa" class="form-control summernote" style="height: 300px"></textarea>
+              </div>
+            
+            </div>
+            <!-- /.card-body -->
+          
+          </div>
+
+      </div>
+
       </div>
     </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        <button type="button"n onclick="revisionarTask()" class="btn btn-primary">Solicitar Revisão</button>
+      </div>
+ 
+    </div>
   </div>
-  </form>
 </div>
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" style="display: none;" aria-hidden="true">
@@ -855,9 +905,7 @@
             <div class="card-body">
             
               <div class="form-group">
-                  <textarea  id="descricao_tarefa_edit" name="descricao_tarefa_edit" class="form-control summernote" style="height: 300px">
-                    
-                  </textarea>
+                  <textarea  id="descricao_tarefa_edit" name="descricao_tarefa_edit" class="form-control summernote" style="height: 300px"></textarea>
               </div>
             
             </div>
@@ -879,27 +927,54 @@
   </div>
 </div>
 
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" style="display: none;" aria-hidden="true">
-  <form id="formTarefas" method="POST"  enctype="multipart/form-data">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
+<div class="modal fade" id="devolverComunicacao" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
-        <button type="button" class="close" onclick="fecharModal('exampleModalCenter')">
+        <h5 class="modal-title" id="TitleEdit">Devolver Entregável a Comunicação</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+     
       <div class="modal-body">
-        <p>This is a vertically centered modal.</p>
+        <div class="row">
+        
+      <input style="display: none;" type="text" value="" id="d_entregavel_id"  class="form-control" name="d_entregavel_id">
+
+
+
+      <div class="col-12 col-sm-12 col-md-12">
+
+          <div class="card card-dark card-outline">
+            <div class="card-header">
+              <h3 class="card-title">Motivo da Devolução:</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+            
+              <div class="form-group">
+                  <textarea  id="motivo_devolucao" name="motivo_devolucao" class="form-control summernote" style="height: 300px"></textarea>
+              </div>
+            
+            </div>
+            <!-- /.card-body -->
+          
+          </div>
+
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" onclick="fecharModal('exampleModalCenter')">Fechar</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+
       </div>
     </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        <button type="button"n onclick="devolverEntregavel()" class="btn btn-primary">Devolver</button>
+      </div>
+ 
+    </div>
   </div>
-  </form>
 </div>
+
 
 <script>
 
@@ -1084,10 +1159,122 @@ function modalTarefas(entregavelId,counter_loop){
         $("#modalEditTask").modal("show")
     }
 
-function fecharModal(id){
-  $("#exampleModalCenter").modal('hide')
+function revisaoTask(idtask){
+  document.getElementById("task_id").value = idtask
+  $("#revisaoTask").modal('show')
 }
 
+function fecharModal(id){
+  $("#"+id).modal('hide')
+}
+
+function revisionarTask(){
+  prazo_entrega = $("#novo_prazo_entrega").val()
+  nova_descricao_tarefa = $("#nova_descricao_tarefa").val()
+  idTask = $("#task_id").val()
+
+  Swal.fire({
+      title: 'Tem certeza?',
+      text: 'Ao confirmar enviará a tarefa para revisão ao usuário já designado',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sim',
+      cancelButtonText: 'Não'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        var XCSRFToken = '{{ csrf_token }}'
+        const url = "/ajax/ajax-revisao-task";
+        $.ajax({
+            
+            url: url,
+            type:"post",
+            data: { 'idTask':idTask,'novo_prazo_entrega':prazo_entrega,"nova_descricao_tarefa":nova_descricao_tarefa},
+            headers: { "X-CSRFToken":  XCSRFToken },
+            success: function (data) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Tarefa em Revisão!',
+                    text: "A terefa foi enviada para revisão!"
+                }).then((result) => {
+                    // Ação a ser realizada após o botão "OK" ser clicado
+                    if (result.isConfirmed) {
+                        // Redirecionar ou atualizar a página aqui
+                        location.reload(); // Isso atualizará a página
+                    }
+                });
+            },
+            error: function (data) {
+                if (data.responseJSON && data.responseJSON.error_message) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ops!',
+                        text: data.responseJSON.error_message
+                    });
+                }
+            }
+        });
+      }
+    });
+}
+
+function devolveComunicacao(idEntregavel){
+  document.getElementById("d_entregavel_id").value = idEntregavel
+  $("#devolverComunicacao").modal('show')
+}
+
+function devolverEntregavel(){
+  motivo_devolucao = $("#motivo_devolucao").val()
+  entregavelId = $("#d_entregavel_id").val()
+
+  Swal.fire({
+      title: 'Tem certeza?',
+      text: 'Ao confirmar você irá devolver o entregável a comunicação',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sim',
+      cancelButtonText: 'Não'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        var XCSRFToken = '{{ csrf_token }}'
+        const url = "/ajax/ajax-devolver-entregavel";
+        $.ajax({
+            
+            url: url,
+            type:"post",
+            data: { 'entregavelId':entregavelId,'motivo_devolucao':motivo_devolucao},
+            headers: { "X-CSRFToken":  XCSRFToken },
+            success: function (data) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Entregável Devolvido!',
+                    text: "O entregável foi devolvido para correções"
+                }).then((result) => {
+                    // Ação a ser realizada após o botão "OK" ser clicado
+                    if (result.isConfirmed) {
+                        // Redirecionar ou atualizar a página aqui
+                        location.reload(); // Isso atualizará a página
+                    }
+                });
+            },
+            error: function (data) {
+                if (data.responseJSON && data.responseJSON.error_message) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ops!',
+                        text: data.responseJSON.error_message
+                    });
+                }
+            }
+        });
+      }
+    });
+}
 </script>
 
   <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>

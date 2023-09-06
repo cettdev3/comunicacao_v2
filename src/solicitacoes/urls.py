@@ -1,5 +1,5 @@
 from django.urls import include, path
-from solicitacoes.views import Form_Solicitacoes,Visualizar_Solicitacao,Dados_Gerais_Evento,Ajax_Realiza_Solicitacao,Ajax_Cria_Tarefa,Ajax_Realiza_Entrega
+from solicitacoes.views import Form_Solicitacoes,Visualizar_Solicitacao,Dados_Gerais_Evento,Ajax_Realiza_Solicitacao,Ajax_Cria_Tarefa,Ajax_Realiza_Entrega,Ajax_Revisa_Task,Ajax_Devolve_Entregavel
 
 
 urlpatterns = [
@@ -10,4 +10,6 @@ urlpatterns = [
     path('ajax/realiza-solicitacao',  Ajax_Realiza_Solicitacao),
     path('ajax/criar-tarefas',  Ajax_Cria_Tarefa),
     path('ajax/ajax-confirmar-entrega',  Ajax_Realiza_Entrega),
+    path('ajax/ajax-revisao-task',  Ajax_Revisa_Task),
+    path('ajax/ajax-devolver-entregavel',  Ajax_Devolve_Entregavel),
 ]

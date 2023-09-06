@@ -546,3 +546,51 @@ def Ajax_Realiza_Entrega(request):
         return JsonResponse({"success_message": "Entrega Realizada"}) 
     except Exception as e:
         return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)   
+
+@login_required(login_url='/')
+def Ajax_Revisa_Task(request):
+
+    try:
+        idTask = request.POST.get('idTask',None)
+        novo_prazo_entrega = request.POST.get('novo_prazo_entrega',None)
+        nova_descricao_tarefa = request.POST.get('nova_descricao_tarefa',None)
+
+        #obtem a tarefa atual e informa que ela foi revisionada
+        tarefa = Tarefas.objects.get(id=idTask)
+        tarefa_revisao = tarefa
+        tarefa.tipo = 2
+        tarefa.save()
+
+        tarefas = Tarefas.objects.create(
+            titulo_tarefa = tarefa_revisao.titulo_tarefa,
+            descricao_tarefa = nova_descricao_tarefa,
+            status = 2,
+            usuario_id = tarefa_revisao.usuario_id,
+            usuario_designou_id = tarefa_revisao.usuario_designou_id,
+            entregavel_id = tarefa_revisao.entregavel_id,
+            prazo_entrega = novo_prazo_entrega,
+            prioridade = tarefa_revisao.prioridade,
+    )
+
+
+        return JsonResponse({"success_message": "Tarefa em revisão!"}) 
+    except Exception as e:
+        return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)
+    
+@login_required(login_url='/')
+def Ajax_Devolve_Entregavel(request):
+
+    try:
+        idEntregavel = request.POST.get('entregavelId',None)
+        motivo = request.POST.get('motivo_devolucao',None)
+
+        #obtem o entregável atual e informa que ela foi devolvido
+        entregavel = Entregaveis.objects.get(id=idEntregavel)
+        entregavel.status = 3
+        entregavel.motivo_revisao = motivo
+        entregavel.save()
+
+
+        return JsonResponse({"success_message": "Tarefa em revisão!"}) 
+    except Exception as e:
+        return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)   

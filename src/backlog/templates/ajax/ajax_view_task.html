@@ -243,7 +243,7 @@
                     </div>
                     {% endif %}
 
-                    {% if tarefa.status == 1 %}
+                    {% if tarefa.status == 1 or tarefa.status == 2 %}
 
                     <div class="col-12 col-sm-12 col-md-12">
                       <div class="card" style="width: 100%;">
@@ -273,6 +273,10 @@
         <button type="button" onclick="MoveTarefa('{{tarefa.id}}',3)" class="btn btn-success"> <i class="bi bi-check-lg"></i> Concluir Tarefa</button>
 
         {% endif %}
+
+        {% if tarefa.status == 2 %}
+        <button type="button" onclick="MoveTarefa('{{tarefa.id}}',3)" class="btn btn-success"> <i class="bi bi-check-lg"></i> Concluir Tarefa</button>
+      {% endif %}
       </div>
     </div>
   </div>

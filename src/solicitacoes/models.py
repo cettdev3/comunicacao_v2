@@ -72,7 +72,7 @@ class Solicitacoes(models.Model):
 class Entregaveis(models.Model):
     choices_tipo = [('1','SAVE THE DATE'),('2','DIVULGAÇÃO'),('3','PROGRAMAÇÃO'),('4','STAND')]
     choices_tipo_produto = [('1','DIGITAL'),('2','IMPRESSO'),('3','AUDIOVISUAL'),('4','COBERTURA DE EVENTO'),('5','PRODUÇÃO DE ÁUDIO VISUAL (ORÇAMENTOS E EXECUÇÕES)')]
-    choices_status = [('0','AGUARDANDO ENTREGAS'),('1','AGUARDANDO APROVAÇÃO DA COMUNICAÇÃO'),('2','APROVADA PELA COMUNICAÇÃO, AGUARDANDO APROVAÇÃO DO SOLICITANTE'),('3','DEVOLVIDA'),('4','APROVADO PELO SOLICITANTE')]
+    choices_status = [('0','AGUARDANDO ENTREGAS'),('1','AGUARDANDO APROVAÇÃO DA COMUNICAÇÃO'),('2','APROVADA PELA COMUNICAÇÃO, AGUARDANDO APROVAÇÃO DO SOLICITANTE'),('3','DEVOLVIDO'),('4','APROVADO PELO SOLICITANTE')]
     id = models.AutoField(primary_key=True)
     evento = models.ForeignKey(Solicitacoes,on_delete=models.CASCADE)
     prazo = models.DateField()
@@ -90,12 +90,24 @@ class Entregaveis(models.Model):
     @property
     def status_entregaveis(self):
         total_tarefas = self.tarefas_set.exclude(status=3).count()
+        total_geral_tarefas =  self.tarefas_set.count()
+
         if total_tarefas  > 0:
             self.status = 0
             self.save()
-        elif total_tarefas == 0 and self.status == 0:
+
+        elif total_tarefas == 0 and total_geral_tarefas > 0 and self.status == 0:
             self.status = 1
             self.save()
+
+        elif total_tarefas == 0 and total_geral_tarefas > 0 and self.status == 1:
+            self.status = 2
+            self.save()
+        
+
+
+
+ 
 
     def get_status_display(self):
         return dict(self.choices_status)[str(self.status)]
