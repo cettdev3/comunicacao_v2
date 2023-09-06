@@ -38,6 +38,8 @@ class Tarefas_Serializar(serializers.ModelSerializer):
                 "usuario" ,
                 "usuario_designou" ,
                 "prioridade" ,
+                "tipo",
+                "get_tipo_display",
                 "status" ,
                 
         ]

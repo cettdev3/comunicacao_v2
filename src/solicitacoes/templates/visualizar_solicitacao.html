@@ -429,11 +429,11 @@
                                                         </div>
                                                         {% endif %}
                                                        
-                                                       
+                                                        {% if entregavel.status == '1' %}
                                                         <div class="col-lg-3 col-12">
                                                             <button onclick="modalTarefas('{{entregavel.id}}','{{ forloop.counter }}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-people-fill"></i> Designar Usuário</button>
                                                         </div>
-                                            
+                                                        {% endif %}
                                                       </div>
                                                    
                                                   
@@ -619,33 +619,33 @@
                                                                   </thead>
                                                                   <tbody id="tbl_tarefas_{{ forloop.counter }}">
                                                           
-                                                                   {% for tarefa in entregavel.tarefas_relacionadas %}
+                                                                
 
                                                                       <tr>
                                           
-                                                                       <td>#{{tarefa.id}}</td>
-                                                                       <td>{{tarefa.data_tarefa|date:'d/m/Y'}}</td>
-                                                                       <td>{{tarefa.titulo_tarefa}}</td>
-                                                                       <td>{{tarefa.prazo_entrega|date:'d/m/Y'}}</td>
-                                                                       <td>{% if tarefa.data_entrega %} {{tarefa.data_entrega|date:'d/m/Y'}} {%else%} Aguardando Entrega {% endif %}</td>
-                                                                       <td>{{tarefa.usuario.first_name}}</td>
-                                                                       <td>{% if tarefa.prioridade == 1 %}   <span class="badge bg-primary" style="padding: 5px; width: 100%;"> {{tarefa.get_prioridade_display}}</span> {% else %} <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{tarefa.get_prioridade_display}}</span>{% endif %}</td>
+                                                                       <td>#{{entregavel.tarefas_relacionadas.id}}</td>
+                                                                       <td>{{entregavel.tarefas_relacionadas.data_tarefa|date:'d/m/Y'}}</td>
+                                                                       <td>{{entregavel.tarefas_relacionadas.titulo_tarefa}}</td>
+                                                                       <td>{{entregavel.tarefas_relacionadas.prazo_entrega|date:'d/m/Y'}}</td>
+                                                                       <td>{% if entregavel.tarefas_relacionadas.data_entrega %} {{entregavel.tarefas_relacionadas.data_entrega|date:'d/m/Y'}} {%else%} Aguardando Entrega {% endif %}</td>
+                                                                       <td>{{entregavel.tarefas_relacionadas.usuario.first_name}}</td>
+                                                                       <td>{% if entregavel.tarefas_relacionadas.prioridade == 1 %}   <span class="badge bg-primary" style="padding: 5px; width: 100%;"> {{entregavel.tarefas_relacionadas.get_prioridade_display}}</span> {% else %} <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{entregavel.tarefas_relacionadas.get_prioridade_display}}</span>{% endif %}</td>
                                                                        
                                                                        <td>
-                                                                        {% if tarefa.status == 0 %}
-                                                                        <span class="badge bg-warning" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
+                                                                        {% if entregavel.tarefas_relacionadas.status == 0 %}
+                                                                        <span class="badge bg-warning" style="padding: 5px; width: 100%;"> {{entregavel.tarefas_relacionadas.get_status_display}}</span>
 
-                                                                          {% elif tarefa.status == 1 %}
-                                                                          <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
+                                                                          {% elif entregavel.tarefas_relacionadas.status == 1 %}
+                                                                          <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{entregavel.tarefas_relacionadas.get_status_display}}</span>
                                                                          
-                                                                          {% elif tarefa.status == 2 %}
-                                                                          <span class="badge bg-success" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
+                                                                          {% elif entregavel.tarefas_relacionadas.status == 2 %}
+                                                                          <span class="badge bg-success" style="padding: 5px; width: 100%;"> {{entregavel.tarefas_relacionadas.get_status_display}}</span>
                                                                         {% endif %}
                                                                        </td>
                     
                                                                  
                                                                       </tr>
-                                                                      {% endfor %}
+                                                              
                                                                     
                                                                   </tbody>
                                                                   

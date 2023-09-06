@@ -38,7 +38,7 @@ def Visualizar_Solicitacao(request,codigo):
     for entregavel in entregaveis:
         entregavel['prazo'] = datetime.datetime.strptime(entregavel['prazo'], '%Y-%m-%d').date()
         entregavel['data_solicitacao'] = datetime.datetime.strptime(entregavel['data_solicitacao'], '%Y-%m-%d').date()
-        tarefas_relacionadas = Tarefas.objects.filter(entregavel_id=entregavel['id']).all()
+        tarefas_relacionadas = Tarefas.objects.filter(entregavel_id=entregavel['id']).latest('id')
 
         entregavel['tarefas_relacionadas'] = tarefas_relacionadas
 

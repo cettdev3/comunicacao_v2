@@ -125,6 +125,8 @@ class Programacao_Adicional(models.Model):
 class Tarefas(models.Model):
     choices_status = [('0','AGUARDANDO ENTREGAS'),('1','EM REVISÃO'),('2','ENTREGUE')]
     choices_prioridade = [('1','NORMAL'),('2','PRIORIDADE')]
+    choices_tipo = [('1','NORMAL'),('2','REVISÃO')]
+
     id = models.AutoField(primary_key=True)
     entregavel = models.ForeignKey(Entregaveis,models.CASCADE)
     titulo_tarefa = models.TextField()
@@ -136,12 +138,18 @@ class Tarefas(models.Model):
     usuario = models.ForeignKey(User,models.CASCADE)
     usuario_designou = models.ForeignKey(User,models.CASCADE,related_name='usuario_designou')
     prioridade = models.IntegerField(choices=choices_prioridade, blank=False, null=False,default=0)
-    status = models.IntegerField(choices=choices_status,blank=False, null=False,default='0')
+    tipo = models.IntegerField(choices=choices_prioridade, blank=False, null=False,default=0)
+    status = models.IntegerField(choices=choices_tipo,blank=False, null=False,default='0')
 
     def get_prioridade_display(self):
         return dict(self.choices_prioridade)[str(self.prioridade)]
     
     def get_status_display(self):
         return dict(self.choices_status)[str(self.status)]
+    
+    def get_tipo_display(self):
+        return dict(self.choices_tipo)[str(self.tipo)]
+    
+
     class  Meta:
         db_table = 'tarefas'
