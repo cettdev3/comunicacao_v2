@@ -221,6 +221,28 @@
                     </div>
                     {% endif %}
 
+                    {% if tarefa.descricao_entrega %}
+                    <div class="col-12 col-sm-12 col-md-12">
+                      <div class="card" style="width: 100%;">
+                          <div class="card-header" style="background-color: #fafafa;">
+                            <label for="">Entrega Realizada</label>
+                            
+                          </div>
+                            
+                          <div class="card-body">
+                           <div class="row">
+                            <div class="col-sm-2">
+                              
+                              {{tarefa.descricao_entrega|safe}}
+
+                            </div>
+                           </div>
+
+                          </div>
+                      </div>
+                    </div>
+                    {% endif %}
+
                     {% if tarefa.status == 1 %}
 
                     <div class="col-12 col-sm-12 col-md-12">
@@ -243,6 +265,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" onclick="fecharModal('exampleModalCenter')">Fechar</button>
+   
         {% if tarefa.status == 0 %}
         <button type="button" onclick="MoveTarefa('{{tarefa.id}}',1)" class="btn btn-primary"> <i class="bi bi-arrow-90deg-right"></i> Mover para Fazendo</button>
         {% elif tarefa.status == 1 %}

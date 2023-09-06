@@ -389,12 +389,12 @@
                                   {% for entregavel in entregaveis %}
                                     <div class="col-12 col-sm-12 col-md-12">
                                         <div id="accordion">
-                                            <div {% if entregavel.status == "0" %} class="card card-warning" {% elif entregavel.status == "1" %} class="card card-dark" {% elif entregavel.status == "3" %} class="card card-danger" {% else %} class="card card-success" {% endif %}>
+                                            <div {% if entregavel.status == "0" or entregavel.status == "2" %} class="card card-warning" {% elif entregavel.status == "1" %} class="card card-dark" {% elif entregavel.status == "3" %} class="card card-danger" {% else %} class="card card-success" {% endif %}>
                                                 <div class="card-header">
                                                     <h4 class="card-title w-100">
                                                         <a style=" font-size: 20px;" class="d-block w-100" data-toggle="collapse" href="#collapse{{ forloop.counter }}" aria-expanded="true">
                                                            #{{entregavel.id}} {{entregavel.get_tipoentregavel_display}} - PRAZO ATÉ (<b>{{entregavel.prazo|date:'d/m/Y'}}</b>) - {{entregavel.get_status_display}}
-                                                       {% if entregavel.status == '2' %}
+                                                       {% if entregavel.status == '4' %}
                                                        <span style="float: right; font-size: 20px;" class="bi bi-check2-circle"></span>
                                                        {% else %}
                                                        <span style="float: right; font-size: 20px;" class="bi bi-hourglass-bottom"></span>
@@ -408,34 +408,37 @@
                                                 </div>
                                                 <div id="collapse{{ forloop.counter }}" class="collapse" data-parent="#accordion" style="">
                                                     <div class="card-body">
-
+                                                      {% if entregavel.status != '0' %}
                                                       <div class="row" style="margin-bottom: 3%;">
 
-                                                        {% if entregavel.status == '1' %}
-                                                        <div class="col-lg-3 col-12">
-                                                            <button type="button" class="btn btn-block btn-dark"><i class="bi bi-check2-circle"></i> Aprovado pelo Cliente</button>
-                                                        </div>
-                                                       {% endif %}
 
-                                                       {% if entregavel.tarefas_relacionadas %}
+                                                       {% if entregavel.status == '2' %}
                                                        <div class="col-lg-3 col-12">
-                                                            <button type="button" class="btn btn-block btn-dark"><i class="bi bi-eye-fill"></i> Visualizar Demanda</button>
-                                                        </div>
-                                                        {% endif %}
-
-                                                        {% if not entregavel.tarefas_relacionadas %}
-                                                        <div class="col-lg-3 col-12">
-                                                            <button type="button" class="btn btn-block btn-dark"><i class="bi bi-arrow-counterclockwise"></i> Devolver Entregável</button>
+                                                          <button onclick="enviaAprovacao('{{entregavel.id}}',4)" type="button" class="btn btn-block btn-dark"><i class="bi bi-check2-circle"></i> Marcar como Recebido</button>
+                                                      </div>
+                                                      <div class="col-lg-3 col-12">
+                                                          <button onclick="enviaAprovacao('{{entregavel.id}}',4)" type="button" class="btn btn-block btn-dark"><i class="bi bi-arrow-counterclockwise"></i> Devolver p/ Correções</button>
+                                                      </div>
+                                                       <div class="col-lg-3 col-12">
+                                                            <button type="button" class="btn btn-block btn-dark"><i class="bi bi-eye-fill"></i> Visualizar Entregas</button>
                                                         </div>
                                                         {% endif %}
                                                        
                                                         {% if entregavel.status == '1' %}
                                                         <div class="col-lg-3 col-12">
+                                                            <button onclick="enviaAprovacao('{{entregavel.id}}',2)" type="button" class="btn btn-block btn-dark"><i class="bi bi-send-plus"></i> Enviar p/ Solicitante</button>
+                                                        </div>
+
+                                                        <div class="col-lg-3 col-12">
+                                                          <button onclick="enviaAprovacao('{{entregavel.id}}',2)" type="button" class="btn btn-block btn-dark"><i class="bi bi-card-text"></i> Solicitar Revisão de Tarefa</button>
+                                                        </div>
+                                                        {%  elif entregavel.status == '1' or entregavel.status == '4' %}
+                                                        <div class="col-lg-3 col-12">
                                                             <button onclick="modalTarefas('{{entregavel.id}}','{{ forloop.counter }}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-people-fill"></i> Designar Usuário</button>
                                                         </div>
                                                         {% endif %}
                                                       </div>
-                                                   
+                                                      {% endif %}
                                                   
 
                                                         <div class="row">
@@ -617,11 +620,11 @@
                                                                       
                                                                     </tr>
                                                                   </thead>
-                                                                  <tbody id="tbl_tarefas_{{ forloop.counter }}">
+                                                                  <tbody >
                                                           
                                                                 
 
-                                                                      <tr>
+                                                                      <tr onclick="modalTarefa('{{entregavel.tarefas_relacionadas.id}}')">
                                           
                                                                        <td>#{{entregavel.tarefas_relacionadas.id}}</td>
                                                                        <td>{{entregavel.tarefas_relacionadas.data_tarefa|date:'d/m/Y'}}</td>
@@ -722,6 +725,28 @@
       </div>
     </div>
   </div>
+</div>
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" style="display: none;" aria-hidden="true">
+  <form id="formTarefas" method="POST"  enctype="multipart/form-data">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+        <button type="button" class="close" onclick="fecharModal('exampleModalCenter')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>This is a vertically centered modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="fecharModal('exampleModalCenter')">Fechar</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+  </form>
 </div>
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" style="display: none;" aria-hidden="true">
@@ -854,37 +879,131 @@
   </div>
 </div>
 
-<script>
-    function designarUsuario(){
-        var titulo_tarefa = $("#tituloTarefa_edit").val()
-        var usuario_designado = $("#designar_usuario_edit").val()
-        console.log(usuario_designado)
-        var prioridade = $("#prioridade_edit").val()
-        var prazo_entrega = $("#prazo_entrega_edit").val()
-        var descricao = $("#descricao_tarefa_edit").val()
-        var entregavelId = $("#id_entregavel").val()
-        var tbl = $("#num_tbl").val()
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" style="display: none;" aria-hidden="true">
+  <form id="formTarefas" method="POST"  enctype="multipart/form-data">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+        <button type="button" class="close" onclick="fecharModal('exampleModalCenter')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>This is a vertically centered modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="fecharModal('exampleModalCenter')">Fechar</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+  </form>
+</div>
 
-        var XCSRFToken = '{{ csrf_token }}';
-        url = '/ajax/criar-tarefas'
-        
+<script>
+
+function modalTarefa(tarefaId){
+
+  url = '/ajax/view-task'
+
+  $.ajax({
+  url: url,
+  data: {'tarefaId':tarefaId},
+
+  success: function(data) {
+
+    $("#exampleModalCenter").html(data);
+    $("#exampleModalCenter").modal('show')
+  },
+  error: function(xhr, status, error) {
+    Swal.fire({
+          icon: 'error',
+          title: 'Ops!',
+          text: 'Não foi possível obter resultados!'
+        });
+  }
+  });
+  }
+    
+function designarUsuario(){
+    var titulo_tarefa = $("#tituloTarefa_edit").val()
+    var usuario_designado = $("#designar_usuario_edit").val()
+    console.log(usuario_designado)
+    var prioridade = $("#prioridade_edit").val()
+    var prazo_entrega = $("#prazo_entrega_edit").val()
+    var descricao = $("#descricao_tarefa_edit").val()
+    var entregavelId = $("#id_entregavel").val()
+    var tbl = $("#num_tbl").val()
+
+    var XCSRFToken = '{{ csrf_token }}';
+    url = '/ajax/criar-tarefas'
+    
+    $.ajax({
+        url: url,
+        type: "post",
+        data: {
+            "titulo": titulo_tarefa,
+            "usuario": usuario_designado,
+            "prioridade": prioridade,
+            "prazo_entrega": prazo_entrega,
+            "descricao_tarefa": descricao,
+            "idEntregavel": entregavelId
+        },
+        headers: { "X-CSRFToken": XCSRFToken },
+        success: function (data) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Tarefa Criada!',
+                text: "Tarefa criada e designada com sucesso!"
+            }).then((result) => {
+                // Ação a ser realizada após o botão "OK" ser clicado
+                if (result.isConfirmed) {
+                    // Redirecionar ou atualizar a página aqui
+                    location.reload(); // Isso atualizará a página
+                }
+            });
+        },
+        error: function (data) {
+            if (data.responseJSON && data.responseJSON.error_message) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Ops!',
+                    text: data.responseJSON.error_message
+                });
+            }
+        }
+    });
+
+}
+
+function enviaAprovacao(idEntregavel,status){
+    if (status ==  4){
+      Swal.fire({
+      title: 'Tem certeza?',
+      text: 'Ao clicar em sim confirmo que a entrega foi realizada corretamente',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sim',
+      cancelButtonText: 'Não'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        var XCSRFToken = '{{ csrf_token }}'
+        const url = "/ajax/ajax-confirmar-entrega";
         $.ajax({
+            
             url: url,
-            type: "post",
-            data: {
-                "titulo": titulo_tarefa,
-                "usuario": usuario_designado,
-                "prioridade": prioridade,
-                "prazo_entrega": prazo_entrega,
-                "descricao_tarefa": descricao,
-                "idEntregavel": entregavelId
-            },
-            headers: { "X-CSRFToken": XCSRFToken },
+            type:"post",
+            data: { 'idEntregavel':idEntregavel,'statusEntregavel':status},
+            headers: { "X-CSRFToken":  XCSRFToken },
             success: function (data) {
                 Swal.fire({
                     icon: 'success',
-                    title: 'Tarefa Criada!',
-                    text: "Tarefa criada e designada com sucesso!"
+                    title: 'Entrega Realizada!',
+                    text: "A entrega foi marcada como realizada!"
                 }).then((result) => {
                     // Ação a ser realizada após o botão "OK" ser clicado
                     if (result.isConfirmed) {
@@ -903,10 +1022,58 @@
                 }
             }
         });
+      }
+    });
+    }else{
+      Swal.fire({
+      title: 'Tem certeza?',
+      text: 'Ao clicar enviará o entregável para o solicitante aprovar!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sim',
+      cancelButtonText: 'Não'
+    }).then((result) => {
+      if (result.isConfirmed) {
 
-    }
-
-    function modalTarefas(entregavelId,counter_loop){
+        var XCSRFToken = '{{ csrf_token }}'
+        const url = "/ajax/ajax-confirmar-entrega";
+        $.ajax({
+            
+            url: url,
+            type:"post",
+            data: { 'idEntregavel':idEntregavel,'statusEntregavel':status},
+            headers: { "X-CSRFToken":  XCSRFToken },
+            success: function (data) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Entrega Realizada!',
+                    text: "Entregável enviado para aprovação do solicitante!"
+                }).then((result) => {
+                    // Ação a ser realizada após o botão "OK" ser clicado
+                    if (result.isConfirmed) {
+                        // Redirecionar ou atualizar a página aqui
+                        location.reload(); // Isso atualizará a página
+                    }
+                });
+            },
+            error: function (data) {
+                if (data.responseJSON && data.responseJSON.error_message) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ops!',
+                        text: data.responseJSON.error_message
+                    });
+                }
+            }
+        });
+      }
+    });
+  }
+}
+    
+function modalTarefas(entregavelId,counter_loop){
         document.getElementById('id_entregavel').value = entregavelId
         document.getElementById('num_tbl').value = counter_loop
 
@@ -916,6 +1083,11 @@
 
         $("#modalEditTask").modal("show")
     }
+
+function fecharModal(id){
+  $("#exampleModalCenter").modal('hide')
+}
+
 </script>
 
   <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>

@@ -21,11 +21,11 @@ class Solicitacoes(models.Model):
     
     @property
     def status_solicitacao(self):
-        total_entregaveis = self.entregaveis_set.exclude(status=2).count()
-        if total_entregaveis  > 0 and self.status != 4:
+        total_entregaveis = self.entregaveis_set.exclude(status=4).count()
+        if total_entregaveis  > 0 and self.status != 3:
             self.status = 2
             self.save()
-        elif total_entregaveis == 0 and self.status == 2:
+        elif total_entregaveis == 0:
             self.status = 3
             self.save()
         else:
@@ -49,12 +49,12 @@ class Solicitacoes(models.Model):
 
     @property
     def entregaveis_concluidos(self):
-        entregaveis_concluidos = self.entregaveis_set.filter(status=2).count()
+        entregaveis_concluidos = self.entregaveis_set.filter(status=4).count()
         return entregaveis_concluidos
 
     @property
     def entregaveis_pendentes(self):
-        entregaveis_pendentes = self.entregaveis_set.exclude(status=2).count()
+        entregaveis_pendentes = self.entregaveis_set.exclude(status=4).count()
         return entregaveis_pendentes
 
 
@@ -72,7 +72,7 @@ class Solicitacoes(models.Model):
 class Entregaveis(models.Model):
     choices_tipo = [('1','SAVE THE DATE'),('2','DIVULGAÇÃO'),('3','PROGRAMAÇÃO'),('4','STAND')]
     choices_tipo_produto = [('1','DIGITAL'),('2','IMPRESSO'),('3','AUDIOVISUAL'),('4','COBERTURA DE EVENTO'),('5','PRODUÇÃO DE ÁUDIO VISUAL (ORÇAMENTOS E EXECUÇÕES)')]
-    choices_status = [('0','AGUARDANDO ENTREGAS'),('1','EM APROVAÇÃO'),('2','APROVADO PELO CLIENTE'),('3','DEVOLVIDA')]
+    choices_status = [('0','AGUARDANDO ENTREGAS'),('1','AGUARDANDO APROVAÇÃO DA COMUNICAÇÃO'),('2','APROVADA PELA COMUNICAÇÃO, AGUARDANDO APROVAÇÃO DO SOLICITANTE'),('3','DEVOLVIDA'),('4','APROVADO PELO SOLICITANTE')]
     id = models.AutoField(primary_key=True)
     evento = models.ForeignKey(Solicitacoes,on_delete=models.CASCADE)
     prazo = models.DateField()
@@ -138,7 +138,7 @@ class Tarefas(models.Model):
     usuario = models.ForeignKey(User,models.CASCADE)
     usuario_designou = models.ForeignKey(User,models.CASCADE,related_name='usuario_designou')
     prioridade = models.IntegerField(choices=choices_prioridade, blank=False, null=False,default=0)
-    tipo = models.IntegerField(choices=choices_prioridade, blank=False, null=False,default=0)
+    tipo = models.IntegerField(choices=choices_prioridade, blank=False, null=False,default=1)
     status = models.IntegerField(choices=choices_tipo,blank=False, null=False,default='0')
 
     def get_prioridade_display(self):

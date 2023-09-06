@@ -531,3 +531,18 @@ def Ajax_Cria_Tarefa(request):
         return render(request,'ajax/ajax_load_tbl_tarefas.html',{'tarefas':tarefas})
     except Exception as e:
         return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)
+    
+
+@login_required(login_url='/')
+def Ajax_Realiza_Entrega(request):
+   
+    try:
+        idEntregavel = request.POST.get('idEntregavel',None)
+        statusEntregavel = request.POST.get('statusEntregavel',None)
+        entregavel = Entregaveis.objects.get(id=idEntregavel)
+        entregavel.status = statusEntregavel
+        entregavel.save()
+
+        return JsonResponse({"success_message": "Entrega Realizada"}) 
+    except Exception as e:
+        return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)   
