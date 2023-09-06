@@ -21,6 +21,16 @@ def Form_Solicitacoes(request):
     token = get_token_api_eventos()
     eventos = get_all_eventos(token)
 
+  
+    if eventos:
+        for evento in eventos:
+            try:
+                evento['data_fim'] = datetime.datetime.strptime(evento['data_fim'], '%Y-%m-%d').date()
+                evento['data_inicio'] = datetime.datetime.strptime(evento['data_inicio'], '%Y-%m-%d').date()
+            except:
+                pass
+
+
     return render(request, 'solicitacoes.html',{'eventos':eventos})
 
 def Visualizar_Solicitacao(request,codigo):
@@ -38,7 +48,10 @@ def Visualizar_Solicitacao(request,codigo):
     for entregavel in entregaveis:
         entregavel['prazo'] = datetime.datetime.strptime(entregavel['prazo'], '%Y-%m-%d').date()
         entregavel['data_solicitacao'] = datetime.datetime.strptime(entregavel['data_solicitacao'], '%Y-%m-%d').date()
-        tarefas_relacionadas = Tarefas.objects.filter(entregavel_id=entregavel['id']).latest('id')
+        try:
+            tarefas_relacionadas = Tarefas.objects.filter(entregavel_id=entregavel['id']).latest('id')
+        except:
+            tarefas_relacionadas = {}
 
         entregavel['tarefas_relacionadas'] = tarefas_relacionadas
 
