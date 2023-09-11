@@ -152,6 +152,19 @@ class Tarefas(models.Model):
     tipo = models.IntegerField(choices=choices_prioridade, blank=False, null=False,default=1)
     status = models.IntegerField()
 
+    def calcular_status(self):
+        hoje = datetime.now().date()
+        prazo = self.prazo_entrega
+
+        if prazo < hoje:
+            return "background:#FF0000;color:#FFF"
+        elif prazo == hoje:
+            return "background:#FFFF00;color:#000"
+        elif prazo - hoje <= timedelta(days=3):
+            return "background:#FF8C00;color:#000"
+        else:
+             return "background:#006400;color:#FFF"
+        
     def get_prioridade_display(self):
         return dict(self.choices_prioridade)[str(self.prioridade)]
     

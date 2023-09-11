@@ -41,6 +41,7 @@ class Tarefas_Serializar(serializers.ModelSerializer):
                 "tipo",
                 "get_tipo_display"
                 "get_prioridade_display",
+                "calcular_status",
                 "status" ,
                 
         ]

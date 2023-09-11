@@ -190,74 +190,19 @@
           <div class="card-body">
             <div class="form-group">
               <div class="row">
-                <div class="col-12 col-sm-6 col-md-4" style="float:right">
-                  <label>Status:</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i style="color: #0C504B" class="fa fa-search"></i></span>
-                    
-                    </div>
-                    <select required="" class="form-control" name="filtro" id="filtro" onchange="filtrarTabela()">
-                      <option value="TODOS" selected>TODOS</option>
-                      <option value="1">Enviado para Análise</option>
-                      <!-- <option value="2">Cancelado</option> -->
-                      <option value="3">Devolvido ao Autor</option>
-                      <option value="4">Em Andamento</option>
-                      <option value="5">Em Aprovação CETT</option>
-                      <option value="8">Em Aprovação Secretaria</option>
-                      <option value="6">Aguardando Protocolo</option>
-                      <!-- <option value="7">Finalizado</option> -->
-  
-  
-  
-                    
-                    </select>
-                  </div>
-                </div>
-                
-                <div class="col-12 col-sm-6 col-md-4" style="float:right">
-                  <label>Convênio:</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i style="color: #0C504B" class="fa fa-search"></i></span>
-                    
-                    </div>
-                    <select required="" class="form-control" name="filtro_convenio" id="filtro_convenio" onchange="filtrarUnidade()">
-                      <option value="TODOS" selected>TODOS</option>
-                      <option value="COTEC">COTEC</option>
-                      <option value="EFG">EFG</option>
-                      <option value="CETT/UFG">CETT/UFG</option>
-                    </select>
-                  </div>
-                </div>
-                
-                <div class="col-12 col-sm-6 col-md-4" style="float:right">
-                  <label>Prioridades:</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i style="color: #0C504B" class="fa fa-search"></i></span>
-                    
-                    </div>
-                    <select class="form-control" name="filtro_prioridade" id="filtro_prioridade" onchange="filtrarUnidade()">
-                      <option selected value="1" selected>TODAS</option>
-                      <option value="2">CRÍTICA</option>
-  
-                    </select>
-                  </div>
-                </div>
-            
+
                 <div class="col-12 col-sm-12 col-md-12">
                   <table style="margin-top: 10px;">
                     <thead>
                       <tr>
                         <th>#</th>
-                        <th>Projeto</th>
-                        <th>Data da Solicitação</th>
-                        <th>Evento</th>
-                        <th>Data do Evento</th>
-                        <th>Solicitante</th>
-                        <th>Demandas Pendentes</th>
-                        <th>Demandas Concluidas</th>
+                        <th>Data da Tarefa</th>
+                        <th>Prazo de Entrega</th>
+                        <th>Data da Entrega</th>
+                        <th>Título da Tarefa</th>
+                        <th>Usuário Designado</th>
+                        <th>Usuário Designante</th>
+                        <th>Prioridade</th>
                         <th>Status</th>
 
                         
@@ -265,37 +210,30 @@
                     </thead>
                     <tbody id="resultados">
           
-                      {% for solicitacao in solicitacoes %}
-                        <tr style="cursor: pointer;" onclick="acessarSolicitacao('{{solicitacao.id}}')">
-                         <td>#{{solicitacao.id}}</td>
-                         <td>
-      
-                          {% if solicitacao.tipo_projeto == '1' %}
-                          <span class="badge bg-success" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
-                            {% elif solicitacao.tipo_projeto == '2' %}
-                            <span class="badge bg-warning" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
-                            {% elif solicitacao.tipo_projeto == '3' %}
-                            <span class="badge bg-info" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
-                            {% endif %}
-                          </td>
-                          <td>{{solicitacao.data_solicitacao|date:'d/m/Y'}}</td>
-                         <td>{{solicitacao.evento_json.tipo_formatado}}</td>
-                         <td>{{solicitacao.evento_json.data_inicio_formatada}} até {{solicitacao.evento_json.data_fim_formatada}}</td>
-                         <td>{{solicitacao.criado_por.first_name}}</td>
-                         <td><span style="color:#c5221f">{{solicitacao.entregaveis_pendentes}}</span> / <span style="color:#c5221f">{{solicitacao.entregaveis_totais}}</span></td>
-                         <td><span style="color:#0b942b">{{solicitacao.entregaveis_concluidos}}</span> / <span style="color:#0b942b">{{solicitacao.entregaveis_totais}}</span></td>
-                         <td>
-                
-        
-                          {% if solicitacao.status_solicitacao == 1 %}
-                          <span class="badge bg-primary">{{solicitacao.get_status_display}}</td></span>
-                          {% elif solicitacao.status_solicitacao == 2 %}
-                          <span class="badge bg-warning">{{solicitacao.get_status_display}}</td></span>
-                          {% elif solicitacao.status_solicitacao == 3 %}
-                          <span class="badge bg-success">{{solicitacao.get_status_display}}</td></span>
-                          {% elif solicitacao.status_solicitacao == 4 %}
-                          <span class="badge bg-danger">{{solicitacao.get_status_display}}</td></span>
-                         {% endif %}
+                      {% for tarefa in tarefas %}
+                        <tr style="{{tarefa.calcular_status}}"  onclick="acessarSolicitacao('{{tarefa.entregavel.evento.id}}')">
+                          <td>{{tarefa.id}}</td>
+                          <td>{{tarefa.data_tarefa|date:"d/m/Y"}}</td>
+                          <td>{{tarefa.prazo_entrega|date:"d/m/Y"}}</td>
+                          <td>{% if tarefa.data_entrega %} {{tarefa.data_entrega|date:"d/m/Y"}} {% else %} Aguardando Entrega {% endif %}</td>
+                          <td>{{tarefa.titulo_tarefa}}</td>
+                          <td>{{tarefa.usuario.first_name}}</td>
+                          <td>{{tarefa.usuario_designou.first_name}}</td>
+                          <td>{% if tarefa.prioridade == 1 %}   <span class="badge bg-primary" style="padding: 5px; width: 100%;"> {{tarefa.get_prioridade_display}}</span> {% else %} <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{tarefa.get_prioridade_display}}</span>{% endif %}</td>
+                          <td>   {% if tarefa.status == 0 %}
+                            <span class="badge bg-warning" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
+
+                              {% elif tarefa.status == 1 %}
+                              <span class="badge bg-warning" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
+                             
+                              {% elif tarefa.status == 2 %}
+                              <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
+
+                              {% elif tarefa.status == 3 %}
+                              <span class="badge bg-success" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
+                            {% endif %}</td>
+
+
                         </tr>
                        {% endfor %}
                       
@@ -503,6 +441,8 @@
 
   <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
   <script>
-
+    function acessarSolicitacao(solicitacaoId){
+      window.location.href = "/solicitacoes/visualizar/"+solicitacaoId;
+    }
   </script>
   {% endblock %}
