@@ -558,8 +558,7 @@ def Ajax_Revisa_Task(request):
         #obtem a tarefa atual e informa que ela foi revisionada
         tarefa = Tarefas.objects.get(id=idTask)
         tarefa_revisao = tarefa
-        tarefa.tipo = 2
-        tarefa.save()
+        
 
         tarefas = Tarefas.objects.create(
             titulo_tarefa = tarefa_revisao.titulo_tarefa,
@@ -571,6 +570,9 @@ def Ajax_Revisa_Task(request):
             prazo_entrega = novo_prazo_entrega,
             prioridade = tarefa_revisao.prioridade,
     )
+        
+        tarefa.tipo = tarefas.id
+        tarefa.save()
 
 
         return JsonResponse({"success_message": "Tarefa em revisão!"}) 
