@@ -29,7 +29,7 @@ class Solicitacoes(models.Model):
             self.status = 3
             self.save()
         else:
-            self.status = 1
+            self.status = 0
             self.save()
 
     

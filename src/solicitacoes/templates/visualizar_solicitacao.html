@@ -166,11 +166,20 @@
           
       <div class="card">
         <div class="modal-header">
-            <h5 class="modal-title">{% if solicitacao.evento_json.tipo_formatado == None %}
-              Não Informado
+            <h5 class="modal-title">
+              {% if solicitacao.evento_json.titulo_evento %}
+                {{solicitacao.evento_json.titulo_evento}}
               {% else %}
-              {{solicitacao.evento_json.tipo_formatado}}
-              {% endif %}</h5>
+              
+                {% if solicitacao.evento_json.tipo_formatado == None or not solicitacao.evento_json.titulo_evento %}
+                  Não Informado
+                {% else %}
+                  {{solicitacao.evento_json.tipo_formatado}}
+                {% endif %}
+                  
+              {% endif %}
+ 
+</h5>
         
           </div>
         <!-- /.card-header -->
@@ -236,10 +245,16 @@
                             <div class="form-group">
                                 <label>Evento:</label>
                                 <div class="input-group">
-                                  {% if solicitacao.evento_json.tipo_formatado == None %}
-                                  Não Informado
+                                  {% if solicitacao.evento_json.titulo_evento %}
+                                    {{solicitacao.evento_json.titulo_evento}}
                                   {% else %}
-                                  {{solicitacao.evento_json.tipo_formatado}}
+                                  
+                                    {% if solicitacao.evento_json.tipo_formatado == None or not solicitacao.evento_json.titulo_evento %}
+                                      Não Informado
+                                    {% else %}
+                                      {{solicitacao.evento_json.tipo_formatado}}
+                                    {% endif %}
+                                      
                                   {% endif %}
                                   
                               
@@ -252,11 +267,19 @@
                             <div class="form-group">
                                 <label>Data de Início:</label>
                                 <div class="input-group">
-                                  {% if solicitacao.evento_json.data_inicio_formatada == None %}
+                                {% if solicitacao.evento_json.data_inicio %}
+                                  {{solicitacao.evento_json.data_inicio}}
+                                {% else %}
+                                
+                                {% if solicitacao.evento_json.data_inicio_formatada == None or not solicitacao.evento_json.data_inicio %}
                                   Não Informado
-                                  {% else %}
-                                  {{solicitacao.evento_json.data_inicio_formatada}}
-                                  {% endif %}
+                                {% else %}
+                                 {{solicitacao.evento_json.data_inicio_formatada}}
+                                {% endif %}
+                                    
+                                {% endif %}
+
+                                 
                                   
                               
                                 </div>
@@ -268,18 +291,40 @@
                             <div class="form-group">
                                 <label>Data Final:</label>
                                 <div class="input-group">
-                                  {% if solicitacao.evento_json.data_fim_formatada == None %}
+                                  {% if solicitacao.evento_json.data_fim %}
+                                  {{solicitacao.evento_json.data_fim}}
+                                {% else %}
+                                
+                                {% if solicitacao.evento_json.data_fim_formatada == None or not solicitacao.evento_json.data_fim %}
                                   Não Informado
-                                  {% else %}
+                                {% else %}
                                   {{solicitacao.evento_json.data_fim_formatada}}
-                                  {% endif %}
+                                {% endif %}
+                                    
+                                {% endif %}
+
+                                 
                                   
                               
                                 </div>
                                 <!-- /.input group -->
                             </div>
                           </div>
+                          {% if solicitacao.evento_json.endereco %}
+                          <div class="col-lg-3 col-12">
+                            <div class="form-group">
+                                <label>Endereço:</label>
+                                <div class="input-group">
             
+                                  {{solicitacao.evento_json.endereco}}
+                    
+                                  
+                              
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                          </div>
+                          {% else %}
                           <div class="col-lg-3 col-12">
                             <div class="form-group">
                                 <label>Logradouro:</label>
@@ -340,6 +385,8 @@
                                 <!-- /.input group -->
                             </div>
                           </div>
+                          {% endif %}
+                          
 
                           {% if programacao_adicional %}
                           <div class="col-12 col-sm-12 col-md-12">
