@@ -23,4 +23,5 @@ def Dashboard(request):
     solicitacoes = Solicitacao_Serializar(solicitacoes,many=True).data
     for solicitacao in solicitacoes:
         solicitacao['data_solicitacao'] = datetime.datetime.strptime(solicitacao['data_solicitacao'], '%Y-%m-%d').date()
+        
     return render(request,'dashboard.html',{'solicitacoes':solicitacoes})

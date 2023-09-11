@@ -1,0 +1,110 @@
+<div class="col-12 col-sm-12 col-md-6">
+    <div class="form-group">
+      <label>Informe a Escola:</label>
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i style="color: #000000" class="fa fa-map"></i></span>
+         
+        </div>
+        <select  class="form-control select2" id="escola" name="escola">
+            <option value="">SELECIONE UMA ESCOLA:</option>
+            {% for escola in escolas %}
+
+            <option value="{{escola.id}}">{{escola.nome}} - {{escola.convenio}}</option>
+
+            {% endfor %}
+          </select>
+      </div>
+      <!-- /.input group -->
+    </div>
+  </div>
+<div class="col-12 col-sm-12 col-md-6" id="endereco_escola">
+    <div class="form-group">
+      <label>Endereço:</label>
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i style="color: #000000" class="fa fa-map"></i></span>
+         
+        </div>
+        <input type="text" value="" required id="endereco_escola"  class="form-control" name="endereco_escola">
+      </div>
+      <!-- /.input group -->
+    </div>
+  </div>
+  <div class="col-12 col-sm-12 col-md-6">
+    <div class="form-group">
+    <label>Data Inicial:</label>
+
+    <div class="input-group">
+        <div class="input-group-prepend">
+        <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+        </div>
+        <input type="date" id="data_inicial" required   class="form-control" name="data_inicial">
+    </div>
+    <!-- /.input group -->
+    </div>
+</div>
+
+<div class="col-12 col-sm-12 col-md-6">
+  <div class="form-group">
+  <label>Data Final:</label>
+
+  <div class="input-group">
+      <div class="input-group-prepend">
+      <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+      </div>
+      <input type="date" required id="data_final"  class="form-control" name="data_final">
+  </div>
+  <!-- /.input group -->
+  </div>
+</div>
+  <div class="col-12 col-sm-12 col-md-12" id="endereco_escola">
+    <div class="form-group">
+      <label>Título do Evento:</label>
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i style="color: #000000" class="fa fa-map"></i></span>
+         
+        </div>
+        <input type="text" value="" required id="titulo_evento"  class="form-control" name="titulo_evento">
+      </div>
+      <!-- /.input group -->
+    </div>
+  </div>
+
+  <script>
+    $("#escola").on("change", function() {
+      console.log('entrou')
+      var idEscola = $(this).val();
+      url = '/ajax/load-endereco-escola'
+      
+      $.ajax({
+      url: url,
+      data: {'idEscola':idEscola},
+      
+      beforeSend: function() {
+          // exibe o spinner com fundo escuro enquanto aguarda a resposta
+          $('#spinner-background').show();
+        },
+      success: function(data) {
+
+        $("#endereco_escola").html(data);
+      },
+      complete: function() {
+          // esconde o spinner com fundo escuro quando a resposta é recebida
+          $('#spinner-background').hide();
+        },
+      error: function(xhr, status, error) {
+        Swal.fire({
+              icon: 'error',
+              title: 'Ops!',
+              text: 'Não foi possível obter resultados!'
+            });
+      }
+    });
+
+ });
+  </script>

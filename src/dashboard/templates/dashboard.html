@@ -279,8 +279,8 @@
                             {% endif %}
                           </td>
                           <td>{{solicitacao.data_solicitacao|date:'d/m/Y'}}</td>
-                         <td>{{solicitacao.evento_json.tipo_formatado}}</td>
-                         <td>{{solicitacao.evento_json.data_inicio_formatada}} até {{solicitacao.evento_json.data_fim_formatada}}</td>
+                         <td>{% if solicitacao.evento_json.tipo_formatado %}{{solicitacao.evento_json.tipo_formatado}}{%else%}{{solicitacao.evento_json.titulo_evento}}  {% endif %}</td>
+                         <td>{% if solicitacao.evento_json.data_inicio_formatada %} {{solicitacao.evento_json.data_inicio_formatada}} até {{solicitacao.evento_json.data_fim_formatada}} {% else %} {{solicitacao.evento_json.data_inicio}} até {{solicitacao.evento_json.data_fim}} {% endif %}</td>
                          <td>{{solicitacao.criado_por.first_name}}</td>
                          <td><span style="color:#c5221f">{{solicitacao.entregaveis_pendentes}}</span> / <span style="color:#c5221f">{{solicitacao.entregaveis_totais}}</span></td>
                          <td><span style="color:#0b942b">{{solicitacao.entregaveis_concluidos}}</span> / <span style="color:#0b942b">{{solicitacao.entregaveis_totais}}</span></td>

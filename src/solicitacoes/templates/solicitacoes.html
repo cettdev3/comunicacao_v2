@@ -224,7 +224,7 @@ z-index: 9999;
                                         <div class="form-group">
 
                                             <div class="row">
-                                                <div class="col-12 col-sm-12 col-md-9">
+                                                <div class="col-12 col-sm-12 col-md-8">
                                                     <div class="form-group">
                                                       <label>Informe o Evento:</label>
                                     
@@ -237,7 +237,7 @@ z-index: 9999;
                                                             <option value="{{evento.id}}">{{evento.tipo_formatado}} de {{evento.data_inicio|date:'d/m/Y'}} até {{evento.data_fim|date:'d/m/Y'}} em {{evento.cidade.nome}}</option>
                                                             {% endif %}
                                                             {% endfor %}
-                                                            <option value="und">Destinar Unidade</option>
+                                                            <option value="und">Outros</option>
                                                           </select>
                                                       </div>
                                                       <!-- /.input group -->
@@ -270,6 +270,16 @@ z-index: 9999;
                                                       <div class="custom-control custom-radio">
                                                         <input class="custom-control-input" type="radio" id="customRadio3" name="tipo_und" value="3" required checked>
                                                         <label for="customRadio3" class="custom-control-label">CETT</label>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+
+                                                  <div class="col-3 col-sm-3 col-md-1">
+                                                    <div class="form-group">
+                                                      <label> </label>
+                                                      <div class="custom-control custom-radio">
+                                                        <input class="custom-control-input" type="radio" id="customRadio3" name="tipo_und" value="4" required >
+                                                        <label for="customRadio3" class="custom-control-label"> BASILEU</label>
                                                       </div>
                                                     </div>
                                                   </div>
@@ -2410,47 +2420,6 @@ function realizaSolicitacao(user_id, solicitacao_id) {
 }
 
 
-
-
-// function realizaSolicitacao(user_id,solicitacao_id){
-//     const url = "/ajax/realiza-solicitacao";
-//     var formData = $("#form_eventos").serialize();
-   
-//     var XCSRFToken = '{{ csrf_token }}'
-//     if ($("#form_eventos")[0].checkValidity()) {
-
-//       $.ajax({
-          
-//           url: url,
-//           type:"post",
-//           data: formData,
-//           headers: { "X-CSRFToken":  XCSRFToken },
-//           success: function (data) {
-//             Swal.fire({
-//                 icon: 'success',
-//                 title: 'Solicitação Realizada!',
-//                 text: 'Sua solicitação foi realizada com sucesso!'
-//               });
-//               window.location.href = 'solicitacao';   
-//           },
-//           error: function (data) {
-//             if (data.responseJSON && data.responseJSON.error_message) {
-//               Swal.fire({
-//                   icon: 'error',
-//                   title: 'Ops!',
-//                   text: data.responseJSON.error_message
-//               });
-//           }  
-//           }
-//       });
-//     }else{
-//       Swal.fire({
-//             icon: 'error',
-//             title: 'Ops!',
-//             text: 'Por favor, preencha todos os campos obrigatórios.'
-//         });
-//     }
-// }
 </script>
         
         

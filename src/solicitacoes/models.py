@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 # Create your models here.
 class Solicitacoes(models.Model):
-    choices_projeto = [('1','EFG'),('2','COTEC'),('3','CETT')]
+    choices_projeto = [('1','EFG'),('2','COTEC'),('3','CETT'),('4','BASILEU')]
     choices_status = [('1','Solicitação Criada'),('2','Aguardando Entregas'),('3','Concluída'),('4','Devolvida')]
 
     id = models.AutoField(primary_key=True)
@@ -188,3 +188,16 @@ class Tarefas(models.Model):
 
     class  Meta:
         db_table = 'tarefas'
+
+# Create your models here.
+class Escolas(models.Model):
+    id = models.AutoField(primary_key=True)
+    nome = models.CharField(max_length=255)
+    bairro = models.CharField(max_length=255)
+    logradouro = models.CharField(max_length=255)
+    cep = models.CharField(max_length=255)
+    cidade = models.CharField(max_length=255)
+    complemento = models.CharField(max_length=255,default=False, null=False)
+    convenio = models.CharField(max_length=10)
+    class  Meta:
+        db_table = 'escolas'

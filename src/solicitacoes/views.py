@@ -11,9 +11,15 @@ from django.utils.html import linebreaks
 from datetime import datetime
 from .utils import get_token_api_eventos,get_all_eventos,get_evento
 import datetime
-from .models import Entregaveis,Solicitacoes,Programacao_Adicional,Tarefas
+from .models import Entregaveis,Solicitacoes,Programacao_Adicional,Tarefas,Escolas
 from .serializers import Solicitacao_Serializar,Tarefas_Serializar,Entregaveis_Serializar
 from django.contrib.auth.models import User
+
+def convert_data_formatada(data):
+    print(data)
+    data = data.split('-')
+    data = data[2]+'/'+data[1]+'/'+data[0]
+    return data
 
 @login_required(login_url='/')
 def Form_Solicitacoes(request):
@@ -84,26 +90,58 @@ def Ajax_Realiza_Solicitacao(request):
 
             #OBTÉM DADOS DA SOLICITAÇÃO
             idEvento = request.POST.get('eventos_gerais',None)
-            tipoUnidade = request.POST.get('tipo_und',None)
             publicoEvento = request.POST.get('publico_evento',None)
             save_the_date = request.POST.get('save_the_date',None)
             programacao_evento = request.POST.get('programacao_evento',None)
             divulgacao_check = request.POST.get('divulgacao_check',None)
             programacao_check = request.POST.get('programacao_check',None)
             stand_check = request.POST.get('stand_check',None)
-            evento_json = request.POST.get('json_data',None)
             userid = request.user.id
-       
-            token = get_token_api_eventos()
-            json_evento = get_evento(token,idEvento)
-            # json_string = str(json_evento).replace("'", "\"")
-            print(request.user.id)
 
-            #ANTES VERIFICA SE A SOLICITAÇÃO JÁ EXISTE
-            solicitacao = Solicitacoes.objects.filter(evento_json__id = idEvento).first()
-            if solicitacao:
-                print(solicitacao.id)
+            if idEvento != 'und':
+                tipoUnidade = request.POST.get('tipo_und',None)
+                token = get_token_api_eventos()
+                json_evento = get_evento(token,idEvento)
+                # json_string = str(json_evento).replace("'", "\"")
+                print(request.user.id)
+
+                #ANTES VERIFICA SE A SOLICITAÇÃO JÁ EXISTE
+                solicitacao = Solicitacoes.objects.filter(evento_json__id = idEvento).first()
+                if solicitacao:
+                    print(solicitacao.id)
+                else:
+                    #CRIA A SOLICITACAO
+                    solicitacao = Solicitacoes.objects.create(
+                        tipo_projeto = tipoUnidade, 
+                        publico_evento = publicoEvento,
+                        criado_por_id = userid,
+                        evento_json = json_evento,
+                    )
+        
+                
+
             else:
+                tipoUnidade = request.POST.get('tipo_und',None)
+                escola = request.POST.get('escola',None)
+                endereco_escola = request.POST.get('endereco_escola',None)
+                data_inicio = request.POST.get('data_inicial',None)
+                data_fim = request.POST.get('data_final',None)
+                
+                if data_inicio:
+                    data_inicio = convert_data_formatada(data_inicio)
+                if data_fim:
+                    data_fim = convert_data_formatada(data_fim)
+
+                
+                titulo_evento = request.POST.get('titulo_evento',None)
+                json_evento = {
+                        "escola":escola,
+                        "endereco":endereco_escola,
+                        "data_inicio":data_inicio,
+                        "data_fim":data_fim,
+                        "titulo_evento":titulo_evento,
+
+                }
                 #CRIA A SOLICITACAO
                 solicitacao = Solicitacoes.objects.create(
                     tipo_projeto = tipoUnidade, 
@@ -111,6 +149,13 @@ def Ajax_Realiza_Solicitacao(request):
                     criado_por_id = userid,
                     evento_json = json_evento,
                 )
+
+
+
+
+            
+ 
+
 
             #VERIFICA PROGRAMAÇÃO
             if programacao_evento:
@@ -595,4 +640,26 @@ def Ajax_Devolve_Entregavel(request):
 
         return JsonResponse({"success_message": "Tarefa em revisão!"}) 
     except Exception as e:
-        return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)   
+        return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)
+
+@login_required(login_url='/')
+def Ajax_Endereco_Escola(request):
+    idEscola = request.GET['idEscola']
+    if idEscola:
+        escola = Escolas.objects.filter(id=idEscola).first()
+        escola_info = Escolas.objects.filter(id=idEscola).values()
+        escola_info = escola_info[0]
+        endereco_montado = ''
+
+        if escola_info['logradouro']:
+            endereco_montado = endereco_montado + escola_info['logradouro'] + ' - '
+        if escola_info['bairro']:
+            endereco_montado  = endereco_montado + escola_info['bairro'] + ' - '
+        if escola_info['complemento']:
+            endereco_montado  = endereco_montado + escola_info['complemento'] + ' - '
+        if escola_info['cep']:
+            endereco_montado  = endereco_montado + escola_info['cep'] + ' - '
+        if escola_info['cidade']:
+            endereco_montado  = endereco_montado + escola_info['cidade']
+
+        return render(request,'ajax/ajax_load_endereco.html',{'escola':escola,'endereco':endereco_montado})
