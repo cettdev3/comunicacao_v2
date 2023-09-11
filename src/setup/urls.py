@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('menu.urls')),
     path('', include('solicitacoes.urls')),
     path('', include('backlog.urls')),
+    path('', include('tarefas.urls')),
 
 
 

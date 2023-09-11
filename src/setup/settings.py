@@ -59,7 +59,8 @@ INSTALLED_APPS = [
     'menu',
     'dashboard',
     'solicitacoes',
-    'backlog'
+    'backlog',
+    'tarefas'
 
 
 

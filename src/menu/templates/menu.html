@@ -141,10 +141,10 @@
                with font-awesome or any other icon font library -->
                <li class="nav-item">
     
-                <a href="/dashboard" class="nav-link {% if request.path == '/dashboard' %} active{% endif %}">
+                <a href="/solicitacoes" class="nav-link {% if request.path == '/dashboard' %} active{% endif %}">
                   <i class="nav-icon bi bi-speedometer"></span></i>
                   <p>
-                    Dashboard
+                    Solicitações
                  
                   </p>
                 </a>
@@ -152,10 +152,10 @@
 
               <li class="nav-item">
 
-                <a href="/backlog" class="nav-link {% if request.path == '/backlog' %} active{% endif %}">
+                <a href="/minhas-tarefas" class="nav-link {% if request.path == '/backlog' %} active{% endif %}">
                   <i class="nav-icon bi bi-kanban"></i>
                   <p>
-                     Backlog
+                     Minhas Tarefas
                  
                   </p>
                 </a>
@@ -163,10 +163,10 @@
 
               <li class="nav-item">
 
-                <a href="/tasks" class="nav-link {% if request.path == '/tasks' %} active{% endif %}">
+                <a href="/tarefas" class="nav-link {% if request.path == '/tasks' %} active{% endif %}">
                   <i class="nav-icon bi bi-list-task"></i>
                   <p>
-                     Tarefas
+                     Todas as Tarefas
                  
                   </p>
                 </a>
@@ -186,7 +186,7 @@
      
 
           <li class="nav-item">
-            <a href="/solicitacoes" class="nav-link {% if request.path == '/solicitacoes' or '/solicitacao/visualizar/' in request.path %} active{% endif %}">
+            <a href="/realizar-solicitacoes" class="nav-link {% if request.path == '/solicitacoes' or '/solicitacao/visualizar/' in request.path %} active{% endif %}">
               <i class="nav-icon fa fa-sticky-note"></i>
               <p>
                 Realizar Solicitações

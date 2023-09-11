@@ -434,11 +434,14 @@
                                                         <div class="col-lg-3 col-12">
                                                           <button onclick="revisaoTask('{{entregavel.tarefas_relacionadas.id}}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-card-text"></i> Solicitar Revisão de Tarefa</button>
                                                         </div>
-                                                        {%  elif entregavel.status == '0' or entregavel.status == '4' or entregavel.status == '3' %}
+                                                        {%  elif entregavel.status == '0' and not entregavel.tarefas_relacionadas or entregavel.status == '4' or entregavel.status == '3' %}
                                                         <div class="col-lg-3 col-12">
                                                             <button onclick="modalTarefas('{{entregavel.id}}','{{ forloop.counter }}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-people-fill"></i> Designar Usuário</button>
                                                         </div>
                                                         {% endif %}
+
+                                                   
+
                                                       </div>
                                            
                                                   
