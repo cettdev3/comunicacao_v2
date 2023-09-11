@@ -474,17 +474,25 @@
                                                         {% endif %}
                                                        
                                                         {% if entregavel.status == '1' %}
+
+                                                        {% if '8' in permissoes.permissao %}
                                                         <div class="col-lg-3 col-12">
                                                             <button onclick="enviaAprovacao('{{entregavel.id}}',2)" type="button" class="btn btn-block btn-dark"><i class="bi bi-send-plus"></i> Enviar p/ Solicitante</button>
                                                         </div>
+                                                        {% endif %}
 
+                                                        {% if '7' in permissoes.permissao %}
                                                         <div class="col-lg-3 col-12">
                                                           <button onclick="revisaoTask('{{entregavel.tarefas_relacionadas.id}}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-card-text"></i> Solicitar Revisão de Tarefa</button>
                                                         </div>
+                                                        {% endif %}
+                                                        
                                                         {%  elif entregavel.status == '0' and not entregavel.tarefas_relacionadas or entregavel.status == '4' or entregavel.status == '3' %}
+                                                        {% if '6' in permissoes.permissao %}
                                                         <div class="col-lg-3 col-12">
                                                             <button onclick="modalTarefas('{{entregavel.id}}','{{ forloop.counter }}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-people-fill"></i> Designar Usuário</button>
                                                         </div>
+                                                        {% endif %}
                                                         {% endif %}
 
                                                    

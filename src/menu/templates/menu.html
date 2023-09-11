@@ -139,6 +139,8 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+               {% if '1' in permissoes.permissao %}
+            
                <li class="nav-item">
     
                 <a href="/solicitacoes" class="nav-link {% if request.path == '/dashboard' %} active{% endif %}">
@@ -149,9 +151,10 @@
                   </p>
                 </a>
               </li>
-
+              {% endif %}
               <li class="nav-item">
 
+              {% if '2' in permissoes.permissao %}  
                 <a href="/minhas-tarefas" class="nav-link {% if request.path == '/backlog' %} active{% endif %}">
                   <i class="nav-icon bi bi-kanban"></i>
                   <p>
@@ -160,7 +163,9 @@
                   </p>
                 </a>
               </li>
+              {% endif %}
 
+              {% if '3' in permissoes.permissao %}  
               <li class="nav-item">
 
                 <a href="/tarefas" class="nav-link {% if request.path == '/tasks' %} active{% endif %}">
@@ -171,8 +176,9 @@
                   </p>
                 </a>
               </li>
+              {% endif %}   
               
-  
+              {% if '4' in permissoes.permissao %}  
               <li class="nav-item">
     
                 <a href="/gerir-time" class="nav-link {% if request.path == '/gerir-time' %} active{% endif %}">
@@ -183,8 +189,9 @@
                   </p>
                 </a>
               </li>
-     
+              {% endif %}
 
+        {% if '5' in permissoes.permissao %}  
           <li class="nav-item">
             <a href="/realizar-solicitacoes" class="nav-link {% if request.path == '/solicitacoes' or '/solicitacao/visualizar/' in request.path %} active{% endif %}">
               <i class="nav-icon fa fa-sticky-note"></i>
@@ -194,7 +201,7 @@
               </p>
             </a>
           </li>
-     
+          {% endif %}
 
         
 

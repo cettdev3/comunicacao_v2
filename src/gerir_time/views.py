@@ -10,7 +10,8 @@ def Gerir_time(request):
     #users = User.objects.select_related('user_id').values('id', 'email','first_name', 'username', 'usuarios__unidade__nome').values('id','email', 'first_name', 'username', 'usuarios__unidade__nome')
     usuarios = User.objects.all()
     unidades = Escolas.objects.all()
-    return render(request, 'gerir_time.html',{'usuarios':usuarios,'unidades':unidades})
+    permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first
+    return render(request, 'gerir_time.html',{'usuarios':usuarios,'unidades':unidades,'permissoes':permissoes})
 
 @login_required(login_url='/')
 def Ajax_load_unidade(request):

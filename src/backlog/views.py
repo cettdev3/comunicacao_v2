@@ -4,12 +4,14 @@ from solicitacoes.models import Tarefas
 from django.db import transaction
 from django.http import JsonResponse
 import datetime
+from gerir_time.models import Permissoes
 # Create your views here.
 @login_required(login_url='/')
 def Backlog(request):
+    permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first
     tarefas = Tarefas.objects.filter(usuario=request.user.id).all()
     
-    return render(request, 'backlog.html',{'tarefas':tarefas})
+    return render(request, 'backlog.html',{'tarefas':tarefas,'permissoes':permissoes})
 
 @login_required(login_url='/')
 def Ajax_View_Task(request):

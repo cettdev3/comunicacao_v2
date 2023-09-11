@@ -13,6 +13,7 @@ import datetime
 from .models import Entregaveis,Solicitacoes,Programacao_Adicional,Tarefas,Escolas
 from .serializers import Solicitacao_Serializar,Tarefas_Serializar,Entregaveis_Serializar
 from django.contrib.auth.models import User
+from gerir_time.models import Permissoes
 
 def convert_data_formatada(data):
     print(data)
@@ -22,7 +23,7 @@ def convert_data_formatada(data):
 
 @login_required(login_url='/')
 def Form_Solicitacoes(request):
-
+    permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first
     token = get_token_api_eventos()
     eventos = get_all_eventos(token)
 
@@ -36,9 +37,11 @@ def Form_Solicitacoes(request):
                 pass
 
 
-    return render(request, 'solicitacoes.html',{'eventos':eventos})
+    return render(request, 'solicitacoes.html',{'eventos':eventos,'permissoes':permissoes})
 
 def Visualizar_Solicitacao(request,codigo):
+    permissoes = Permissoes.objects.filter(id=request.user.id).first()
+
     solicitacao = Solicitacoes.objects.filter(id=codigo).first()
     solicitacao = Solicitacao_Serializar(solicitacao).data
     solicitacao['data_solicitacao'] = datetime.datetime.strptime(solicitacao['data_solicitacao'], '%Y-%m-%d').date()
@@ -61,7 +64,7 @@ def Visualizar_Solicitacao(request,codigo):
         entregavel['tarefas_relacionadas'] = tarefas_relacionadas
 
     usuarios = User.objects.all()
-    context = {'solicitacao':solicitacao,'entregaveis':entregaveis,'programacao_adicional':programacao_adicional,'usuarios':usuarios,'tarefas_por_entregavel': tarefas_por_entregavel}
+    context = {'solicitacao':solicitacao,'entregaveis':entregaveis,'programacao_adicional':programacao_adicional,'usuarios':usuarios,'tarefas_por_entregavel': tarefas_por_entregavel,'permissoes':permissoes}
     return render(request,'visualizar_solicitacao.html',context)
 
 @login_required(login_url='/')

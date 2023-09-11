@@ -29,7 +29,7 @@ class Solicitacoes(models.Model):
             self.status = 3
             self.save()
         else:
-            self.status = 2
+            self.status = 1
             self.save()
 
     
@@ -100,9 +100,7 @@ class Entregaveis(models.Model):
             self.status = 1
             self.save()
 
-        elif total_tarefas == 0 and total_geral_tarefas > 0 and self.status == 1:
-            self.status = 2
-            self.save()
+
         
 
 
