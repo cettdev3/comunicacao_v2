@@ -1,9 +1,30 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.models import User
+from solicitacoes.models import Escolas
+from .models import Permissoes
 # Create your views here.
 # Create your views here.
 @login_required(login_url='/')
 def Gerir_time(request):
- 
-    return render(request, 'gerir_time.html')
+    #users = User.objects.select_related('user_id').values('id', 'email','first_name', 'username', 'usuarios__unidade__nome').values('id','email', 'first_name', 'username', 'usuarios__unidade__nome')
+    usuarios = User.objects.all()
+    unidades = Escolas.objects.all()
+    return render(request, 'gerir_time.html',{'usuarios':usuarios,'unidades':unidades})
+
+@login_required(login_url='/')
+def Ajax_load_unidade(request):
+    userId = request.GET['userid']
+    dados = Permissoes.objects.filter(usuario_id = userId).values()
+    print(dados[0])
+    unidades = Escolas.objects.all()
+    unidade = dados[0]['unidade_id']
+    return render(request, 'ajax/ajax_unidade.html', {'unidade': unidade,'unidades':unidades})
+
+@login_required(login_url='/')
+def Ajax_load_permissoes(request):
+    userId = request.GET['userid']
+    dados = Permissoes.objects.filter(usuario_id = userId).values()
+    unidades = Escolas.objects.all()
+    permissoes  = dados[0]['permissoes']
+    return render(request, 'ajax/ajax_permissoes.html', {'permissoes': permissoes})

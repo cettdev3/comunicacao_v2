@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from login.models import Usuarios
 from django.core.paginator import Paginator
 from datetime import date,datetime
 import datetime
@@ -15,8 +14,7 @@ from solicitacoes.serializers import Solicitacao_Serializar
 # Create your views here.
 @login_required(login_url='/')
 def Dashboard(request):
-    userLog = request.user
-    infoUserLog = Usuarios.objects.filter(user=request.user.id).values()
+
     data_atual = datetime.date.today()
     
     solicitacoes = Solicitacoes.objects.all()
