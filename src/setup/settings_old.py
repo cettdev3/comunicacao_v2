@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'solicitacoes',
     'backlog',
     'tarefas',
-    
+    'gerir_time'
 
 
 

@@ -1,0 +1,645 @@
+{% extends 'menu.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+
+
+
+  table {
+  
+  border: 1px solid #eee;
+  border-collapse: collapse;
+  text-align: left;
+  width: 100%;
+  align-items: center;
+  font-family: 'Open Sans', sans-serif;
+  }
+  
+  table thead th {
+  
+  padding: 10px;
+  font-size: 1em;
+  color: #000;
+  font-weight: 600;
+  }
+  
+  table tbody tr td {
+  
+  display: table-cell;
+  font-weight: 400;
+  padding: 10px;
+  text-align: left;
+  position: relative;
+  }
+  
+  table tbody tr {
+  
+  border: none;
+  display: table-row;
+  }
+  
+  table tbody tr:nth-child(odd) {
+  
+  background: #f2f2f2;
+  }
+  
+  table tbody tr td button {
+  
+  display: inline-block;
+  padding: 10px 15px;
+  position: initial;
+  transform: translate(0);
+  width: auto;
+  }
+  
+  table tbody tr td button {
+  
+  background: #4CAF50;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(34, 34, 34, 0.2);
+  color: #fff;
+  font-weight: 700;;
+  padding: 10px 0;
+  width: 100%;
+  }
+  
+  table thead {
+  
+  display: table-header-group;
+  font-weight: 500;
+  }
+  
+  
+  table tbody tr td:before {
+  
+  display: none;
+  }
+  
+  table tbody tr td button:hover, table tbody tr td button:focus {
+  
+  background: #0C504B;
+  color: #ffffff;
+  cursor: pointer;
+  }
+  
+  @media all and (max-width: 800px) {
+  
+  table tbody tr td {
+  
+      display: block;
+      text-align: center;
+  }
+  
+  table tbody tr td:before {
+  
+      content: attr(data-title);
+      position: absolute;
+      left: 15px;
+      display: block;
+      font-weight: 600;
+      font-size: 1em;
+  }
+  
+  table {
+  
+      border: none;
+  }
+  
+  table thead {
+  
+      display: none;
+  }
+  
+  table tbody tr {
+  
+      margin-bottom: 10px;
+      display: block;
+      border: 1px solid #dad6eb;
+  }
+  
+  
+  }
+  
+  </style>
+   <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Gerir Time</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Configurações</a></li>
+              <li class="breadcrumb-item active">Gerir Time</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+<section class="content">
+    <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+   <div class="container-fluid">
+      <!-- Small boxes (Stat box) -->
+      <div class="card">
+        <div class="card-header" style="background-color: #fafafa;">
+          <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="fa fa-key"></i> Permissões de Usuário</h3>
+
+        </div>
+        <!-- /.card-header -->
+        
+            {% csrf_token %}
+            <div class="card-body">
+              {% if messages %}
+              {% for message in messages%}
+              <div {% if message.tags %} class="{{ message.tags }}"{% endif %} style="text-align: center;" role="alert">
+              {{message}}
+              </div>
+              {% endfor %}
+              {% endif  %}
+             
+     
+                    <div class="container-fluid">
+                        <!-- Small boxes (Stat box) -->
+                        <form method="POST" action="/permissoes-acesso" >
+                          {% csrf_token %}
+                          <div class="row">
+
+                            <div class="col-12 col-sm-12 col-md-6">
+                              <div class="form-group">
+                                <label>Usuário:</label>
+                                <select class="form-control select2" style="width: 100%;" name="usuarioPerm" id="usuarioPerm">
+                                  <option selected="selected">--</option>
+                                  {% for user in users %}
+                                  <option value="{{user.id}}">{{user.first_name}}</option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                            </div>
+                           
+                            <div class="col-12 col-sm-12 col-md-6">
+                              <div class="form-group">
+                                <label>Unidade:</label>
+                                <select class="form-control select2" style="width: 100%;" name="unidade_perm" id="unidade_perm">
+                                 <option></option>
+
+                                </select>
+                              </div>
+                            </div>
+                            </div>
+                            <div class="row" id="permission_ajax">
+                            <div class="col-12 col-sm-6 col-md-4">
+                              <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" name="checkboxCreateSolicitacoes" id="checkboxCreateSolicitacoes" value="1">
+                                <label for="checkboxCreateSolicitacoes" class="custom-control-label">Realizar Solicitações</label>
+                              </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6 col-md-4">
+                              <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" name="checkboxEditSolicitacoes" id="checkboxEditSolicitacoes" value="2">
+                                <label for="checkboxEditSolicitacoes" class="custom-control-label">Editar Solicitações</label>
+                              </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6 col-md-4">
+                              <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" name="checkboxCancelSolicitacoes" id="checkboxCancelSolicitacoes" value="4">
+                                <label for="checkboxCancelSolicitacoes" class="custom-control-label">Aprovar/Cancelar/Devolver Solicitação</label>
+                              </div>
+                            </div>
+
+                            <br>
+                            <br>
+
+                            <div class="col-12 col-sm-6 col-md-4">
+                              <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" name="checkboxAnexarMaterial" id="checkboxAnexarMaterial" value="6">
+                                <label for="checkboxAnexarMaterial" class="custom-control-label">Anexar Material</label>
+                              </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6 col-md-4">
+                              <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" name="checkboxAprovaCettSecretaria" id="checkboxAprovaCettSecretaria" value="7">
+                                <label for="checkboxAprovaCettSecretaria" class="custom-control-label">Aprovar Material CETT/Secretaria</label>
+                              </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6 col-md-4">
+                              <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" name="checkboxProtocolarEdu" id="checkboxProtocolarEdu" value="8">
+                                <label for="checkboxProtocolarEdu" class="custom-control-label">Protocolar Edu.CETT</label>
+                              </div>
+                            </div>
+                            <br>
+                            <br>
+                            <div class="col-12 col-sm-6 col-md-4">
+                              <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" name="checkboxGerarPermissoes" id="checkboxGerarPermissoes" value="10">
+                                <label for="checkboxGerarPermissoes" class="custom-control-label">Permissões de Acesso</label>
+                              </div>
+                            </div>
+
+                           
+                            <br>
+                            <br>
+                            
+                            <div class="col-12 col-sm-6 col-md-4">
+                              <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" name="checkboxAcessarLogs" id="checkboxAcessarLogs" value="11">
+                                <label for="checkboxAcessarLogs" class="custom-control-label">Acesso aos Logs</label>
+                              </div>
+                            </div>
+                            <br>
+                            <br>
+
+                            <div class="col-12 col-sm-6 col-md-4">
+                              <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" name="checkboxDesignarDesign" id="checkboxDesignarDesign" value="13">
+                                <label for="checkboxAcessarLogs" class="custom-control-label">Designar Design</label>
+                              </div>
+                            </div>
+                            <br>
+                            <br>
+                               
+                            <div class="col-12 col-sm-6 col-md-4">
+                              <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" name="checkboxAcessarDesign" id="checkboxAcessarDesign" value="12">
+                                <label for="checkboxAcessarLogs" class="custom-control-label">Página do Design</label>
+                              </div>
+                            </div>
+                            <br>
+                            <br>
+                            <div class="col-12 col-sm-3 col-md-2"></div>
+
+                            <div class="col-12 col-sm-3 col-md-2">
+                              <button type="button" data-toggle="modal" data-target="#modal-notificar-usuario" class="btn btn-block bg-gradient-dark btn-flat"><i class="fa fa-commenting" aria-hidden="true"></i>   Notificar Usuário</button>
+                            </div>
+                            <div class="col-12 col-sm-3 col-md-2">
+                              <button type="button" data-toggle="modal" data-target="#modal-cadastrar-usuario" class="btn btn-block bg-gradient-dark btn-flat"><i class="fa fa-user" aria-hidden="true"></i>   Cadastrar Usuário</button>
+                            </div>
+                            <div class="col-12 col-sm-3 col-md-2">
+                              <button type="submit" class="btn btn-block bg-gradient-dark btn-flat"><i class="fa fa-save" aria-hidden="true"></i>   Salvar</button>
+                            </div>
+                        
+                          
+                          </div>
+                        </form>
+                      </div>
+                      
+                    </div>
+                    
+                      </div><!-- /.container-fluid -->
+                      <div class="row">
+
+                        <div class="card" style="width: 100%;">
+                            <div class="card-header" style="background-color: #fafafa;">
+                                <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-users"></i> Usuários Registrados</h3>
+
+                            </div>
+
+                                <div class="card-body">
+                                <div class="form-group">
+                                  <div class="row">
+                                                  
+                                    <table style="margin-bottom: 10px;">
+                                      <thead>
+                                        <tr>
+                                          <th>Nome</th>
+                                          <th>Usuário</th>
+                                          <th>Email</th>
+                                          <th>Unidade</th>
+                                          <th></th>
+                                        
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {% for user in users %}
+                                        <tr >
+                                          <td data-label="first_name">{{user.first_name}}</td>
+                                          <td data-label="username">{{user.username}}</td>
+                                          <td data-label="email">{{user.email}}</td>
+                                          <td data-label="unidade">{{user.usuarios__unidade__nome}}</td>
+                                          <td data-label="dados">
+                                            <div class="input-group-prepend">
+                                              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                                <i class="fa fa-angle-double-right" ></i> Ação
+                                              </button>
+                                            <div class="dropdown-menu">
+                                              <a style="cursor: pointer;" type="button" class="dropdown-item btn btn-default" data-toggle="modal" data-target="#modal-editar-usuario" onclick="editaUsuario('{{user.first_name}}','{{user.username}}','{{user.email}}','{{user.id}}')"><i class="fa fa-pencil" ></i>  Editar</a>
+                                              <a class="dropdown-item" type="button" data-toggle="modal" data-target="#modal-confirmar-exclusao-usuario" onclick="delete_usuario('{{user.id}}')"><i class="fa fa-trash" ></i>  Excluir</a>
+                                              </div>
+                                            </div>
+                                          </td>
+
+                                        </tr>
+                                        {% endfor %}
+                                      </tbody>
+                                      
+                                    </table>
+
+                                  </div>
+                                </div>
+                                
+                    
+                            
+                                </div>
+                                <!-- /.card-body -->
+                    
+                        </div>
+
+                      </div>
+                </div>
+                
+            </div>
+
+
+    </div>
+
+    
+      <!-- /.row -->
+      <div class="modal fade" id="modal-notificar-usuario" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title"><i class="fa fa-commenting" aria-hidden="true"></i> Notificar Usuário</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <form method="POST" action="/notifica-usuario">
+              {% csrf_token %}
+              <div class="modal-body">
+                <div class="row">
+
+                  <div class="col-12 col-sm-12 col-md-12">
+                    <label>Usuário:</label>
+                    <div class="input-group mb-3">
+                                           
+                      <select class="form-control select2" style="width: 100%;" name="user_notifica" id="user_notifica">
+                        <option selected="selected">--</option>
+                        {% for user in users %}
+                        <option value="{{user.id}}">{{user.first_name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    
+                  </div>
+
+                  <div class="col-12 col-sm-12 col-md-12">
+                    <label>Notificação:</label>
+                    <div class="input-group mb-12">
+                    
+                      
+                      <textarea style="width: 100%;" rows="10" required type="text" class="form-control" name="notificacao"></textarea>
+                    </div>
+                  </div>
+
+                
+                </div>
+
+              </div>
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-dark">Cadastrar Usuário</button>
+                </div>
+              </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+      <div class="modal fade" id="modal-cadastrar-usuario" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title"><i class="fa fa-user" aria-hidden="true"></i> Cadastrar Usuário</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <form method="POST" action="/cadastrar-usuario">
+              {% csrf_token %}
+              <div class="modal-body">
+                <div class="row">
+
+                  <div class="col-12 col-sm-12 col-md-12">
+                    <label>Nome Completo:</label>
+                    <div class="input-group mb-3">
+                      
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-user" aria-hidden="true"></i></span>
+                      </div>
+                      
+                      <input required type="text" class="form-control"  name="nome_completo">
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-sm-12 col-md-6">
+                    <label>Usuário:</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-user" aria-hidden="true"></i></span>
+                      </div>
+                      
+                      <input required type="text" class="form-control" name="usuario">
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-sm-12 col-md-6">
+                    <label>Senha:</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-lock" aria-hidden="true"></i></span>
+                      </div>
+                      
+                      <input required type="password" class="form-control" name="senha">
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-sm-12 col-md-12">
+                    <label>Email:</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                      </div>
+                      
+                      <input required type="email" class="form-control" name="email">
+                    </div>
+                  </div>
+                
+                </div>
+
+              </div>
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-dark">Cadastrar Usuário</button>
+                </div>
+              </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+      <div class="modal fade" id="modal-editar-usuario" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title"><i class="fa fa-user" aria-hidden="true"></i> Alterar Usuário</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <form method="POST" action="/editar-usuario">
+              {% csrf_token %}
+              <div class="modal-body">
+                <div class="row">
+                  <input style="display: none;" type="text" id="idUser" name="idUser">
+                  <div class="col-12 col-sm-12 col-md-12">
+                    <label>Nome Completo:</label>
+                    <div class="input-group mb-3">
+                      
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-user" aria-hidden="true"></i></span>
+                      </div>
+                      
+                      <input  type="text" class="form-control"  name="nome_completo_modal" id="nome_completo_modal">
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-sm-12 col-md-6">
+                    <label>Usuário:</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-user" aria-hidden="true"></i></span>
+                      </div>
+                      
+                      <input  type="text" class="form-control" name="usuario_modal" id="usuario_modal">
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-sm-12 col-md-6">
+                    <label>Senha:</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-lock" aria-hidden="true"></i></span>
+                      </div>
+                      
+                      <input  type="password" class="form-control" name="senha_modal" id="senha_modal">
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-sm-12 col-md-12">
+                    <label>Email:</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                      </div>
+                      
+                      <input  type="email" class="form-control" name="email_modal" id="email_modal">
+                    </div>
+                  </div>
+                
+                </div>
+
+              </div>
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-dark">Alterar Usuário</button>
+                </div>
+              </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      
+      <div class="modal fade" id="modal-confirmar-exclusao-usuario" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content bg-default">
+            <div style="text-align: center;">
+              <br>
+              <h4 class="modal-title" >ATENÇÃO!</h4><br>
+              <img src="https://www.pngmart.com/files/21/Alert-PNG-Picture.png" style="width: 15%;">
+              <hr style="background-color: #ffffff;">
+            </div>
+            <div class="modal-body" style="text-align: center;">
+              <form method="POST" action="/excluir-usuario">
+                {% csrf_token %}
+                <input style="display: none;" type="text" id="idUserModal" name="idUserModal">
+              <p><b>Realmente deseja excluir este usuário?</b></p>
+              <p>Este usuário poderá conter várias ações dentro do sistema, se confirmada a exclusão, este usuário além de ser excluído também terá todas as suas relações excluídas!</p>
+              <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Cancelar</button>
+                <button type="submit"  class="btn btn-dark">Confirmar Exclusão</button>
+              </div>
+              </form>
+            </div>
+          
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+</section>
+
+
+        <!-- /.row (main row) -->
+      </div><!-- /.container-fluid -->
+
+
+      
+
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<script>
+
+  function delete_usuario(id){
+    document.getElementById('idUserModal').value = id;
+  }
+
+  function editaUsuario(nome,usuario,email,id){
+    console.log(nome,usuario,email)
+    document.getElementById('nome_completo_modal').value = nome;
+    document.getElementById('usuario_modal').value = usuario;
+    document.getElementById('email_modal').value = email;
+    document.getElementById('idUser').value = id;
+  }
+
+  $("#usuarioPerm").change(function(){
+    console.log('entrou')
+    url = '/ajax/load-unidade'
+    url_pcerm = '/ajax/load-permissoes'
+    userid = document.getElementById('usuarioPerm').value
+
+    $.ajax({
+        url : url,
+        
+        data: {'userid': userid},
+        success: function(data){
+            $("#unidade_perm").html(data);
+  
+        }
+    });
+
+    $.ajax({
+        url : url_pcerm,
+        
+        data: {'userid': userid},
+        success: function(data){
+            $("#permission_ajax").html(data);
+  
+        }
+    });
+  });
+
+</script>
+{% endblock %}
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->

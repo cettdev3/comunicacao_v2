@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include('solicitacoes.urls')),
     path('', include('backlog.urls')),
     path('', include('tarefas.urls')),
+    path('', include('gerir_time.urls')),
 
 
 

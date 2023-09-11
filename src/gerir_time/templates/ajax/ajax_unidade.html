@@ -1,0 +1,7 @@
+
+<select class="form-control select2" style="width: 100%;" name="unidade_perm" id="unidade_perm" teste="{{unidade}}">
+
+    {% for und in unidades %}
+    <option value="{{und.id}}" {% if unidade == und.id %} selected {% endif %}>{{und.nome}} - {{und.convenio}} - {{und.cidade}}</option>
+    {% endfor %}
+  </select>
