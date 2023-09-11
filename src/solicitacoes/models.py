@@ -157,13 +157,24 @@ class Tarefas(models.Model):
         prazo = self.prazo_entrega
 
         if prazo < hoje:
-            return "background:#FF0000;color:#FFF"
+            return "background:#FBEFEF;color:#000"
         elif prazo == hoje:
             return "background:#FFFF00;color:#000"
         elif prazo - hoje <= timedelta(days=3):
             return "background:#FF8C00;color:#000"
         else:
-             return "background:#006400;color:#FFF"
+             return "background:#EFFBEF;color:#000"
+    
+    def calcular_status_entrega(self):
+        entrega = self.data_entrega
+        prazo = self.prazo_entrega
+        if entrega:
+            if entrega > prazo:
+                return "background:#FBEFEF;color:#000"
+            else:
+                return "background:#EFFBEF;color:#000"
+        else:
+            return "background:#ffffff;color:#000"
         
     def get_prioridade_display(self):
         return dict(self.choices_prioridade)[str(self.prioridade)]
