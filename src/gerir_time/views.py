@@ -16,16 +16,16 @@ def Gerir_time(request):
 @login_required(login_url='/')
 def Ajax_load_unidade(request):
     userId = request.GET['userid']
-    dados = Permissoes.objects.filter(usuario_id = userId).values()
-    print(dados[0])
+    dados = Permissoes.objects.filter(usuario_id = userId).first()
+
     unidades = Escolas.objects.all()
-    unidade = dados[0]['unidade_id']
+    unidade = dados.unidade_id
     return render(request, 'ajax/ajax_unidade.html', {'unidade': unidade,'unidades':unidades})
 
 @login_required(login_url='/')
 def Ajax_load_permissoes(request):
     userId = request.GET['userid']
-    dados = Permissoes.objects.filter(usuario_id = userId).values()
+    dados = Permissoes.objects.filter(usuario_id = userId).first()
     unidades = Escolas.objects.all()
-    permissoes  = dados[0]['permissoes']
+    permissoes  = dados
     return render(request, 'ajax/ajax_permissoes.html', {'permissoes': permissoes})
