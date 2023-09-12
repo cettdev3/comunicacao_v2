@@ -237,19 +237,21 @@
                             
                           <div class="card-body">
                            <div class="row">
-                            <div class="col-sm-2">
+                   
                               
                               {{tarefa.descricao_entrega|safe}}
 
-                            </div>
+                   
                            </div>
+
                            <div class="row" style="text-align: right;">{% if arquivos %}
                             {% for arquivo in arquivos %}
                             <a href="{{arquivo}}" class="btn btn-app">
                               <i class="fas fa-file"></i> Download
                             </a>
                             {% endfor %}
-                            {% endif %}</div>
+                            {% endif %}
+                          </div>
 
                           </div>
                       </div>

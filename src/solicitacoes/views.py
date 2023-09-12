@@ -717,3 +717,25 @@ def Ajax_Altera_Entregavel(request):
     entregavel = Entregaveis.objects.filter(id=entregavelID).first()
     
     return render(request, 'ajax/ajax_editar_entregaveis.html', {'entregavel': entregavel})
+
+@login_required(login_url='/')
+def Ajax_Alterar_Entregavel(request):
+    try:
+        with transaction.atomic():
+            entregavel_id = request.POST.get('identregavel',None)
+            obs_audiovisual = request.POST.get('descricao_audiovisual',None)
+            obs = request.POST.get('descricao',None)
+
+            entregavel = Entregaveis.objects.get(id=entregavel_id)
+            if obs_audiovisual:
+                entregavel.descricao_audio_visual = obs_audiovisual
+            if obs:
+                entregavel.observacao = obs
+            
+            entregavel.status = 0
+
+            entregavel.save()
+            return JsonResponse({"success_message": "Entregável Alterado!"})
+
+    except Exception as e:
+        return JsonResponse({"error_message": "Não foi possível alterar o entregável: " + str(e)}, status=400)

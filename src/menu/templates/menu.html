@@ -143,7 +143,7 @@
             
                <li class="nav-item">
     
-                <a href="/solicitacoes" class="nav-link {% if request.path == '/dashboard' %} active{% endif %}">
+                <a href="/solicitacoes" class="nav-link {% if request.path == '/solicitacoes' %} active {% endif %}">
                   <i class="nav-icon bi bi-speedometer"></span></i>
                   <p>
                     Solicitações
@@ -155,7 +155,7 @@
               <li class="nav-item">
 
               {% if '2' in permissoes.permissao %}  
-                <a href="/minhas-tarefas" class="nav-link {% if request.path == '/backlog' %} active{% endif %}">
+                <a href="/minhas-tarefas" class="nav-link {% if request.path == '/minhas-tarefas' %} active{% endif %}">
                   <i class="nav-icon bi bi-kanban"></i>
                   <p>
                      Minhas Tarefas
@@ -168,7 +168,7 @@
               {% if '3' in permissoes.permissao %}  
               <li class="nav-item">
 
-                <a href="/tarefas" class="nav-link {% if request.path == '/tasks' %} active{% endif %}">
+                <a href="/tarefas" class="nav-link {% if request.path == '/tarefas' %} active{% endif %}">
                   <i class="nav-icon bi bi-list-task"></i>
                   <p>
                      Todas as Tarefas
@@ -193,7 +193,7 @@
 
         {% if '5' in permissoes.permissao %}  
           <li class="nav-item">
-            <a href="/realizar-solicitacoes" class="nav-link {% if request.path == '/solicitacoes' or '/solicitacao/visualizar/' in request.path %} active{% endif %}">
+            <a href="/realizar-solicitacoes" class="nav-link {% if request.path == '/realizar-solicitacoes' or '/solicitacao/visualizar/' in request.path %} active{% endif %}">
               <i class="nav-icon fa fa-sticky-note"></i>
               <p>
                 Realizar Solicitações
