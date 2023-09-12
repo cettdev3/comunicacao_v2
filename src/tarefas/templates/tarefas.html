@@ -211,13 +211,12 @@
                           <table style="margin-top: 10px;">
                             <thead>
                               <tr>
-                                <th>#</th>
+                                <th>Evento</th>
                                 <th>Data da Tarefa</th>
                                 <th>Prazo de Entrega</th>
                                 <th>Data da Entrega</th>
                                 <th>Título da Tarefa</th>
                                 <th>Usuário Designado</th>
-                                <th>Usuário Designante</th>
                                 <th>Prioridade</th>
                                 <th>Status</th>
         
@@ -229,13 +228,18 @@
                               {% for tarefa in tarefas %}
                                 {% if tarefa.status != 3 %}
                                 <tr style="{{tarefa.calcular_status}}"  onclick="acessarSolicitacao('{{tarefa.entregavel.evento.id}}')">
-                                  <td>{{tarefa.id}}</td>
+                                  <td>
+                                    {% if tarefa.entregavel.evento.evento_json.tipo_formatado %}
+                                    {{tarefa.entregavel.evento.evento_json.tipo_formatado}}
+                                    {% else %}
+                                    {{tarefa.entregavel.evento.evento_json.titulo_evento}}
+                                    {% endif %}
+                                  </td>
                                   <td>{{tarefa.data_tarefa|date:"d/m/Y"}}</td>
                                   <td>{{tarefa.prazo_entrega|date:"d/m/Y"}}</td>
                                   <td>{% if tarefa.data_entrega %} {{tarefa.data_entrega|date:"d/m/Y"}} {% else %} Aguardando Entrega {% endif %}</td>
                                   <td>{{tarefa.titulo_tarefa}}</td>
                                   <td>{{tarefa.usuario.first_name}}</td>
-                                  <td>{{tarefa.usuario_designou.first_name}}</td>
                                   <td>{% if tarefa.prioridade == 1 %}   <span class="badge bg-primary" style="padding: 5px; width: 100%;"> {{tarefa.get_prioridade_display}}</span> {% else %} <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{tarefa.get_prioridade_display}}</span>{% endif %}</td>
                                   <td>   {% if tarefa.status == 0 %}
                                     <span class="badge bg-warning" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
@@ -268,13 +272,12 @@
                           <table style="margin-top: 10px;">
                             <thead>
                               <tr>
-                                <th>#</th>
+                                <th>Evento</th>
                                 <th>Data da Tarefa</th>
                                 <th>Prazo de Entrega</th>
                                 <th>Data da Entrega</th>
                                 <th>Título da Tarefa</th>
                                 <th>Usuário Designado</th>
-                                <th>Usuário Designante</th>
                                 <th>Prioridade</th>
                                 <th>Status</th>
         
@@ -286,13 +289,18 @@
                               {% for tarefa in tarefas %}
                                 {% if tarefa.status == 3 %}
                                 <tr style="{{tarefa.calcular_status_entrega}}"  onclick="acessarSolicitacao('{{tarefa.entregavel.evento.id}}')">
-                                  <td>{{tarefa.id}}</td>
+                                  <td>
+                                    {% if tarefa.entregavel.evento.evento_json.tipo_formatado %}
+                                    {{tarefa.entregavel.evento.evento_json.tipo_formatado}}
+                                    {% else %}
+                                    {{tarefa.entregavel.evento.evento_json.titulo_evento}}
+                                    {% endif %}
+                                  </td>
                                   <td>{{tarefa.data_tarefa|date:"d/m/Y"}}</td>
                                   <td>{{tarefa.prazo_entrega|date:"d/m/Y"}}</td>
                                   <td>{% if tarefa.data_entrega %} {{tarefa.data_entrega|date:"d/m/Y"}} {% else %} Aguardando Entrega {% endif %}</td>
                                   <td>{{tarefa.titulo_tarefa}}</td>
                                   <td>{{tarefa.usuario.first_name}}</td>
-                                  <td>{{tarefa.usuario_designou.first_name}}</td>
                                   <td>{% if tarefa.prioridade == 1 %}   <span class="badge bg-primary" style="padding: 5px; width: 100%;"> {{tarefa.get_prioridade_display}}</span> {% else %} <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{tarefa.get_prioridade_display}}</span>{% endif %}</td>
                                   <td>   {% if tarefa.status == 0 %}
                                     <span class="badge bg-warning" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
