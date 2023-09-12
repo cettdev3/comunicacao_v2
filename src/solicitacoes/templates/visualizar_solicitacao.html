@@ -654,7 +654,7 @@
                                                         </div>
                                                         {% endif %}
                                                         
-                                                        {% if entregavel.tarefas_relacionadas %}
+                                                        {% if entregavel.tarefas_relacionadas and '3' in permissoes.permissao %}
                                                         <div class="col-12 col-sm-12 col-md-12">
                                                           <div class="card" style="width: 100%;">
                                                               <div class="card-header" style="background-color: #fafafa;">

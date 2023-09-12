@@ -9,6 +9,7 @@
       </div>
       <div class="modal-body">
         <div class="row">
+          {% if '3' in permissoes.permissao %}
           <div class="col-12 col-sm-12 col-md-3">
             <div class="form-group">
               
@@ -85,7 +86,7 @@
                       <!-- /.input group -->
                       </div>
                     </div>
-
+                    {% endif %}
                     <div class="col-lg-3 col-12">
                       <div class="form-group">
                           <label>Tipo do Entregável:</label>

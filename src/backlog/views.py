@@ -15,12 +15,12 @@ def Backlog(request):
 
 @login_required(login_url='/')
 def Ajax_View_Task(request):
-    print(request.GET)
+    permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first
     idtask = request.GET['tarefaId']
     tarefa = Tarefas.objects.filter(id=idtask).first()
     
     
-    return render(request, 'ajax/ajax_view_task.html', {'tarefa': tarefa})
+    return render(request, 'ajax/ajax_view_task.html', {'tarefa': tarefa,'permissoes':permissoes})
 
 @login_required(login_url='/')
 def Ajax_Move_Task(request):
