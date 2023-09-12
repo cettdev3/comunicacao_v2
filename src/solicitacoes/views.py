@@ -687,3 +687,16 @@ def Ajax_Endereco_Escola(request):
             endereco_montado  = endereco_montado + escola_info['cidade']
 
         return render(request,'ajax/ajax_load_endereco.html',{'escola':escola,'endereco':endereco_montado})
+
+@login_required(login_url='/')
+def Ajax_Negar_Entregavel(request):
+    try:
+        entregavelId = request.POST['idEntregavel']
+        descricao_negativa = request.POST['negativa_descricao']
+        entregavel = Entregaveis.objects.get(id=entregavelId)
+        entregavel.status = 6
+        entregavel.motivo_revisao = descricao_negativa
+        entregavel.save()
+        return JsonResponse({"success_message": "Tarefa em revisão!"}) 
+    except Exception as e:
+        return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)

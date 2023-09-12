@@ -436,7 +436,7 @@
                                   {% for entregavel in entregaveis %}
                                     <div class="col-12 col-sm-12 col-md-12">
                                         <div id="accordion">
-                                            <div {% if entregavel.status == "0" or entregavel.status == "2" %} class="card card-warning" {% elif entregavel.status == "1" %} class="card card-dark" {% elif entregavel.status == "3" %} class="card card-danger" {% else %} class="card card-success" {% endif %}>
+                                            <div {% if entregavel.status == "0" or entregavel.status == "2" %} class="card card-warning" {% elif entregavel.status == "1" %} class="card card-dark" {% elif entregavel.status == "3" or entregavel.status == "6" %} class="card card-danger" {% else %} class="card card-success" {% endif %}>
                                                 <div class="card-header">
                                                     <h4 class="card-title w-100">
                                                         <a style=" font-size: 20px;" class="d-block w-100" data-toggle="collapse" href="#collapse{{ forloop.counter }}" aria-expanded="true">
@@ -492,6 +492,15 @@
                                                         <div class="col-lg-3 col-12">
                                                             <button onclick="modalTarefas('{{entregavel.id}}','{{ forloop.counter }}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-people-fill"></i> Designar Usuário</button>
                                                         </div>
+                                                        {% endif %}
+                                                       
+                                                        {% if entregavel.status == '0'  and not entregavel.tarefas_relacionadas%}
+                                                        <div class="col-lg-3 col-12">
+                                                          <button onclick="negarEntregavel('{{entregavel.id}}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-x-circle-fill"></i> Negar Entregável</button>
+                                                      </div>
+                                                      <div class="col-lg-3 col-12">
+                                                        <button onclick="modalTarefas('{{entregavel.id}}','{{ forloop.counter }}')" type="button" class="btn btn-block btn-dark"> <i class="bi bi-arrow-return-left"></i> Devolver Entregável</button>
+                                                    </div>
                                                         {% endif %}
                                                         {% endif %}
 
@@ -725,7 +734,7 @@
                                                         <div class="col-12 col-sm-12 col-md-12">
                                                           <div class="alert alert-danger alert-dismissible">
                             
-                                                            <h5><i class="bi bi-arrow-repeat"></i> Entregável Devolvido! </h5>
+                                                            <h5><i class="bi bi-arrow-repeat"></i> {% if entregavel.status == '6' %} Entregável Negado! {% else %} Entregável Devolvido!{% endif %}</h5>
                                                               {{entregavel.motivo_revisao|safe}}
                                                           </div>
                                                         </div>
@@ -1033,7 +1042,52 @@
   </div>
 </div>
 
+<div class="modal fade" id="motivoNegado" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="TitleEdit">Motivo da Negativa</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+     
+      <div class="modal-body">
+        <div class="row">
+        
+      <input style="display: none;" type="text" value="" id="entregavelId_negativa"  class="form-control" name="entregavelId_negativa">
 
+
+      <div class="col-12 col-sm-12 col-md-12">
+
+          <div class="card card-dark card-outline">
+            <div class="card-header">
+              <h3 class="card-title">Descreva sobre a negativa:</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+            
+              <div class="form-group">
+                  <textarea  id="negativa_descricao" name="negativa_descricao" class="form-control summernote" style="height: 300px"></textarea>
+              </div>
+            
+            </div>
+            <!-- /.card-body -->
+          
+          </div>
+
+      </div>
+
+      </div>
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        <button type="button"n onclick="negativarEntregavel()" class="btn btn-primary">Negar</button>
+      </div>
+ 
+    </div>
+  </div>
+</div>
 <script>
 
 function modalTarefa(tarefaId){
@@ -1256,6 +1310,61 @@ function revisionarTask(){
                     icon: 'success',
                     title: 'Tarefa em Revisão!',
                     text: "A terefa foi enviada para revisão!"
+                }).then((result) => {
+                    // Ação a ser realizada após o botão "OK" ser clicado
+                    if (result.isConfirmed) {
+                        // Redirecionar ou atualizar a página aqui
+                        location.reload(); // Isso atualizará a página
+                    }
+                });
+            },
+            error: function (data) {
+                if (data.responseJSON && data.responseJSON.error_message) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ops!',
+                        text: data.responseJSON.error_message
+                    });
+                }
+            }
+        });
+      }
+    });
+}
+
+function negarEntregavel(entregavelId){
+  document.getElementById("entregavelId_negativa").value = entregavelId
+  $("#motivoNegado").modal('show')
+}
+
+function negativarEntregavel(){
+  idEntregavel = $("#entregavelId_negativa").val()
+  motivo = $("#negativa_descricao").val()
+  Swal.fire({
+      title: 'Tem certeza?',
+      text: 'Ao negar o entregável ele não poderá mais ser reaberto',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sim',
+      cancelButtonText: 'Não'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        var XCSRFToken = '{{ csrf_token }}'
+        const url = "/ajax/negar-entregavel";
+        $.ajax({
+            
+            url: url,
+            type:"post",
+            data: { 'idEntregavel':idEntregavel,'negativa_descricao':motivo},
+            headers: { "X-CSRFToken":  XCSRFToken },
+            success: function (data) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Entregável Negado!',
+                    text: "Entregável negado com sucesso!"
                 }).then((result) => {
                     // Ação a ser realizada após o botão "OK" ser clicado
                     if (result.isConfirmed) {

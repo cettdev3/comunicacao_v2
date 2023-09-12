@@ -21,7 +21,7 @@ class Solicitacoes(models.Model):
     
     @property
     def status_solicitacao(self):
-        total_entregaveis = self.entregaveis_set.exclude(status=4).count()
+        total_entregaveis = self.entregaveis_set.exclude(status=4).exclude(status=6).count()
         if total_entregaveis  > 0 and self.status != 3:
             self.status = 2
             self.save()
@@ -44,7 +44,7 @@ class Solicitacoes(models.Model):
 
     @property
     def entregaveis_totais(self):
-        total_entregaveis = self.entregaveis_set.count()
+        total_entregaveis = self.entregaveis_set.exclude(status=6).count()
         return total_entregaveis
 
     @property
@@ -54,7 +54,7 @@ class Solicitacoes(models.Model):
 
     @property
     def entregaveis_pendentes(self):
-        entregaveis_pendentes = self.entregaveis_set.exclude(status=4).count()
+        entregaveis_pendentes = self.entregaveis_set.exclude(status=4).exclude(status=6).count()
         return entregaveis_pendentes
 
 
@@ -72,7 +72,7 @@ class Solicitacoes(models.Model):
 class Entregaveis(models.Model):
     choices_tipo = [('1','SAVE THE DATE'),('2','DIVULGAÇÃO'),('3','PROGRAMAÇÃO'),('4','STAND')]
     choices_tipo_produto = [('1','DIGITAL'),('2','IMPRESSO'),('3','AUDIOVISUAL'),('4','COBERTURA DE EVENTO'),('5','PRODUÇÃO DE ÁUDIO VISUAL (ORÇAMENTOS E EXECUÇÕES)')]
-    choices_status = [('0','AGUARDANDO ENTREGAS'),('1','AGUARDANDO APROVAÇÃO DA COMUNICAÇÃO'),('2','APROVADA PELA COMUNICAÇÃO, AGUARDANDO APROVAÇÃO DO SOLICITANTE'),('3','DEVOLVIDO'),('4','APROVADO PELO SOLICITANTE')]
+    choices_status = [('0','AGUARDANDO ENTREGAS'),('1','AGUARDANDO APROVAÇÃO DA COMUNICAÇÃO'),('2','APROVADA PELA COMUNICAÇÃO, AGUARDANDO APROVAÇÃO DO SOLICITANTE'),('3','DEVOLVIDO'),('4','APROVADO PELO SOLICITANTE'),('5','Devolvido p/ Solicitante'),('6','Negado')]
     id = models.AutoField(primary_key=True)
     evento = models.ForeignKey(Solicitacoes,on_delete=models.CASCADE)
     prazo = models.DateField()
