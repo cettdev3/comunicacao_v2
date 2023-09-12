@@ -355,11 +355,14 @@ function MoveTarefa(taskId,step){
     
     var formData = new FormData();
     var fileInput = document.getElementById('arquivos_task');
-    
-    // Adicione os arquivos selecionados ao objeto FormData
-    for (var i = 0; i < fileInput.files.length; i++) {
+
+    if (fileInput){
+      for (var i = 0; i < fileInput.files.length; i++) {
         formData.append('files[]', fileInput.files[i]);
     }
+    }
+    // Adicione os arquivos selecionados ao objeto FormData
+  
     
     formData.append('taskId', taskId);
     formData.append('step', step);

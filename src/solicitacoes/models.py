@@ -144,7 +144,7 @@ class Tarefas(models.Model):
     data_entrega = models.DateField(null=True,blank=True)
     descricao_tarefa = models.TextField()
     descricao_entrega = models.TextField()
-    arquivos = models.TextField(default='')
+    arquivos = models.TextField()
     usuario = models.ForeignKey(User,models.CASCADE)
     usuario_designou = models.ForeignKey(User,models.CASCADE,related_name='usuario_designou')
     prioridade = models.IntegerField(choices=choices_prioridade, blank=False, null=False,default=0)

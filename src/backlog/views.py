@@ -21,8 +21,11 @@ def Ajax_View_Task(request):
     permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first
     idtask = request.GET['tarefaId']
     tarefa = Tarefas.objects.filter(id=idtask).first()
-    arquivos = tarefa.arquivos
-    arquivos_list = ast.literal_eval(arquivos)
+    try:
+        arquivos = tarefa.arquivos
+        arquivos_list = ast.literal_eval(arquivos)
+    except:
+        arquivos_list = None
 
     
     return render(request, 'ajax/ajax_view_task.html', {'tarefa': tarefa,'permissoes':permissoes,'arquivos':arquivos_list})
@@ -34,8 +37,9 @@ def Ajax_Move_Task(request):
             print(request.POST)
             idtask = request.POST['taskId']
             step = request.POST['step']
-            entrega = request.POST.get('entrega')
-
+            entrega = request.POST.get('entrega',None)
+            if entrega == 'undefined':
+                entrega = None
             try:
                 arquivos_task = []
                 arquivos = request.FILES.getlist('files[]')
@@ -51,9 +55,9 @@ def Ajax_Move_Task(request):
             if entrega:
                 tarefa.descricao_entrega = entrega
                 tarefa.data_entrega = datetime.date.today()
-                tarefa.arquivos = arquivos_task
+            
             tarefa.status  = step
-
+            tarefa.arquivos = arquivos_task
             tarefa.save()
 
             tarefas = Tarefas.objects.filter(usuario_id=request.user.id).all()
