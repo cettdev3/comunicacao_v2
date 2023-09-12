@@ -76,8 +76,13 @@
                               <div class="card-body">
                               <div class="row">
                                 {{tarefa.descricao_tarefa|safe}}
+
                               </div>
+                              
+                        
+                              
                               </div>
+                           
                           </div>
           
 
@@ -238,13 +243,37 @@
 
                             </div>
                            </div>
+                           <div class="row" style="text-align: right;">{% if arquivos %}
+                            {% for arquivo in arquivos %}
+                            <a href="{{arquivo}}" class="btn btn-app">
+                              <i class="fas fa-file"></i> Download
+                            </a>
+                            {% endfor %}
+                            {% endif %}</div>
 
                           </div>
                       </div>
                     </div>
                     {% endif %}
-
+               
                     {% if tarefa.status == 1 or tarefa.status == 2 %}
+
+                    <div class="col-12 col-sm-12 col-md-12">
+                      <div class="card" style="width: 100%;">
+                          <div class="card-header" style="background-color: #fafafa;">
+                            <label for="">Arquivos: <span class=" badge bg-warning" ></label>
+                            
+                          </div>
+                            
+                          <div class="card-body">
+                         
+                            <input type="file" name="arquivos_task" id="arquivos_task" multiple>
+                        
+                          </div>
+                      </div>
+                    </div>
+                   
+                   
 
                     <div class="col-12 col-sm-12 col-md-12">
                       <div class="card" style="width: 100%;">

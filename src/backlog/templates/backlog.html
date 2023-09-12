@@ -350,37 +350,75 @@ function modalTarefa(tarefaId){
       }
 
 function MoveTarefa(taskId,step){
-
-    url = '/ajax/move-task'
-    entrega = $("#entrega_backlog").val()
+  var entrega = $("#entrega_backlog").val();
+    var XCSRFToken = '{{ csrf_token }}';
     
-    console.log(entrega)
-    var XCSRFToken = '{{ csrf_token }}'
-
-    $.ajax({
-    url: url,
-    type:"post",
-    headers: { "X-CSRFToken":  XCSRFToken },
-    data: {'taskId':taskId,'step':step,'entrega':entrega},
-
-    success: function(data) {
-
-      $("#backlog_trello").html(data);
-      Swal.fire({
-                    icon: 'success',
-                    title: 'Tarefa Movida!',
-                    text: 'A terefa foi movida com sucesso!'
-                });
-      $("#exampleModalCenter").modal('hide')
-    },
-    error: function(xhr, status, error) {
-      Swal.fire({
-            icon: 'error',
-            title: 'Ops!',
-            text: 'Não foi possível obter resultados!'
-          });
+    var formData = new FormData();
+    var fileInput = document.getElementById('arquivos_task');
+    
+    // Adicione os arquivos selecionados ao objeto FormData
+    for (var i = 0; i < fileInput.files.length; i++) {
+        formData.append('files[]', fileInput.files[i]);
     }
+    
+    formData.append('taskId', taskId);
+    formData.append('step', step);
+    formData.append('entrega', entrega);
+    
+    $.ajax({
+        url: '/ajax/move-task',
+        type: 'post',
+        headers: { "X-CSRFToken": XCSRFToken },
+        data: formData,
+        processData: false, // Não processar os dados
+        contentType: false, // Não definir o tipo de conteúdo
+        success: function (data) {
+            $("#backlog_trello").html(data);
+            Swal.fire({
+                icon: 'success',
+                title: 'Tarefa Movida!',
+                text: 'A tarefa foi movida com sucesso!'
+            });
+            $("#exampleModalCenter").modal('hide');
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Ops!',
+                text: 'Não foi possível obter resultados!'
+            });
+        }
     });
+    // url = '/ajax/move-task'
+    // entrega = $("#entrega_backlog").val()
+    
+    // console.log(entrega)
+    // var XCSRFToken = '{{ csrf_token }}'
+
+    // $.ajax({
+    // url: url,
+    // type:"post",
+    // headers: { "X-CSRFToken":  XCSRFToken },
+    // data: {'taskId':taskId,'step':step,'entrega':entrega},
+
+    // success: function(data) {
+
+    //   $("#backlog_trello").html(data);
+    //   Swal.fire({
+    //                 icon: 'success',
+    //                 title: 'Tarefa Movida!',
+    //                 text: 'A terefa foi movida com sucesso!'
+    //             });
+    //   $("#exampleModalCenter").modal('hide')
+    // },
+    // error: function(xhr, status, error) {
+    //   Swal.fire({
+    //         icon: 'error',
+    //         title: 'Ops!',
+    //         text: 'Não foi possível obter resultados!'
+    //       });
+    // }
+    // });
   }
 
 function fecharModal(id){
