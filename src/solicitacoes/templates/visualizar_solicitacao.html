@@ -436,7 +436,7 @@
                                   {% for entregavel in entregaveis %}
                                     <div class="col-12 col-sm-12 col-md-12">
                                         <div id="accordion">
-                                            <div {% if entregavel.status == "0" or entregavel.status == "2" %} class="card card-warning" {% elif entregavel.status == "1" %} class="card card-dark" {% elif entregavel.status == "3" or entregavel.status == "6" %} class="card card-danger" {% else %} class="card card-success" {% endif %}>
+                                            <div {% if entregavel.status == "0" or entregavel.status == "2" %} class="card card-warning" {% elif entregavel.status == "1" %} class="card card-dark" {% elif entregavel.status == "3" or entregavel.status == "6" or entregavel.status == "5"  %} class="card card-danger" {% else %} class="card card-success" {% endif %}>
                                                 <div class="card-header">
                                                     <h4 class="card-title w-100">
                                                         <a style=" font-size: 20px;" class="d-block w-100" data-toggle="collapse" href="#collapse{{ forloop.counter }}" aria-expanded="true">
@@ -445,8 +445,14 @@
                                                        <span style="float: right; font-size: 20px;" class="bi bi-check2-circle"></span>
                                                        {% elif entregavel.status == '3' %}
                                                        <span style="float: right; font-size: 20px;" class="bi bi-arrow-repeat"></span>
+                                                       {% elif entregavel.status == '6' %}
+                                                       <span style="float: right; font-size: 20px;" class="bi bi-x-circle-fill"></span>
+                                                       {% elif entregavel.status == '5' %}
+                                                       <span onclick="editarEntregavelModal('{{entregavel.id}}')" style="float: right; font-size: 20px;" class="bi bi-pencil-square"> Editar</span>
+
+                                   
                                                        {% else %}
-                                                       <span style="float: right; font-size: 20px;" class="bi bi-hourglass-bottom"></span>
+                                                       <span style="float: right; font-size: 20px;" class="btn bi bi-hourglass-bottom"></span>
                       
                                                        {% endif %}
                                                       
@@ -496,10 +502,10 @@
                                                        
                                                         {% if entregavel.status == '0'  and not entregavel.tarefas_relacionadas%}
                                                         <div class="col-lg-3 col-12">
-                                                          <button onclick="negarEntregavel('{{entregavel.id}}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-x-circle-fill"></i> Negar Entregável</button>
+                                                          <button onclick="negarEntregavel('{{entregavel.id}}',6)" type="button" class="btn btn-block btn-dark"><i class="bi bi-x-circle-fill"></i> Negar Entregável</button>
                                                       </div>
                                                       <div class="col-lg-3 col-12">
-                                                        <button onclick="modalTarefas('{{entregavel.id}}','{{ forloop.counter }}')" type="button" class="btn btn-block btn-dark"> <i class="bi bi-arrow-return-left"></i> Devolver Entregável</button>
+                                                        <button onclick="negarEntregavel('{{entregavel.id}}',5)" type="button" class="btn btn-block btn-dark"> <i class="bi bi-arrow-return-left"></i> Devolver Entregável</button>
                                                     </div>
                                                         {% endif %}
                                                         {% endif %}
@@ -714,7 +720,7 @@
                                                                           <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{entregavel.tarefas_relacionadas.get_status_display}}</span>
 
                                                                           {% elif entregavel.tarefas_relacionadas.status == 3 %}
-                                                                          <span class="badge bg-success" style="padding: 5px; width: 100%;"> {{entregavel.tarefas_relacionadas.get_status_display}}</span>
+                                                                          <span onclick="editarEntregavel('{{entregavel.id}}')" class="badge bg-success" style="padding: 5px; width: 100%;"> {{entregavel.tarefas_relacionadas.get_status_display}}</span>
                                                                         {% endif %}
                                                                        </td>
                     
@@ -1046,7 +1052,7 @@
   <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="TitleEdit">Motivo da Negativa</h5>
+        <h5 class="modal-title" id="title_negative">Motivo da Negativa</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -1056,13 +1062,13 @@
         <div class="row">
         
       <input style="display: none;" type="text" value="" id="entregavelId_negativa"  class="form-control" name="entregavelId_negativa">
-
+      <input style="display: none;" type="text" value="" id="status_modal"  class="form-control" name="status_modal">
 
       <div class="col-12 col-sm-12 col-md-12">
 
           <div class="card card-dark card-outline">
             <div class="card-header">
-              <h3 class="card-title">Descreva sobre a negativa:</h3>
+              <h3 class="card-title" id="descricao_negative">Descreva sobre a negativa:</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -1082,11 +1088,15 @@
     </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-        <button type="button"n onclick="negativarEntregavel()" class="btn btn-primary">Negar</button>
+        <button type="button"n onclick="negativarEntregavel()" class="btn btn-primary">Negar / Devolver</button>
       </div>
  
     </div>
   </div>
+</div>
+
+<div class="modal fade" id="editarEntregavelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  
 </div>
 <script>
 
@@ -1332,59 +1342,126 @@ function revisionarTask(){
     });
 }
 
-function negarEntregavel(entregavelId){
+function negarEntregavel(entregavelId,motivo){
+  
+  var titulo = document.querySelector(".modal-title#title_negative");
+  var descricao = document.querySelector(".card-title#descricao_negative");
+
+
+  if (motivo == 6){
+    console.log('entrou 6')
+    titulo.innerText = "Motivo da Negativa"
+    descricao.innerText = "Descreva o motivo da negativa:"
+    document.getElementById("status_modal").value = 1
+  }else{
+    console.log('entrou 5')
+    titulo.innerText = "Motivo da Devolutiva"
+    descricao.innerText = "Descreva o motivo da devolutiva:"
+    document.getElementById("status_modal").value = 2
+  }
   document.getElementById("entregavelId_negativa").value = entregavelId
+ 
   $("#motivoNegado").modal('show')
 }
 
-function negativarEntregavel(){
+function negativarEntregavel(motivo){
   idEntregavel = $("#entregavelId_negativa").val()
   motivo = $("#negativa_descricao").val()
-  Swal.fire({
-      title: 'Tem certeza?',
-      text: 'Ao negar o entregável ele não poderá mais ser reaberto',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Sim',
-      cancelButtonText: 'Não'
-    }).then((result) => {
-      if (result.isConfirmed) {
+  tipo = $("#status_modal").val()
+    if (tipo ==  '1'){
+      Swal.fire({
+        title: 'Tem certeza?',
+        text: 'Ao negar o entregável ele não poderá mais ser reaberto',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sim',
+        cancelButtonText: 'Não'
+      }).then((result) => {
+        if (result.isConfirmed) {
 
-        var XCSRFToken = '{{ csrf_token }}'
-        const url = "/ajax/negar-entregavel";
-        $.ajax({
-            
-            url: url,
-            type:"post",
-            data: { 'idEntregavel':idEntregavel,'negativa_descricao':motivo},
-            headers: { "X-CSRFToken":  XCSRFToken },
-            success: function (data) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Entregável Negado!',
-                    text: "Entregável negado com sucesso!"
-                }).then((result) => {
-                    // Ação a ser realizada após o botão "OK" ser clicado
-                    if (result.isConfirmed) {
-                        // Redirecionar ou atualizar a página aqui
-                        location.reload(); // Isso atualizará a página
-                    }
-                });
-            },
-            error: function (data) {
-                if (data.responseJSON && data.responseJSON.error_message) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Ops!',
-                        text: data.responseJSON.error_message
-                    });
-                }
-            }
-        });
-      }
-    });
+          var XCSRFToken = '{{ csrf_token }}'
+          const url = "/ajax/negar-entregavel";
+          $.ajax({
+              
+              url: url,
+              type:"post",
+              data: { 'idEntregavel':idEntregavel,'negativa_descricao':motivo,'tipo':tipo},
+              headers: { "X-CSRFToken":  XCSRFToken },
+              success: function (data) {
+                  Swal.fire({
+                      icon: 'success',
+                      title: 'Entregável Negado!',
+                      text: "Entregável negado com sucesso!"
+                  }).then((result) => {
+                      // Ação a ser realizada após o botão "OK" ser clicado
+                      if (result.isConfirmed) {
+                          // Redirecionar ou atualizar a página aqui
+                          location.reload(); // Isso atualizará a página
+                      }
+                  });
+              },
+              error: function (data) {
+                  if (data.responseJSON && data.responseJSON.error_message) {
+                      Swal.fire({
+                          icon: 'error',
+                          title: 'Ops!',
+                          text: data.responseJSON.error_message
+                      });
+                  }
+              }
+          });
+        }
+      });
+  }else{
+    Swal.fire({
+        title: 'Tem certeza?',
+        text: 'Ao devolver o entregável o solicitante poderá editar os dados!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sim',
+        cancelButtonText: 'Não'
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          var XCSRFToken = '{{ csrf_token }}'
+          const url = "/ajax/negar-entregavel";
+          $.ajax({
+              
+              url: url,
+              type:"post",
+              data: { 'idEntregavel':idEntregavel,'negativa_descricao':motivo,'tipo':tipo},
+              headers: { "X-CSRFToken":  XCSRFToken },
+              success: function (data) {
+                  Swal.fire({
+                      icon: 'success',
+                      title: 'Entregável Negado!',
+                      text: "Entregável negado com sucesso!"
+                  }).then((result) => {
+                      // Ação a ser realizada após o botão "OK" ser clicado
+                      if (result.isConfirmed) {
+                          // Redirecionar ou atualizar a página aqui
+                          location.reload(); // Isso atualizará a página
+                      }
+                  });
+              },
+              error: function (data) {
+                  if (data.responseJSON && data.responseJSON.error_message) {
+                      Swal.fire({
+                          icon: 'error',
+                          title: 'Ops!',
+                          text: data.responseJSON.error_message
+                      });
+                  }
+              }
+          });
+        }
+      });
+  }
+ 
 }
 
 function devolveComunicacao(idEntregavel){
@@ -1442,6 +1519,29 @@ function devolverEntregavel(){
       }
     });
 }
+
+function editarEntregavelModal(entregavelId){
+  url = '/ajax/alterar-entregavel'
+
+  $.ajax({
+  url: url,
+  data: {'entregavelId':entregavelId},
+
+  success: function(data) {
+
+    $("#editarEntregavelModal").html(data);
+    $("#editarEntregavelModal").modal('show')
+  },
+  error: function(xhr, status, error) {
+    Swal.fire({
+          icon: 'error',
+          title: 'Ops!',
+          text: 'Não foi possível obter resultados!'
+        });
+  }
+  });
+}
+
 </script>
 
   <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>

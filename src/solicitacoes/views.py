@@ -693,10 +693,27 @@ def Ajax_Negar_Entregavel(request):
     try:
         entregavelId = request.POST['idEntregavel']
         descricao_negativa = request.POST['negativa_descricao']
-        entregavel = Entregaveis.objects.get(id=entregavelId)
-        entregavel.status = 6
-        entregavel.motivo_revisao = descricao_negativa
-        entregavel.save()
-        return JsonResponse({"success_message": "Tarefa em revisão!"}) 
+        tipo = request.POST['tipo']
+
+        if tipo == '1':
+            entregavel = Entregaveis.objects.get(id=entregavelId)
+            entregavel.status = 6
+            entregavel.motivo_revisao = descricao_negativa
+            entregavel.save()
+            return JsonResponse({"success_message": "Tarefa Negada!"})
+        elif tipo == '2':
+            entregavel = Entregaveis.objects.get(id=entregavelId)
+            entregavel.status = 5
+            entregavel.motivo_revisao = descricao_negativa
+            entregavel.save()
+            return JsonResponse({"success_message": "Tarefa Devolvida!"})
+
     except Exception as e:
         return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)
+
+@login_required(login_url='/')
+def Ajax_Altera_Entregavel(request):
+    entregavelID = request.GET['entregavelId']
+    entregavel = Entregaveis.objects.filter(id=entregavelID).first()
+    
+    return render(request, 'ajax/ajax_editar_entregaveis.html', {'entregavel': entregavel})
