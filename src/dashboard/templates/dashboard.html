@@ -222,6 +222,8 @@
                             <span class="badge bg-warning" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
                             {% elif solicitacao.tipo_projeto == '3' %}
                             <span class="badge bg-info" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
+                            {% elif solicitacao.tipo_projeto == '4' %}
+                            <span class="badge bg-dark" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
                             {% endif %}
                           </td>
                           <td>{{solicitacao.data_solicitacao|date:'d/m/Y'}}</td>

@@ -1,0 +1,99 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><i class="fa fa-user" aria-hidden="true"></i> Alterar Usuário</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <form method="POST" action="/editar-usuario">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="row">
+            <input style="display:none" value="{{permission.usuario.id}}" required type="text" class="form-control"  name="usuario_id">
+            <div class="col-12 col-sm-12 col-md-12">
+              <label>Nome Completo:</label>
+              <div class="input-group mb-3">
+                
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-user" aria-hidden="true"></i></span>
+                </div>
+                
+                <input value="{{permission.usuario.first_name}}" required type="text" class="form-control"  name="nome_completo">
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-6">
+              <label>Usuário:</label>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-user" aria-hidden="true"></i></span>
+                </div>
+                
+                <input value="{{permission.usuario}}" required type="text" class="form-control" name="usuario">
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-6">
+              <label>Senha:</label>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-lock" aria-hidden="true"></i></span>
+                </div>
+                
+                <input type="password" class="form-control" name="senha">
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-12">
+              <label>Email:</label>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                </div>
+                
+                <input value="{{permission.usuario.email}}" required type="email" class="form-control" name="email">
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-6">
+              <label>Departamento:</label>
+              <div class="input-group mb-3">
+
+                
+                <select class="form-control select2" style="width: 100%;" name="departamento" id="departamento">
+                  <option selected="selected">--</option>
+                  {% for departamento in departamentos %}
+                  <option {% if permission.departamento.id == departamento.id %} selected {% endif %} value="{{departamento.id}}">{{departamento.departamento}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+             <div class="col-12 col-sm-12 col-md-6">
+              <label>Unidade:</label>
+              <div class="input-group mb-3">
+
+                
+                <select class="form-control select2" style="width: 100%;" name="unidade_user" id="unidade_user">
+                  <option selected="selected">--</option>
+                  {% for unidade in unidades %}
+                  <option {% if permission.unidade.id == unidade.id %} selected {% endif %} value="{{unidade.id}}">{{unidade.nome}} - {{unidade.convenio}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+         
+          
+          </div>
+
+        </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-dark">Alterar Usuário</button>
+          </div>
+        </form>
+    </div>
+    <!-- /.modal-content -->
+  </div>

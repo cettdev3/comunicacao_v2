@@ -22,6 +22,22 @@ def convert_data_formatada(data):
     return data
 
 @login_required(login_url='/')
+def Permissoes_usuario(request):
+    permissoes = []
+    usuario = request.POST['usuarioPerm']
+    for dados in request.POST:
+        if 'checkbox' in dados:
+            perm = request.POST[dados]
+            permissoes.append(perm)
+    
+    permissoes = ','.join(permissoes)
+    user  = Permissoes.objects.get(usuario_id=usuario)
+    user.permissao = permissoes
+    user.save()
+    messages.success(request, 'Usuário cadastrado com sucesso!')
+    return redirect('/gerir-time')
+
+@login_required(login_url='/')
 def Form_Solicitacoes(request):
     permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first
     token = get_token_api_eventos()
@@ -39,33 +55,39 @@ def Form_Solicitacoes(request):
 
     return render(request, 'solicitacoes.html',{'eventos':eventos,'permissoes':permissoes})
 
+@login_required(login_url='/')
 def Visualizar_Solicitacao(request,codigo):
-    permissoes = Permissoes.objects.filter(id=request.user.id).first()
+    permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first()
 
     solicitacao = Solicitacoes.objects.filter(id=codigo).first()
-    solicitacao = Solicitacao_Serializar(solicitacao).data
-    solicitacao['data_solicitacao'] = datetime.datetime.strptime(solicitacao['data_solicitacao'], '%Y-%m-%d').date()
-    
-    programacao_adicional = Programacao_Adicional.objects.filter(solicitacao_id=codigo).all()
+    if solicitacao.criado_por_id == request.user.id or permissoes.departamento_id == 1:
+        solicitacao = Solicitacao_Serializar(solicitacao).data
+        solicitacao['data_solicitacao'] = datetime.datetime.strptime(solicitacao['data_solicitacao'], '%Y-%m-%d').date()
+        
+        programacao_adicional = Programacao_Adicional.objects.filter(solicitacao_id=codigo).all()
 
 
-    entregaveis = Entregaveis.objects.filter(evento_id=codigo).all()
-    entregaveis = Entregaveis_Serializar(entregaveis,many=True).data
-    tarefas_por_entregavel = {}
+        entregaveis = Entregaveis.objects.filter(evento_id=codigo).all()
+        entregaveis = Entregaveis_Serializar(entregaveis,many=True).data
+        tarefas_por_entregavel = {}
 
-    for entregavel in entregaveis:
-        entregavel['prazo'] = datetime.datetime.strptime(entregavel['prazo'], '%Y-%m-%d').date()
-        entregavel['data_solicitacao'] = datetime.datetime.strptime(entregavel['data_solicitacao'], '%Y-%m-%d').date()
-        try:
-            tarefas_relacionadas = Tarefas.objects.filter(entregavel_id=entregavel['id']).latest('id')
-        except:
-            tarefas_relacionadas = {}
+        for entregavel in entregaveis:
+            entregavel['prazo'] = datetime.datetime.strptime(entregavel['prazo'], '%Y-%m-%d').date()
+            entregavel['data_solicitacao'] = datetime.datetime.strptime(entregavel['data_solicitacao'], '%Y-%m-%d').date()
+            try:
+                tarefas_relacionadas = Tarefas.objects.filter(entregavel_id=entregavel['id']).latest('id')
+            except:
+                tarefas_relacionadas = {}
 
-        entregavel['tarefas_relacionadas'] = tarefas_relacionadas
+            entregavel['tarefas_relacionadas'] = tarefas_relacionadas
 
-    usuarios = User.objects.all()
-    context = {'solicitacao':solicitacao,'entregaveis':entregaveis,'programacao_adicional':programacao_adicional,'usuarios':usuarios,'tarefas_por_entregavel': tarefas_por_entregavel,'permissoes':permissoes}
-    return render(request,'visualizar_solicitacao.html',context)
+        usuarios = User.objects.all()
+        context = {'solicitacao':solicitacao,'entregaveis':entregaveis,'programacao_adicional':programacao_adicional,'usuarios':usuarios,'tarefas_por_entregavel': tarefas_por_entregavel,'permissoes':permissoes}
+        return render(request,'visualizar_solicitacao.html',context)
+    else:
+        messages.error(request, 'Você não tem permissões para acessar!')
+        return redirect('/solicitacoes')
+
 
 @login_required(login_url='/')
 def Dados_Gerais_Evento(request):

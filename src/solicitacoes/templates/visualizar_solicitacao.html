@@ -249,7 +249,7 @@
                                     {{solicitacao.evento_json.titulo_evento}}
                                   {% else %}
                                   
-                                    {% if solicitacao.evento_json.tipo_formatado == None or not solicitacao.evento_json.titulo_evento %}
+                                    {% if solicitacao.evento_json.tipo_formatado == None %}
                                       Não Informado
                                     {% else %}
                                       {{solicitacao.evento_json.tipo_formatado}}
@@ -265,13 +265,13 @@
             
                           <div class="col-lg-3 col-12">
                             <div class="form-group">
-                                <label>Data de Início:</label>
+                                <label>Data de Início: </label>
                                 <div class="input-group">
-                                {% if solicitacao.evento_json.data_inicio %}
+                                {% if solicitacao.evento_json.titulo_evento %}
                                   {{solicitacao.evento_json.data_inicio}}
                                 {% else %}
                                 
-                                {% if solicitacao.evento_json.data_inicio_formatada == None or not solicitacao.evento_json.data_inicio %}
+                                {% if solicitacao.evento_json.data_inicio_formatada == None%}
                                   Não Informado
                                 {% else %}
                                  {{solicitacao.evento_json.data_inicio_formatada}}
@@ -291,11 +291,11 @@
                             <div class="form-group">
                                 <label>Data Final:</label>
                                 <div class="input-group">
-                                  {% if solicitacao.evento_json.data_fim %}
+                                  {% if solicitacao.evento_json.titulo_evento %}
                                   {{solicitacao.evento_json.data_fim}}
                                 {% else %}
                                 
-                                {% if solicitacao.evento_json.data_fim_formatada == None or not solicitacao.evento_json.data_fim %}
+                                {% if solicitacao.evento_json.data_fim_formatada == None%}
                                   Não Informado
                                 {% else %}
                                   {{solicitacao.evento_json.data_fim_formatada}}

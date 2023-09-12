@@ -8,14 +8,14 @@
 
 <div class="col-12 col-sm-6 col-md-4">
 <div class="custom-control custom-checkbox">
-  <input {% if '2' in permissoes.permissao %} checked {% endif %}  class="custom-control-input" type="checkbox" name="checkboxMinhasTarefas" id="checkboxMinhasTarefas" value="1">
+  <input {% if '2' in permissoes.permissao %} checked {% endif %}  class="custom-control-input" type="checkbox" name="checkboxMinhasTarefas" id="checkboxMinhasTarefas" value="2">
   <label for="checkboxMinhasTarefas" class="custom-control-label">Minhas Tarefas</label>
 </div>
 </div>
 
 <div class="col-12 col-sm-6 col-md-4">
 <div class="custom-control custom-checkbox">
-  <input {% if '3' in permissoes.permissao %} checked {% endif %}  class="custom-control-input" type="checkbox" name="checkboxTodasTarefas" id="checkboxTodasTarefas" value="2">
+  <input {% if '3' in permissoes.permissao %} checked {% endif %}  class="custom-control-input" type="checkbox" name="checkboxTodasTarefas" id="checkboxTodasTarefas" value="3">
   <label for="checkboxTodasTarefas" class="custom-control-label">Todas as Tarefas</label>
 </div>
 </div>
@@ -31,14 +31,14 @@
 
 <div class="col-12 col-sm-6 col-md-4">
 <div class="custom-control custom-checkbox">
-  <input {% if '5' in permissoes.permissao %} checked {% endif %}  class="custom-control-input" type="checkbox" name="checkboxRealizarSolicitacoes" id="checkboxRealizarSolicitacoes" value="6">
+  <input {% if '5' in permissoes.permissao %} checked {% endif %}  class="custom-control-input" type="checkbox" name="checkboxRealizarSolicitacoes" id="checkboxRealizarSolicitacoes" value="5">
   <label for="checkboxRealizarSolicitacoes" class="custom-control-label">Realizar Solicitações</label>
 </div>
 </div>
 
 <div class="col-12 col-sm-6 col-md-4">
 <div class="custom-control custom-checkbox">
-  <input {% if '6' in permissoes.permissao %} checked {% endif %} class="custom-control-input" type="checkbox" name="checkboxdesignarUsuario" id="checkboxdesignarUsuario" value="7">
+  <input {% if '6' in permissoes.permissao %} checked {% endif %} class="custom-control-input" type="checkbox" name="checkboxdesignarUsuario" id="checkboxdesignarUsuario" value="6">
   <label for="checkboxdesignarUsuario" class="custom-control-label">Designar Tarefas a Usuários</label>
 </div>
 </div>
@@ -46,7 +46,7 @@
 <br>
 <div class="col-12 col-sm-6 col-md-4">
 <div class="custom-control custom-checkbox">
-  <input {% if '7' in permissoes.permissao %} checked {% endif %} class="custom-control-input" type="checkbox" name="checkboxSolicitarRevisao" id="checkboxSolicitarRevisao" value="8">
+  <input {% if '7' in permissoes.permissao %} checked {% endif %} class="custom-control-input" type="checkbox" name="checkboxSolicitarRevisao" id="checkboxSolicitarRevisao" value="7">
   <label for="checkboxSolicitarRevisao" class="custom-control-label">Solicitar Revisão de Tarefas</label>
 </div>
 </div>
@@ -54,10 +54,17 @@
 <br>
 <div class="col-12 col-sm-6 col-md-4">
 <div class="custom-control custom-checkbox">
-  <input {% if '8' in permissoes.permissao %} checked {% endif %} class="custom-control-input" type="checkbox" name="checkboxAprovarTarefa" id="checkboxAprovarTarefa" value="10">
+  <input {% if '8' in permissoes.permissao %} checked {% endif %} class="custom-control-input" type="checkbox" name="checkboxAprovarTarefa" id="checkboxAprovarTarefa" value="8">
   <label for="checkboxAprovarTarefa" class="custom-control-label">Aprovar e Enviar p/ Solicitante</label>
 </div>
 </div>
+<div class="col-12 col-sm-6 col-md-4">
+  <div class="custom-control custom-checkbox">
+    <input {% if '9' in permissoes.permissao %} checked {% endif %} class="custom-control-input" type="checkbox" name="checkboxVisualizarTodoDepartamento" id="checkboxVisualizarTodoDepartamento" value="9">
+    <label for="checkboxVisualizarTodoDepartamento" class="custom-control-label">Visualizar Demandas do Departamento</label>
+  </div>
+</div>
+</div>
 
 
 <br>
@@ -65,11 +72,7 @@
 
 
 
-<!-- <div class="col-12 col-sm-3 col-md-2"></div> -->
-
-<!-- <div class="col-12 col-sm-3 col-md-2">
-<button type="button" data-toggle="modal" data-target="#modal-notificar-usuario" class="btn btn-block bg-gradient-dark btn-flat"><i class="fa fa-commenting" aria-hidden="true"></i>   Notificar Usuário</button>
-</div> -->
+<div class="col-12 col-sm-6 col-md-8"></div>
 <div class="col-12 col-sm-3 col-md-2">
 <button type="button" data-toggle="modal" data-target="#modal-cadastrar-usuario" class="btn btn-block bg-gradient-dark btn-flat"><i class="fa fa-user" aria-hidden="true"></i>   Cadastrar Usuário</button>
 </div>

@@ -170,7 +170,7 @@
                           {% csrf_token %}
                           <div class="row">
                             
-                            <div class="col-12 col-sm-12 col-md-6">
+                            <div class="col-12 col-sm-12 col-md-12">
                               <div class="form-group">
                                 <label>Usuário:</label>
                                 <select class="form-control select2" style="width: 100%;" name="usuarioPerm" id="usuarioPerm">
@@ -181,16 +181,10 @@
                                 </select>
                               </div>
                             </div>
-                           
-                            <div class="col-12 col-sm-12 col-md-6">
-                              <div class="form-group">
-                                <label>Unidade:</label>
-                                <select class="form-control select2" style="width: 100%;" name="unidade_perm" id="unidade_perm">
-                                 <option></option>
 
-                                </select>
-                              </div>
-                            </div>
+                            
+                           
+                      
                             </div>
                             <div class="row" id="permission_ajax">
 
@@ -203,14 +197,14 @@
 
                             <div class="col-12 col-sm-6 col-md-4">
                               <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" name="checkboxMinhasTarefas" id="checkboxMinhasTarefas" value="1">
+                                <input class="custom-control-input" type="checkbox" name="checkboxMinhasTarefas" id="checkboxMinhasTarefas" value="2">
                                 <label for="checkboxMinhasTarefas" class="custom-control-label">Minhas Tarefas</label>
                               </div>
                             </div>
 
                             <div class="col-12 col-sm-6 col-md-4">
                               <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" name="checkboxTodasTarefas" id="checkboxTodasTarefas" value="2">
+                                <input class="custom-control-input" type="checkbox" name="checkboxTodasTarefas" id="checkboxTodasTarefas" value="3">
                                 <label for="checkboxTodasTarefas" class="custom-control-label">Todas as Tarefas</label>
                               </div>
                             </div>
@@ -226,14 +220,14 @@
 
                             <div class="col-12 col-sm-6 col-md-4">
                               <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" name="checkboxRealizarSolicitacoes" id="checkboxRealizarSolicitacoes" value="6">
+                                <input class="custom-control-input" type="checkbox" name="checkboxRealizarSolicitacoes" id="checkboxRealizarSolicitacoes" value="5">
                                 <label for="checkboxRealizarSolicitacoes" class="custom-control-label">Realizar Solicitações</label>
                               </div>
                             </div>
                  
                             <div class="col-12 col-sm-6 col-md-4">
                               <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" name="checkboxdesignarUsuario" id="checkboxdesignarUsuario" value="7">
+                                <input class="custom-control-input" type="checkbox" name="checkboxdesignarUsuario" id="checkboxdesignarUsuario" value="6">
                                 <label for="checkboxdesignarUsuario" class="custom-control-label">Designar Tarefas a Usuários</label>
                               </div>
                             </div>
@@ -241,7 +235,7 @@
                             <br>
                             <div class="col-12 col-sm-6 col-md-4">
                               <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" name="checkboxSolicitarRevisao" id="checkboxSolicitarRevisao" value="8">
+                                <input class="custom-control-input" type="checkbox" name="checkboxSolicitarRevisao" id="checkboxSolicitarRevisao" value="7">
                                 <label for="checkboxSolicitarRevisao" class="custom-control-label">Solicitar Revisão de Tarefas</label>
                               </div>
                             </div>
@@ -249,26 +243,26 @@
                             <br>
                             <div class="col-12 col-sm-6 col-md-4">
                               <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" name="checkboxAprovarTarefa" id="checkboxAprovarTarefa" value="10">
+                                <input class="custom-control-input" type="checkbox" name="checkboxAprovarTarefa" id="checkboxAprovarTarefa" value="8">
                                 <label for="checkboxAprovarTarefa" class="custom-control-label">Aprovar e Enviar p/ Solicitante</label>
                               </div>
                             </div>
 
-                           
+                            <div class="col-12 col-sm-6 col-md-4">
+                              <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" name="checkboxVisualizarTodoDepartamento" id="checkboxVisualizarTodoDepartamento" value="9">
+                                <label for="checkboxVisualizarTodoDepartamento" class="custom-control-label">Visualizar Demandas do Departamento</label>
+                              </div>
+                            </div>
                             <br>
                             <br>
                             
 
-                       
-                            <!-- <div class="col-12 col-sm-3 col-md-2"></div> -->
-
-                            <!-- <div class="col-12 col-sm-3 col-md-2">
-                              <button type="button" data-toggle="modal" data-target="#modal-notificar-usuario" class="btn btn-block bg-gradient-dark btn-flat"><i class="fa fa-commenting" aria-hidden="true"></i>   Notificar Usuário</button>
-                            </div> -->
-                            <div class="col-12 col-sm-3 col-md-2">
+                            <div class="col-12 col-sm-6 col-md-8"></div>
+                            <div class="col-12 col-sm-6 col-md-2">
                               <button type="button" data-toggle="modal" data-target="#modal-cadastrar-usuario" class="btn btn-block bg-gradient-dark btn-flat"><i class="fa fa-user" aria-hidden="true"></i>   Cadastrar Usuário</button>
                             </div>
-                            <div class="col-12 col-sm-3 col-md-2">
+                            <div class="col-12 col-sm-6 col-md-2">
                               <button type="submit" class="btn btn-block bg-gradient-dark btn-flat"><i class="fa fa-save" aria-hidden="true"></i>   Salvar</button>
                             </div>
                         
@@ -291,7 +285,7 @@
                                 <div class="card-body">
                                 <div class="form-group">
                                   <div class="row">
-                                                  
+                               
                                     <table style="margin-bottom: 10px;">
                                       <thead>
                                         <tr>
@@ -299,6 +293,7 @@
                                           <th>Usuário</th>
                                           <th>Email</th>
                                           <th>Unidade</th>
+                                          <th>Departamento</th>
                                           <th></th>
                                         
                                         </tr>
@@ -309,14 +304,15 @@
                                           <td data-label="first_name">{{user.first_name}}</td>
                                           <td data-label="username">{{user.username}}</td>
                                           <td data-label="email">{{user.email}}</td>
-                                          <td data-label="unidade">{{user.usuarios__unidade__nome}}</td>
+                                          <td data-label="unidade">{{user.permissoes__unidade__nome}} - {{user.permissoes__unidade__convenio}}</td>
+                                          <td data-label="departamento">{{user.permissoes__departamento__departamento}}</td>
                                           <td data-label="dados">
                                             <div class="input-group-prepend">
                                               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                                 <i class="fa fa-angle-double-right" ></i> Ação
                                               </button>
                                             <div class="dropdown-menu">
-                                              <a style="cursor: pointer;" type="button" class="dropdown-item btn btn-default" data-toggle="modal" data-target="#modal-editar-usuario" onclick="editaUsuario('{{user.first_name}}','{{user.username}}','{{user.email}}','{{user.id}}')"><i class="fa fa-pencil" ></i>  Editar</a>
+                                              <a style="cursor: pointer;" type="button" class="dropdown-item btn btn-default" onclick="editaUsuario('{{user.id}}')"><i class="fa fa-pencil" ></i>  Editar</a>
                                               <a class="dropdown-item" type="button" data-toggle="modal" data-target="#modal-confirmar-exclusao-usuario" onclick="delete_usuario('{{user.id}}')"><i class="fa fa-trash" ></i>  Excluir</a>
                                               </div>
                                             </div>
@@ -347,58 +343,6 @@
     </div>
 
     
-      <!-- /.row -->
-      <div class="modal fade" id="modal-notificar-usuario" style="display: none;" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title"><i class="fa fa-commenting" aria-hidden="true"></i> Notificar Usuário</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <form method="POST" action="/notifica-usuario">
-              {% csrf_token %}
-              <div class="modal-body">
-                <div class="row">
-
-                  <div class="col-12 col-sm-12 col-md-12">
-                    <label>Usuário:</label>
-                    <div class="input-group mb-3">
-                                           
-                      <select class="form-control select2" style="width: 100%;" name="user_notifica" id="user_notifica">
-                        <option selected="selected">--</option>
-                        {% for user in users %}
-                        <option value="{{user.id}}">{{user.first_name}}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                    
-                  </div>
-
-                  <div class="col-12 col-sm-12 col-md-12">
-                    <label>Notificação:</label>
-                    <div class="input-group mb-12">
-                    
-                      
-                      <textarea style="width: 100%;" rows="10" required type="text" class="form-control" name="notificacao"></textarea>
-                    </div>
-                  </div>
-
-                
-                </div>
-
-              </div>
-                <div class="modal-footer justify-content-between">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                  <button type="submit" class="btn btn-dark">Cadastrar Usuário</button>
-                </div>
-              </form>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
 
       <div class="modal fade" id="modal-cadastrar-usuario" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -458,6 +402,36 @@
                       <input required type="email" class="form-control" name="email">
                     </div>
                   </div>
+
+                  <div class="col-12 col-sm-12 col-md-6">
+                    <label>Departamento:</label>
+                    <div class="input-group mb-3">
+
+                      
+                      <select class="form-control select2" style="width: 100%;" name="departamento" id="departamento">
+                        <option selected="selected">--</option>
+                        {% for departamento in departamentos %}
+                        <option value="{{departamento.id}}">{{departamento.departamento}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+
+                   <div class="col-12 col-sm-12 col-md-6">
+                    <label>Unidade:</label>
+                    <div class="input-group mb-3">
+
+                      
+                      <select class="form-control select2" style="width: 100%;" name="unidade_user" id="unidade_user">
+                        <option selected="selected">--</option>
+                        {% for unidade in unidades %}
+                        <option value="{{unidade.id}}">{{unidade.nome}} - {{unidade.convenio}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+
+               
                 
                 </div>
 
@@ -474,75 +448,7 @@
       </div>
 
       <div class="modal fade" id="modal-editar-usuario" style="display: none;" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title"><i class="fa fa-user" aria-hidden="true"></i> Alterar Usuário</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <form method="POST" action="/editar-usuario">
-              {% csrf_token %}
-              <div class="modal-body">
-                <div class="row">
-                  <input style="display: none;" type="text" id="idUser" name="idUser">
-                  <div class="col-12 col-sm-12 col-md-12">
-                    <label>Nome Completo:</label>
-                    <div class="input-group mb-3">
-                      
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-user" aria-hidden="true"></i></span>
-                      </div>
-                      
-                      <input  type="text" class="form-control"  name="nome_completo_modal" id="nome_completo_modal">
-                    </div>
-                  </div>
-
-                  <div class="col-12 col-sm-12 col-md-6">
-                    <label>Usuário:</label>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-user" aria-hidden="true"></i></span>
-                      </div>
-                      
-                      <input  type="text" class="form-control" name="usuario_modal" id="usuario_modal">
-                    </div>
-                  </div>
-
-                  <div class="col-12 col-sm-12 col-md-6">
-                    <label>Senha:</label>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-lock" aria-hidden="true"></i></span>
-                      </div>
-                      
-                      <input  type="password" class="form-control" name="senha_modal" id="senha_modal">
-                    </div>
-                  </div>
-
-                  <div class="col-12 col-sm-12 col-md-12">
-                    <label>Email:</label>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-envelope" aria-hidden="true"></i></span>
-                      </div>
-                      
-                      <input  type="email" class="form-control" name="email_modal" id="email_modal">
-                    </div>
-                  </div>
-                
-                </div>
-
-              </div>
-                <div class="modal-footer justify-content-between">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                  <button type="submit" class="btn btn-dark">Alterar Usuário</button>
-                </div>
-              </form>
-          </div>
-          <!-- /.modal-content -->
-        </div>
+       
         <!-- /.modal-dialog -->
       </div>
       
@@ -589,12 +495,21 @@
     document.getElementById('idUserModal').value = id;
   }
 
-  function editaUsuario(nome,usuario,email,id){
-    console.log(nome,usuario,email)
-    document.getElementById('nome_completo_modal').value = nome;
-    document.getElementById('usuario_modal').value = usuario;
-    document.getElementById('email_modal').value = email;
-    document.getElementById('idUser').value = id;
+  function editaUsuario(id){
+    url = '/ajax/load-usuario'
+    
+
+    $.ajax({
+        url : url,
+        
+        data: {'userid': id},
+        success: function(data){
+        
+          
+          $("#modal-editar-usuario").html(data);
+          $("#modal-editar-usuario").modal('show')
+        }
+    });
   }
 
   $("#usuarioPerm").change(function(){
