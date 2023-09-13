@@ -66,6 +66,7 @@ class Entregaveis_Serializar(serializers.ModelSerializer):
                     "motivo_revisao",
                     "status_entregaveis",
                     "status",
+                    "get_tipoproduto_display",
                     "get_tipoentregavel_display",
                     "get_status_display"
         ]
