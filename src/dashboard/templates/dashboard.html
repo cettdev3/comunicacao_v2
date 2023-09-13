@@ -189,72 +189,155 @@
           
           <div class="card-body">
             <div class="form-group">
-              <div class="row">
 
-            
-                <div class="col-12 col-sm-12 col-md-12">
-                  <table style="margin-top: 10px;">
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>Projeto</th>
-                        <th>Data da Solicitação</th>
-                        <th>Evento</th>
-                        <th>Data do Evento</th>
-                        <th>Solicitante</th>
-                        <th>Demandas Pendentes</th>
-                        <th>Demandas Concluidas</th>
-                        <th>Status</th>
-
-                        
-                      </tr>
-                    </thead>
-                    <tbody id="resultados">
-          
-                      {% for solicitacao in solicitacoes %}
-                        <tr style="cursor: pointer;" onclick="acessarSolicitacao('{{solicitacao.id}}')">
-                         <td>#{{solicitacao.id}}</td>
-                         <td>
-      
-                          {% if solicitacao.tipo_projeto == '1' %}
-                          <span class="badge bg-success" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
-                            {% elif solicitacao.tipo_projeto == '2' %}
-                            <span class="badge bg-warning" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
-                            {% elif solicitacao.tipo_projeto == '3' %}
-                            <span class="badge bg-info" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
-                            {% elif solicitacao.tipo_projeto == '4' %}
-                            <span class="badge bg-dark" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
-                            {% endif %}
-                          </td>
-                          <td>{{solicitacao.data_solicitacao|date:'d/m/Y'}}</td>
-                         <td>{% if solicitacao.evento_json.tipo_formatado %}{{solicitacao.evento_json.tipo_formatado}}{%else%}{{solicitacao.evento_json.titulo_evento}}  {% endif %}</td>
-                         <td>{% if solicitacao.evento_json.data_inicio_formatada %} {{solicitacao.evento_json.data_inicio_formatada}} até {{solicitacao.evento_json.data_fim_formatada}} {% else %} {{solicitacao.evento_json.data_inicio}} até {{solicitacao.evento_json.data_fim}} {% endif %}</td>
-                         <td>{{solicitacao.criado_por.first_name}}</td>
-                         <td><span style="color:#c5221f">{{solicitacao.entregaveis_pendentes}}</span> / <span style="color:#c5221f">{{solicitacao.entregaveis_totais}}</span></td>
-                         <td><span style="color:#0b942b">{{solicitacao.entregaveis_concluidos}}</span> / <span style="color:#0b942b">{{solicitacao.entregaveis_totais}}</span></td>
-                         <td>
-                
-        
-                          {% if solicitacao.status_solicitacao == 1 %}
-                          <span class="badge bg-primary">{{solicitacao.get_status_display}}</td></span>
-                          {% elif solicitacao.status_solicitacao == 2 %}
-                          <span class="badge bg-warning">{{solicitacao.get_status_display}}</td></span>
-                          {% elif solicitacao.status_solicitacao == 3 %}
-                          <span class="badge bg-success">{{solicitacao.get_status_display}}</td></span>
-                          {% elif solicitacao.status_solicitacao == 4 %}
-                          <span class="badge bg-danger">{{solicitacao.get_status_display}}</td></span>
-                         {% endif %}
-                        </tr>
-                       {% endfor %}
-                      
-                    </tbody>
-                    
-                  </table>
-                </div>
-
-              </div>
-              <br>
+                <div class="card card-dark card-tabs">
+                  <div class="card-header p-0 pt-1">
+                    <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+                      <li class="pt-2 px-3"><h3 class="card-title">Controle de Solicitações</h3></li>
+                      <li class="nav-item">
+                        <a class="nav-link active" id="custom-tabs-two-home-tab" data-toggle="pill" href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home" aria-selected="true">Solicitações em Andamento</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-two-profile-tab" data-toggle="pill" href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false">Solicitações Concluídas</a>
+                      </li>
     
+                    </ul>
+                  </div>
+                  <div class="card-body">
+                    <div class="tab-content" id="custom-tabs-two-tabContent">
+                      <div class="tab-pane fade show active" id="custom-tabs-two-home" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
+                        <table style="margin-top: 10px;">
+                          <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>Projeto</th>
+                              <th>Data da Solicitação</th>
+                              <th>Evento</th>
+                              <th>Data do Evento</th>
+                              <th>Solicitante</th>
+                              <th>Demandas Pendentes</th>
+                              <th>Demandas Concluidas</th>
+                              <th>Status</th>
+      
+                              
+                            </tr>
+                          </thead>
+                          <tbody id="resultados">
+                
+                            {% for solicitacao in solicitacoes %}
+                            {% if solicitacao.status_solicitacao != '3' %}
+                              <tr style="cursor: pointer;" onclick="acessarSolicitacao('{{solicitacao.id}}')">
+                              <td>#{{solicitacao.id}}</td>
+                              <td>
+            
+                                {% if solicitacao.tipo_projeto == '1' %}
+                                <span class="badge bg-success" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
+                                  {% elif solicitacao.tipo_projeto == '2' %}
+                                  <span class="badge bg-warning" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
+                                  {% elif solicitacao.tipo_projeto == '3' %}
+                                  <span class="badge bg-info" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
+                                  {% elif solicitacao.tipo_projeto == '4' %}
+                                  <span class="badge bg-dark" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
+                                  {% endif %}
+                                </td>
+                                <td>{{solicitacao.data_solicitacao|date:'d/m/Y'}}</td>
+                              <td>{% if solicitacao.evento_json.tipo_formatado %}{{solicitacao.evento_json.tipo_formatado}}{%else%}{{solicitacao.evento_json.titulo_evento}}  {% endif %}</td>
+                              <td>{% if solicitacao.evento_json.data_inicio_formatada %} {{solicitacao.evento_json.data_inicio_formatada}} até {{solicitacao.evento_json.data_fim_formatada}} {% else %} {{solicitacao.evento_json.data_inicio}} até {{solicitacao.evento_json.data_fim}} {% endif %}</td>
+                              <td>{{solicitacao.criado_por.first_name}}</td>
+                              <td><span style="color:#c5221f">{{solicitacao.entregaveis_pendentes}}</span> / <span style="color:#c5221f">{{solicitacao.entregaveis_totais}}</span></td>
+                              <td><span style="color:#0b942b">{{solicitacao.entregaveis_concluidos}}</span> / <span style="color:#0b942b">{{solicitacao.entregaveis_totais}}</span></td>
+                              <td>
+                      
+              
+                                {% if solicitacao.status_solicitacao == 1 %}
+                                <span class="badge bg-primary">{{solicitacao.get_status_display}}</td></span>
+                                {% elif solicitacao.status_solicitacao == 2 %}
+                                <span class="badge bg-warning">{{solicitacao.get_status_display}}</td></span>
+                                {% elif solicitacao.status_solicitacao == 3 %}
+                                <span class="badge bg-success">{{solicitacao.get_status_display}}</td></span>
+                                {% elif solicitacao.status_solicitacao == 4 %}
+                                <span class="badge bg-danger">{{solicitacao.get_status_display}}</td></span>
+                              {% endif %}
+                              </tr>
+                              {% endif %}
+                            {% endfor %}
+                            
+                          </tbody>
+                          
+                        </table>
+                      </div>
+                      <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab">
+                        <div class="row">
+                          <div class="col-12 col-sm-12 col-md-12">
+                            <table style="margin-top: 10px;">
+                              <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>Projeto</th>
+                                  <th>Data da Solicitação</th>
+                                  <th>Evento</th>
+                                  <th>Data do Evento</th>
+                                  <th>Solicitante</th>
+                                  <th>Demandas Pendentes</th>
+                                  <th>Demandas Concluidas</th>
+                                  <th>Status</th>
+          
+                                  
+                                </tr>
+                              </thead>
+                              <tbody id="resultados">
+                    
+                                {% for solicitacao in solicitacoes %}
+                                {% if solicitacao.status_solicitacao == 3 %}
+                                  <tr style="cursor: pointer;" onclick="acessarSolicitacao('{{solicitacao.id}}')">
+                                  <td>#{{solicitacao.id}}</td>
+                                  <td>
+                
+                                    {% if solicitacao.tipo_projeto == '1' %}
+                                    <span class="badge bg-success" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
+                                      {% elif solicitacao.tipo_projeto == '2' %}
+                                      <span class="badge bg-warning" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
+                                      {% elif solicitacao.tipo_projeto == '3' %}
+                                      <span class="badge bg-info" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
+                                      {% elif solicitacao.tipo_projeto == '4' %}
+                                      <span class="badge bg-dark" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
+                                      {% endif %}
+                                    </td>
+                                    <td>{{solicitacao.data_solicitacao|date:'d/m/Y'}}</td>
+                                  <td>{% if solicitacao.evento_json.tipo_formatado %}{{solicitacao.evento_json.tipo_formatado}}{%else%}{{solicitacao.evento_json.titulo_evento}}  {% endif %}</td>
+                                  <td>{% if solicitacao.evento_json.data_inicio_formatada %} {{solicitacao.evento_json.data_inicio_formatada}} até {{solicitacao.evento_json.data_fim_formatada}} {% else %} {{solicitacao.evento_json.data_inicio}} até {{solicitacao.evento_json.data_fim}} {% endif %}</td>
+                                  <td>{{solicitacao.criado_por.first_name}}</td>
+                                  <td><span style="color:#c5221f">{{solicitacao.entregaveis_pendentes}}</span> / <span style="color:#c5221f">{{solicitacao.entregaveis_totais}}</span></td>
+                                  <td><span style="color:#0b942b">{{solicitacao.entregaveis_concluidos}}</span> / <span style="color:#0b942b">{{solicitacao.entregaveis_totais}}</span></td>
+                                  <td>
+                          
+                  
+                                    {% if solicitacao.status_solicitacao == 1 %}
+                                    <span class="badge bg-primary">{{solicitacao.get_status_display}}</td></span>
+                                    {% elif solicitacao.status_solicitacao == 2 %}
+                                    <span class="badge bg-warning">{{solicitacao.get_status_display}}</td></span>
+                                    {% elif solicitacao.status_solicitacao == 3 %}
+                                    <span class="badge bg-success">{{solicitacao.get_status_display}}</td></span>
+                                    {% elif solicitacao.status_solicitacao == 4 %}
+                                    <span class="badge bg-danger">{{solicitacao.get_status_display}}</td></span>
+                                  {% endif %}
+                                  </tr>
+                                  {% endif %}
+                                {% endfor %}
+                                
+                              </tbody>
+                              
+                            </table>
+                          </div>
+                      </div>
+                      </div>
+      
+                    </div>
+                  </div>
+                  <!-- /.card -->
+                </div>
+            
+
               
               
               <br><br><br>
