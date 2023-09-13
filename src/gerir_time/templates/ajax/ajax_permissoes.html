@@ -72,11 +72,16 @@
 
 
 
-<div class="col-12 col-sm-6 col-md-8"></div>
-<div class="col-12 col-sm-3 col-md-2">
+<div class="col-12 col-sm-6 col-md-6">
+  <div class="custom-control custom-checkbox">
+    <input {% if '10' in permissoes.permissao %} checked {% endif %} class="custom-control-input" type="checkbox" name="checkboxEditarDemanda" id="checkboxEditarDemanda" value="10">
+    <label for="checkboxEditarDemanda" class="custom-control-label">Editar Demandas</label>
+  </div>
+</div>
+<div class="col-12 col-sm-3 col-md-3">
 <button type="button" data-toggle="modal" data-target="#modal-cadastrar-usuario" class="btn btn-block bg-gradient-dark btn-flat"><i class="fa fa-user" aria-hidden="true"></i>   Cadastrar Usuário</button>
 </div>
-<div class="col-12 col-sm-3 col-md-2">
+<div class="col-12 col-sm-3 col-md-3">
 <button type="submit" class="btn btn-block bg-gradient-dark btn-flat"><i class="fa fa-save" aria-hidden="true"></i>   Salvar</button>
 </div>
 
