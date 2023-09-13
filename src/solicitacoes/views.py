@@ -60,6 +60,9 @@ def Visualizar_Solicitacao(request,codigo):
     permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first()
 
     solicitacao = Solicitacoes.objects.filter(id=codigo).first()
+    evento_json = solicitacao.evento_json
+
+    escola = Escolas.objects.filter(id=evento_json['escola']).first()
     if solicitacao.criado_por_id == request.user.id or permissoes.departamento_id == 1:
         solicitacao = Solicitacao_Serializar(solicitacao).data
         solicitacao['data_solicitacao'] = datetime.datetime.strptime(solicitacao['data_solicitacao'], '%Y-%m-%d').date()
@@ -82,7 +85,7 @@ def Visualizar_Solicitacao(request,codigo):
             entregavel['tarefas_relacionadas'] = tarefas_relacionadas
 
         usuarios = User.objects.all()
-        context = {'solicitacao':solicitacao,'entregaveis':entregaveis,'programacao_adicional':programacao_adicional,'usuarios':usuarios,'tarefas_por_entregavel': tarefas_por_entregavel,'permissoes':permissoes}
+        context = {'solicitacao':solicitacao,'entregaveis':entregaveis,'programacao_adicional':programacao_adicional,'usuarios':usuarios,'tarefas_por_entregavel': tarefas_por_entregavel,'permissoes':permissoes,'escola':escola}
         return render(request,'visualizar_solicitacao.html',context)
     else:
         messages.error(request, 'Você não tem permissões para acessar!')
@@ -739,3 +742,40 @@ def Ajax_Alterar_Entregavel(request):
 
     except Exception as e:
         return JsonResponse({"error_message": "Não foi possível alterar o entregável: " + str(e)}, status=400)
+
+@login_required(login_url='/')
+def Ajax_Alterar_Solicitacao(request):
+    solicitacaoId = request.GET['solicitacaoId']
+    solicitacao = Solicitacoes.objects.filter(id=solicitacaoId).first()
+    unidades = Escolas.objects.all()
+    usuarios = User.objects.all()
+    solicitacao.evento_json['data_inicio'] = datetime.datetime.strptime(solicitacao.evento_json['data_inicio'], '%d/%m/%Y').date()
+    solicitacao.evento_json['data_fim'] = datetime.datetime.strptime(solicitacao.evento_json['data_fim'], '%d/%m/%Y').date()
+
+    return render(request, 'ajax/ajax_edit_solicitacao_modal.html', {'solicitacao': solicitacao,'unidades':unidades,'usuarios':usuarios})
+
+@login_required(login_url='/')
+def Ajax_Altera_Solicitacao(request):
+    try:
+        solicitacaoID = request.POST.get('solicitacaoID',None)
+        projeto = request.POST.get('projeto',None)
+        titulo_evento = request.POST.get('titulo_evento',None)
+        data_inicio = request.POST.get('data_inicio',None)
+        data_fim = request.POST.get('data_fim',None)
+        publico_evento = request.POST.get('publico_evento',None)
+        unidade = request.POST.get('unidade',None)
+        endereco = request.POST.get('endereco',None)
+        data_inicio_convertida = convert_data_formatada(data_inicio)
+        data_fim_convertida = convert_data_formatada(data_fim)
+
+        evento_json = {"escola": unidade, "endereco": endereco, "data_inicio": data_inicio_convertida, "data_fim": data_fim_convertida, "titulo_evento": titulo_evento}
+        solicitacao = Solicitacoes.objects.get(id=solicitacaoID)
+        solicitacao.evento_json = evento_json
+        solicitacao.tipo_projeto = projeto
+        solicitacao.publico_evento = publico_evento
+        solicitacao.save()
+
+        return JsonResponse({"success_message": "Tarefa Devolvida!"})
+
+    except Exception as e:
+        return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)

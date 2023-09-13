@@ -180,7 +180,12 @@
               {% endif %}
  
 </h5>
-        
+{% if solicitacao.evento_json.titulo_evento %}
+<a onclick="editarSolicitacaoModal('{{solicitacao.id}}')"  id="editar_solicitacao"  style=" width: 20%;" class="btn bg-dark">
+                                        
+  <i class="fas fa-pencil"></i> <B>Editar Solicitação</B>
+</a>
+{% endif %}
           </div>
         <!-- /.card-header -->
         <div class="card">
@@ -201,6 +206,7 @@
                     <div class="small-box" style="background-color: #ffffff; color: #000000">
                       <div class="inner" style="text-align: center;">
                         <h4>{{ solicitacao.get_projeto_display }}</h4>
+                     
                       </div>
                    
                       <div style="background-color: #000000;color: #FFF; cursor: pointer;" class="small-box-footer">PROJETO</div>
@@ -310,8 +316,35 @@
                                 <!-- /.input group -->
                             </div>
                           </div>
+                          {% if solicitacao.publico_evento %}
+                          <div class="col-lg-3 col-4">
+                            <div class="form-group">
+                                <label>Público do Evento:</label>
+                                <div class="input-group">
+                                  {{solicitacao.publico_evento}}
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                          </div>
+                          {% endif %}
+
+
                           {% if solicitacao.evento_json.endereco %}
-                          <div class="col-lg-3 col-12">
+                          <div class="col-lg-3 col-3">
+                            <div class="form-group">
+                                <label>Unidade:</label>
+                                <div class="input-group">
+            
+                                  {{escola.nome}}
+                    
+                                  
+                              
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                          </div>
+
+                          <div class="col-lg-9 col-9">
                             <div class="form-group">
                                 <label>Endereço:</label>
                                 <div class="input-group">
@@ -371,6 +404,7 @@
                                 <!-- /.input group -->
                             </div>
                           </div>
+
                           <div class="col-lg-3 col-12">
                             <div class="form-group">
                                 <label>Cidade:</label>
@@ -386,8 +420,7 @@
                             </div>
                           </div>
                           {% endif %}
-                          
-
+                      
                           {% if programacao_adicional %}
                           <div class="col-12 col-sm-12 col-md-12">
                             <div class="card" style="width: 100%;">
@@ -1105,6 +1138,10 @@
 <div class="modal fade" id="editarEntregavelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   
 </div>
+
+<div class="modal fade" id="editarSolicitacao" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  
+</div>
 <script>
 
 function modalTarefa(tarefaId){
@@ -1549,6 +1586,27 @@ function editarEntregavelModal(entregavelId){
   });
 }
 
+function editarSolicitacaoModal(solicitacaoid){
+  url = '/ajax/alterar-solicitacao'
+
+  $.ajax({
+  url: url,
+  data: {'solicitacaoId':solicitacaoid},
+
+  success: function(data) {
+
+    $("#editarSolicitacao").html(data);
+    $("#editarSolicitacao").modal('show')
+  },
+  error: function(xhr, status, error) {
+    Swal.fire({
+          icon: 'error',
+          title: 'Ops!',
+          text: 'Não foi possível obter resultados!'
+        });
+  }
+  });
+}
 </script>
 
   <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>

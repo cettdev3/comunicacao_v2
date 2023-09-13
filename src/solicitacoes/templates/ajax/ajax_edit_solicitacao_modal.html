@@ -1,0 +1,304 @@
+<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="title_negative">Editar Solicitação</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+     <form id="formEditSol">
+      <div class="modal-body">
+        <div class="row">
+        
+      <input style="display: none;" type="text" value="{{solicitacao.id}}" id="solicitacaoID"  class="form-control" name="solicitacaoID">
+
+
+      <div class="card-body">
+        <div class="form-group" id="save_the_date_container" >
+            <div class="row">
+                      
+            <div class="card" style="width: 100%;">
+              <div class="card-header" style="background-color: #fafafa;">
+                  <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i> {{solicitacao.evento_json.titulo_evento}}</h3>
+                  
+              </div>
+      
+              <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-3">
+                        <div class="form-group">
+                    
+                        <label>Projeto:</label>
+                            
+                          <div class="input-group">
+                            <select style="width: 100%;"  class="form-control select2" id="projeto_altera" name="projeto_altera" required>
+                                <option value="1" {% if solicitacao.tipo_projeto == 1 %} selected {% endif %}>EFG</option>
+                                <option value="2" {% if solicitacao.tipo_projeto == 2 %} selected {% endif %}>COTEC</option>
+                                <option value="3" {% if solicitacao.tipo_projeto == 3 %} selected {% endif %}>CETT</option>
+                                <option value="4" {% if solicitacao.tipo_projeto == 4 %} selected {% endif %}>BASILEU</option>
+                              </select>
+                          </div>
+                          <!-- /.input group -->
+                          </div>
+                        </div>
+
+
+              <div class="col-12 col-sm-12 col-md-3">
+                <div class="form-group">
+                <label>Solicitante:</label>
+
+                <div class="input-group">
+                   
+                    <select style="width: 100%;"  class="form-control select2" id="solicitante_altera" name="solicitante_altera" required>
+                        {% for usuario in usuarios %}
+                            <option value="{{usuario.id}}" {% if solicitacao.criado_por_id == usuario.id %} selected {% endif %}>{{usuario.first_name}}</option>
+                        {% endfor %}
+                      </select>
+                </div>
+                <!-- /.input group -->
+                </div>
+              </div>
+            
+          
+            <div class="col-12 col-sm-12 col-md-6">
+              <div class="form-group">
+              <label>Título do Evento:</label>
+
+              <div class="input-group">
+              <input value="{{solicitacao.evento_json.titulo_evento}}" class="form-control" type="text" name="titulo_evento_altera" id="titulo_evento_altera">
+              </div>
+              <!-- /.input group -->
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-3">
+                <div class="form-group">
+                <label>Data Início: </label>
+  
+                <div class="input-group">
+                <input type="date" value="{{solicitacao.evento_json.data_inicio|date:'Y-m-d'}}" class="form-control" type="text" name="data_inicio_altera" id="data_inicio_altera">
+                </div>
+                <!-- /.input group -->
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-12 col-md-3">
+                <div class="form-group">
+                <label>Data Final:</label>
+  
+                <div class="input-group">
+                <input type="date" value="{{solicitacao.evento_json.data_fim|date:'Y-m-d'}}" class="form-control" type="text" name="data_final_altera" id="data_final_altera">
+                </div>
+                <!-- /.input group -->
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-12 col-md-6">
+                <div class="form-group">
+                <label>Público do Evento:</label>
+  
+                <div class="input-group">
+                <input value="{{solicitacao.publico_evento}}" type="atext" class="form-control" type="text" name="publico_evento_altera" id="publico_evento_altera">
+                </div>
+                <!-- /.input group -->
+                </div>
+              </div>
+
+              
+              <div class="col-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                <label>Unidade:</label>
+  
+                <div class="input-group">
+                    <select style="width: 100%;"  class="form-control select2" id="escola_altera" name="escola_altera" required>
+                        {% for unidade in unidades %}
+                            <option value="{{unidade.id}}" {% if solicitacao.evento_json.escola == unidade.id|stringformat:"d" %} selected {% endif %}>{{unidade.nome}} - {{unidade.convenio}}</option>
+                        {% endfor %}
+                      </select>
+                </div>
+                <!-- /.input group -->
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-12 col-md-12" id="endereco_escola">
+                <div class="form-group">
+                  <label>Endereço:</label>
+            
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i style="color: #000000" class="fa fa-map"></i></span>
+                     
+                    </div>
+                    <input type="text" value="{{solicitacao.evento_json.endereco}}" required id="endereco_escola_altera"  class="form-control" name="endereco_escola_altera">
+                  </div>
+                  <!-- /.input group -->
+                </div>
+              </div>
+
+
+                        </div>
+              </div>
+              </div>
+            </div>
+
+      </div>
+        
+      </div>
+
+      </div>
+    </div>
+</form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        <button type="button"n onclick="AlteraSolicitacao()" class="btn btn-primary">Alterar Solicitação</button>
+      </div>
+ 
+    </div>
+  </div>
+<script>
+    $("#escola").on("change", function() {
+      console.log('entrou')
+      var idEscola = $(this).val();
+      url = '/ajax/load-endereco-escola'
+      
+      $.ajax({
+      url: url,
+      data: {'idEscola':idEscola},
+      
+      beforeSend: function() {
+          // exibe o spinner com fundo escuro enquanto aguarda a resposta
+          $('#spinner-background').show();
+        },
+      success: function(data) {
+
+        $("#endereco_escola").html(data);
+      },
+      complete: function() {
+          // esconde o spinner com fundo escuro quando a resposta é recebida
+          $('#spinner-background').hide();
+        },
+      error: function(xhr, status, error) {
+        Swal.fire({
+              icon: 'error',
+              title: 'Ops!',
+              text: 'Não foi possível obter resultados!'
+            });
+      }
+    });
+
+ });
+
+    function AlteraSolicitacao(){
+      var solicitacaoID = document.getElementById('solicitacaoID')
+      var projeto = document.getElementById('projeto_altera')
+      var solicitante = document.getElementById('solicitante_altera')
+      var titulo_evento = document.getElementById('titulo_evento_altera')
+      var data_inicio = document.getElementById('data_inicio_altera')
+      var data_fim = document.getElementById('data_final_altera')
+      var publico_evento = document.getElementById('publico_evento_altera')
+      var unidade = document.getElementById('escola_altera')
+      var endereco = document.getElementById('endereco_escola_altera')
+
+    var jsonData = {}
+
+      if (solicitacaoID){
+        jsonData.solicitacaoID = solicitacaoID.value
+
+      }
+
+      if (projeto){
+        jsonData.projeto = projeto.value
+      }
+
+      if (solicitante){
+        jsonData.solicitante = solicitante.value
+      }
+
+      if (titulo_evento){
+        jsonData.titulo_evento = titulo_evento.value
+      }
+
+      if (data_inicio){
+        jsonData.data_inicio = data_inicio.value
+      }
+
+      if (data_fim){
+        jsonData.data_fim = data_fim.value
+      }
+
+      if (publico_evento){
+        jsonData.publico_evento = publico_evento.value
+      }
+
+      if (unidade){
+        jsonData.unidade = unidade.value
+      }
+
+      if (endereco){
+        jsonData.endereco = endereco.value
+      }
+      
+      console.log(jsonData)
+      Swal.fire({
+      title: 'Tem certeza?',
+      text: 'Deseja realmente alterar esta solicitação?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sim',
+      cancelButtonText: 'Não'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        var XCSRFToken = '{{ csrf_token }}'
+        const url = "/ajax/altera-entregavel";
+        $.ajax({
+            
+            url: url,
+            type:"post",
+            data: jsonData,
+            headers: { "X-CSRFToken":  XCSRFToken },
+            success: function (data) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Solicitação Editada!',
+                    text: "Solicitação editada com sucesso!"
+                }).then((result) => {
+                    // Ação a ser realizada após o botão "OK" ser clicado
+                    if (result.isConfirmed) {
+                        // Redirecionar ou atualizar a página aqui
+                        location.reload(); // Isso atualizará a página
+                    }
+                });
+            },
+            error: function (data) {
+                if (data.responseJSON && data.responseJSON.error_message) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ops!',
+                        text: data.responseJSON.error_message
+                    });
+                }
+            }
+        });
+      }
+    });
+    }
+    
+  $(function () {
+  //Initialize Select2 Elements
+  $('.select2').select2()
+
+  //Initialize Select2 Elements
+  $('.select2bs4').select2({
+    theme: 'bootstrap4'
+  })
+  })
+    var descricao = '{{entregavel.observacao|escapejs}}'
+    $('.summernote').summernote();
+    $('#obs_save_the_date').summernote('code', descricao);
+
+
+    
+ </script>
