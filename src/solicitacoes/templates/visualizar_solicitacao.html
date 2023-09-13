@@ -579,7 +579,7 @@
                                                           <div class="form-group">
                                                               <label>Categoria do Produto:</label>
                                                               <div class="input-group">
-                                                                {% if entregavel.get_tipoproduto_display %}
+                                                                {% if entregavel.tipo_produto != 0 %}
                                                                 {{entregavel.get_tipoproduto_display}}
                                                                 {% else %}
                                                                 Não Informado
