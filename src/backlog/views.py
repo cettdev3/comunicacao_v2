@@ -32,37 +32,35 @@ def Ajax_View_Task(request):
 
 @login_required(login_url='/')
 def Ajax_Move_Task(request):
-    try:
-        with transaction.atomic():
-            print(request.POST)
-            idtask = request.POST['taskId']
-            step = request.POST['step']
-            entrega = request.POST.get('entrega',None)
-            if entrega == 'undefined':
-                entrega = None
-            try:
-                arquivos_task = []
-                arquivos = request.FILES.getlist('files[]')
-                for arquivo in arquivos:
-                    fs1 = FileSystemStorage()
-                    filename1 = fs1.save(arquivo.name, arquivo)
-                    arquivo_url = fs1.url(filename1)
-                    arquivos_task.append(arquivo_url)
-            except:
-                arquivo_url = ''
 
-            tarefa = Tarefas.objects.get(id=idtask)
+    with transaction.atomic():
+        print(request.POST)
+        idtask = request.POST['taskId']
+        step = request.POST['step']
+        entrega = request.POST.get('entrega',None)
+        if entrega == 'undefined':
+            entrega = None
+        try:
+            arquivos_task = []
+            arquivos = request.FILES.getlist('files[]')
+            for arquivo in arquivos:
+                fs1 = FileSystemStorage()
+                filename1 = fs1.save(arquivo.name, arquivo)
+                arquivo_url = fs1.url(filename1)
+                arquivos_task.append(arquivo_url)
+        except:
+            arquivo_url = ''
 
-            tarefa.descricao_entrega = entrega
-            tarefa.data_entrega = datetime.date.today()
-            
-            tarefa.status  = step
-            tarefa.arquivos = arquivos_task
-            tarefa.save()
+        tarefa = Tarefas.objects.get(id=idtask)
 
-            tarefas = Tarefas.objects.filter(usuario_id=request.user.id).all()
-
-            return render(request, 'ajax/ajax_move_task.html', {'tarefas': tarefas})
+        tarefa.descricao_entrega = entrega
+        tarefa.data_entrega = datetime.date.today()
         
-    except Exception as e:
-         return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)
+        tarefa.status  = step
+        tarefa.arquivos = arquivos_task
+        tarefa.save()
+
+        tarefas = Tarefas.objects.filter(usuario_id=request.user.id).all()
+
+        return render(request, 'ajax/ajax_move_task.html', {'tarefas': tarefas})
+        
