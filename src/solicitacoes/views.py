@@ -112,8 +112,8 @@ def Dados_Gerais_Evento(request):
 def Ajax_Realiza_Solicitacao(request):
     dadosForm = request.POST
     print(dadosForm)
-    try:
-        with transaction.atomic():
+
+    with transaction.atomic():
 
             #OBTÉM DADOS DA SOLICITAÇÃO
             idEvento = request.POST.get('eventos_gerais',None)
@@ -574,8 +574,7 @@ def Ajax_Realiza_Solicitacao(request):
             
             return JsonResponse({"success_message": "Solicitação Realizada!"}) 
         
-    except Exception as e:
-         return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)
+    
 
 @login_required(login_url='/')
 def Ajax_Cria_Tarefa(request):
