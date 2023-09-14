@@ -9,12 +9,12 @@ class Solicitacoes(models.Model):
     choices_status = [('1','Solicitação Criada'),('2','Aguardando Entregas'),('3','Concluída'),('4','Devolvida')]
 
     id = models.AutoField(primary_key=True)
-    evento_json = models.JSONField()
-    motivo_alteracao = models.TextField()
+    evento_json = models.JSONField(null=True,blank=True)
+    motivo_alteracao = models.TextField(null=True,blank=True)
     tipo_projeto = models.IntegerField(choices=choices_projeto, blank=False, null=False)
-    publico_evento = models.TextField()
-    criado_por = models.ForeignKey(User,on_delete=models.CASCADE)
-    data_solicitacao = models.DateField(default=timezone.now)
+    publico_evento = models.TextField(null=True,blank=True)
+    criado_por = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
+    data_solicitacao = models.DateField(default=timezone.now,null=True,blank=True)
     status = models.IntegerField(choices=choices_status, blank=False, null=False,default=1)
 
 
@@ -74,17 +74,17 @@ class Entregaveis(models.Model):
     choices_tipo_produto = [('1','DIGITAL'),('2','IMPRESSO'),('3','AUDIOVISUAL'),('4','COBERTURA DE EVENTO'),('5','PRODUÇÃO (ORÇAMENTOS E EXECUÇÕES)'),('6','IDENTIDADE VISUAL'),('7','PLANEJAMENTO'),('8','BRINDES'),('9','COMUNICAÇÃO VISUAL')]
     choices_status = [('0','AGUARDANDO ENTREGAS'),('1','AGUARDANDO APROVAÇÃO DA COMUNICAÇÃO'),('2','APROVADA PELA COMUNICAÇÃO, AGUARDANDO APROVAÇÃO DO SOLICITANTE'),('3','DEVOLVIDO'),('4','APROVADO PELO SOLICITANTE'),('5','DEVOLVIDO P/ SOLICITANTE'),('6','NEGADO')]
     id = models.AutoField(primary_key=True)
-    evento = models.ForeignKey(Solicitacoes,on_delete=models.CASCADE)
-    prazo = models.DateField()
-    data_solicitacao = models.DateField(default=timezone.now)
-    exemplo_arte = models.CharField(max_length=255,default='')
+    evento = models.ForeignKey(Solicitacoes,on_delete=models.CASCADE,null=True,blank=True)
+    prazo = models.DateField(null=True,blank=True)
+    data_solicitacao = models.DateField(default=timezone.now,null=True,blank=True)
+    exemplo_arte = models.CharField(max_length=255,default='',null=True,blank=True)
     tipo_entregavel = models.IntegerField(choices=choices_tipo, blank=True, null=True)
     tipo_produto = models.IntegerField(choices=choices_tipo_produto, blank=True, null=True)
-    categoria_produto = models.CharField(max_length=255,default='')
-    descricao_audio_visual = models.TextField()
-    observacao = models.TextField()
-    criado_por = models.ForeignKey(User,on_delete=models.CASCADE,related_name='criado_por')
-    motivo_revisao = models.TextField(default='')
+    categoria_produto = models.CharField(max_length=255,default='',null=True,blank=True)
+    descricao_audio_visual = models.TextField(null=True,blank=True)
+    observacao = models.TextField(null=True,blank=True)
+    criado_por = models.ForeignKey(User,on_delete=models.CASCADE,related_name='criado_por',null=True,blank=True)
+    motivo_revisao = models.TextField(default='',null=True,blank=True)
     status = models.IntegerField(choices=choices_status, blank=True, null=True,default=0)
 
     @property
@@ -123,11 +123,11 @@ class Entregaveis(models.Model):
 
 class Programacao_Adicional(models.Model):
     id = models.AutoField(primary_key=True)
-    data = models.DateField()
-    hora = models.CharField(max_length=5,default='')
-    hora_final = models.CharField(max_length=5,default='')
-    atividade = models.CharField(max_length=100,default='')
-    solicitacao = models.ForeignKey(Solicitacoes,models.CASCADE)
+    data = models.DateField(null=True,blank=True)
+    hora = models.CharField(max_length=5,default='',null=True,blank=True)
+    hora_final = models.CharField(max_length=5,default='',null=True,blank=True)
+    atividade = models.CharField(max_length=100,default='',null=True,blank=True)
+    solicitacao = models.ForeignKey(Solicitacoes,models.CASCADE,null=True,blank=True)
 
     class  Meta:
         db_table = 'programacao_adicional'
@@ -137,19 +137,19 @@ class Tarefas(models.Model):
     choices_prioridade = [('1','NORMAL'),('2','PRIORIDADE')]
 
     id = models.AutoField(primary_key=True)
-    entregavel = models.ForeignKey(Entregaveis,models.CASCADE)
-    titulo_tarefa = models.TextField()
-    data_tarefa = models.DateField(default=timezone.now)
-    prazo_entrega = models.DateField()
+    entregavel = models.ForeignKey(Entregaveis,models.CASCADE,null=True,blank=True)
+    titulo_tarefa = models.TextField(null=True,blank=True)
+    data_tarefa = models.DateField(default=timezone.now,null=True,blank=True)
+    prazo_entrega = models.DateField(null=True,blank=True)
     data_entrega = models.DateField(null=True,blank=True)
-    descricao_tarefa = models.TextField()
-    descricao_entrega = models.TextField(null=True)
-    arquivos = models.TextField()
-    usuario = models.ForeignKey(User,models.CASCADE)
-    usuario_designou = models.ForeignKey(User,models.CASCADE,related_name='usuario_designou')
+    descricao_tarefa = models.TextField(null=True,blank=True)
+    descricao_entrega = models.TextField(null=True,blank=True)
+    arquivos = models.TextField(null=True,blank=True)
+    usuario = models.ForeignKey(User,models.CASCADE,null=True,blank=True)
+    usuario_designou = models.ForeignKey(User,models.CASCADE,related_name='usuario_designou',null=True,blank=True)
     prioridade = models.IntegerField(choices=choices_prioridade, blank=False, null=False,default=0)
     tipo = models.IntegerField(choices=choices_prioridade, blank=False, null=False,default=1)
-    status = models.IntegerField()
+    status = models.IntegerField(null=True,blank=True)
 
     def calcular_status(self):
         hoje = datetime.now().date()
@@ -191,12 +191,12 @@ class Tarefas(models.Model):
 # Create your models here.
 class Escolas(models.Model):
     id = models.AutoField(primary_key=True)
-    nome = models.CharField(max_length=255)
-    bairro = models.CharField(max_length=255)
-    logradouro = models.CharField(max_length=255)
-    cep = models.CharField(max_length=255)
-    cidade = models.CharField(max_length=255)
+    nome = models.CharField(max_length=255,null=True,blank=True)
+    bairro = models.CharField(max_length=255,null=True,blank=True)
+    logradouro = models.CharField(max_length=255,null=True,blank=True)
+    cep = models.CharField(max_length=255,null=True,blank=True)
+    cidade = models.CharField(max_length=255,null=True,blank=True)
     complemento = models.CharField(max_length=255,default=False, null=False)
-    convenio = models.CharField(max_length=10)
+    convenio = models.CharField(max_length=10,null=True,blank=True)
     class  Meta:
         db_table = 'escolas'
