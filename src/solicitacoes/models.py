@@ -78,14 +78,14 @@ class Entregaveis(models.Model):
     prazo = models.DateField()
     data_solicitacao = models.DateField(default=timezone.now)
     exemplo_arte = models.CharField(max_length=255,default='')
-    tipo_entregavel = models.IntegerField(choices=choices_tipo, blank=False, null=False)
-    tipo_produto = models.IntegerField(choices=choices_tipo_produto, blank=False, null=False)
+    tipo_entregavel = models.IntegerField(choices=choices_tipo, blank=True, null=True)
+    tipo_produto = models.IntegerField(choices=choices_tipo_produto, blank=True, null=True)
     categoria_produto = models.CharField(max_length=255,default='')
     descricao_audio_visual = models.TextField()
     observacao = models.TextField()
     criado_por = models.ForeignKey(User,on_delete=models.CASCADE,related_name='criado_por')
     motivo_revisao = models.TextField(default='')
-    status = models.IntegerField(choices=choices_status, blank=False, null=False,default=0)
+    status = models.IntegerField(choices=choices_status, blank=True, null=True,default=0)
 
     @property
     def status_entregaveis(self):
@@ -143,7 +143,7 @@ class Tarefas(models.Model):
     prazo_entrega = models.DateField()
     data_entrega = models.DateField(null=True,blank=True)
     descricao_tarefa = models.TextField()
-    descricao_entrega = models.TextField()
+    descricao_entrega = models.TextField(null=True)
     arquivos = models.TextField()
     usuario = models.ForeignKey(User,models.CASCADE)
     usuario_designou = models.ForeignKey(User,models.CASCADE,related_name='usuario_designou')
