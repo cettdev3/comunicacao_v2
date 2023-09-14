@@ -81,7 +81,7 @@ class Entregaveis(models.Model):
     tipo_entregavel = models.IntegerField(choices=choices_tipo, blank=True, null=True)
     tipo_produto = models.IntegerField(choices=choices_tipo_produto, blank=True, null=True,default=5)
     categoria_produto = models.CharField(max_length=255,default='',null=True,blank=True)
-    descricao_audio_visual = models.TextField(null=True,blank=True)
+    descricao_audio_visual = models.TextField(null=True,blank=True,default='')
     observacao = models.TextField(null=True,blank=True)
     criado_por = models.ForeignKey(User,on_delete=models.CASCADE,related_name='criado_por',null=True,blank=True)
     motivo_revisao = models.TextField(default='',null=True,blank=True)
