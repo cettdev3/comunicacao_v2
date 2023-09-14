@@ -52,9 +52,9 @@ def Ajax_Move_Task(request):
                 arquivo_url = ''
 
             tarefa = Tarefas.objects.get(id=idtask)
-            if entrega:
-                tarefa.descricao_entrega = entrega
-                tarefa.data_entrega = datetime.date.today()
+
+            tarefa.descricao_entrega = entrega
+            tarefa.data_entrega = datetime.date.today()
             
             tarefa.status  = step
             tarefa.arquivos = arquivos_task
