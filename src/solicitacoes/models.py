@@ -79,7 +79,7 @@ class Entregaveis(models.Model):
     data_solicitacao = models.DateField(default=timezone.now,null=True,blank=True)
     exemplo_arte = models.CharField(max_length=255,default='',null=True,blank=True)
     tipo_entregavel = models.IntegerField(choices=choices_tipo, blank=True, null=True)
-    tipo_produto = models.IntegerField(choices=choices_tipo_produto, blank=True, null=True)
+    tipo_produto = models.IntegerField(choices=choices_tipo_produto, blank=True, null=True,default=5)
     categoria_produto = models.CharField(max_length=255,default='',null=True,blank=True)
     descricao_audio_visual = models.TextField(null=True,blank=True)
     observacao = models.TextField(null=True,blank=True)
@@ -114,6 +114,7 @@ class Entregaveis(models.Model):
         return dict(self.choices_tipo)[str(self.tipo_entregavel)]
     
     def get_tipoproduto_display(self):
+
         return dict(self.choices_tipo_produto)[str(self.tipo_produto)]
     
    
