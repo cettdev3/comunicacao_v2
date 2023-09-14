@@ -84,7 +84,7 @@ def Visualizar_Solicitacao(request,codigo):
 
             entregavel['tarefas_relacionadas'] = tarefas_relacionadas
 
-        usuarios = User.objects.all()
+        usuarios = User.objects.all().order_by('first_name')
         context = {'solicitacao':solicitacao,'entregaveis':entregaveis,'programacao_adicional':programacao_adicional,'usuarios':usuarios,'tarefas_por_entregavel': tarefas_por_entregavel,'permissoes':permissoes,'escola':escola}
         return render(request,'visualizar_solicitacao.html',context)
     else:
@@ -676,7 +676,7 @@ def Ajax_Alterar_Solicitacao(request):
     solicitacaoId = request.GET['solicitacaoId']
     solicitacao = Solicitacoes.objects.filter(id=solicitacaoId).first()
     unidades = Escolas.objects.all()
-    usuarios = User.objects.all()
+    usuarios = User.objects.all().order_by('first_name')
     solicitacao.evento_json['data_inicio'] = datetime.datetime.strptime(solicitacao.evento_json['data_inicio'], '%d/%m/%Y').date()
     solicitacao.evento_json['data_fim'] = datetime.datetime.strptime(solicitacao.evento_json['data_fim'], '%d/%m/%Y').date()
 

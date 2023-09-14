@@ -10,7 +10,7 @@ from django.db import transaction
 @login_required(login_url='/')
 def Gerir_time(request):
     #users = User.objects.select_related('user_id').values('id', 'email','first_name', 'username', 'usuarios__unidade__nome').values('id','email', 'first_name', 'username', 'usuarios__unidade__nome')
-    usuarios = User.objects.all()
+    usuarios = User.objects.all().order_by('first_name')
     unidades = Escolas.objects.all()
     permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first
     departamentos = Departamentos.objects.all()
@@ -52,7 +52,7 @@ def Cadastrar_usuario(request):
 @login_required(login_url='/')
 def Ajax_load_usuario(request):
     userId = request.GET['userid']
-    usuarios = User.objects.all()
+    usuarios = User.objects.all().order_by('first_name')
     unidades = Escolas.objects.all()
     departamentos = Departamentos.objects.all()
     permission = Permissoes.objects.filter(usuario_id=userId).first()
