@@ -158,9 +158,9 @@ class Tarefas(models.Model):
         if prazo < hoje:
             return "background:#FBEFEF;color:#000"
         elif prazo == hoje:
-            return "background:#FFFF00;color:#000"
+            return "background:##FBFBEF;color:#000"
         elif prazo - hoje <= timedelta(days=3):
-            return "background:#FF8C00;color:#000"
+            return "background:##FBF5EF;color:#000"
         else:
              return "background:#EFFBEF;color:#000"
     
