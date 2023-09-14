@@ -548,7 +548,7 @@
                                                       <div class="col-lg-3 col-12">
                                                         <button onclick="negarEntregavel('{{entregavel.id}}',5)" type="button" class="btn btn-block btn-dark"> <i class="bi bi-arrow-return-left"></i> Devolver Entregável</button>
                                                     </div>
-                                                    <div class="col-lg-3 col-12" style="display: none;">
+                                                    <div class="col-lg-3 col-12">
                                                       <button onclick="editarEntregavelModal('{{entregavel.id}}')" type="button" class="btn btn-block btn-dark"> <i class="bi bi-pencil-square"></i> Editar Entregável</button>
                                                   </div>
                                                     {% endif %}
@@ -743,16 +743,16 @@
                                                                   <tbody >
                                                           
                                                                 
-
+                                                                    {% for tarefa in entregavel.tarefas_relacionadas  %}
                                                                       <tr  onclick="modalTarefa('{{entregavel.tarefas_relacionadas.id}}')">
                                           
-                                                                       <td>#{{entregavel.tarefas_relacionadas.id}}</td>
-                                                                       <td>{{entregavel.tarefas_relacionadas.data_tarefa|date:'d/m/Y'}}</td>
-                                                                       <td>{{entregavel.tarefas_relacionadas.titulo_tarefa}}</td>
-                                                                       <td>{{entregavel.tarefas_relacionadas.prazo_entrega|date:'d/m/Y'}}</td>
-                                                                       <td>{% if entregavel.tarefas_relacionadas.data_entrega %} {{entregavel.tarefas_relacionadas.data_entrega|date:'d/m/Y'}} {%else%} Aguardando Entrega {% endif %}</td>
-                                                                       <td>{{entregavel.tarefas_relacionadas.usuario.first_name}}</td>
-                                                                       <td>{% if entregavel.tarefas_relacionadas.prioridade == 1 %}   <span class="badge bg-primary" style="padding: 5px; width: 100%;"> {{entregavel.tarefas_relacionadas.get_prioridade_display}}</span> {% else %} <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{entregavel.tarefas_relacionadas.get_prioridade_display}}</span>{% endif %}</td>
+                                                                       <td>#{{tarefa.id}}</td>
+                                                                       <td>{{tarefa.data_tarefa|date:'d/m/Y'}}</td>
+                                                                       <td>{{tarefa.titulo_tarefa}}</td>
+                                                                       <td>{{tarefa.prazo_entrega|date:'d/m/Y'}}</td>
+                                                                       <td>{% if tarefa.data_entrega %} {{tarefa.data_entrega|date:'d/m/Y'}} {%else%} Aguardando Entrega {% endif %}</td>
+                                                                       <td>{{tarefa.usuario.first_name}}</td>
+                                                                       <td>{% if tarefa.prioridade == 1 %}   <span class="badge bg-primary" style="padding: 5px; width: 100%;"> {{tarefa.get_prioridade_display}}</span> {% else %} <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{tarefa.get_prioridade_display}}</span>{% endif %}</td>
                                                                        
                                                                        <td>
                                                                         {% if entregavel.tarefas_relacionadas.status == 0 %}
@@ -765,14 +765,14 @@
                                                                           <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{entregavel.tarefas_relacionadas.get_status_display}}</span>
 
                                                                           {% elif entregavel.tarefas_relacionadas.status == 3 %}
-                                                                          <span onclick="editarEntregavel('{{entregavel.id}}')" class="badge bg-success" style="padding: 5px; width: 100%;"> {{entregavel.tarefas_relacionadas.get_status_display}}</span>
+                                                                          <span onclick="editarEntregavel('{{entregavel.id}}')" class="badge bg-success" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
                                                                         {% endif %}
                                                                        </td>
                     
                                                                  
                                                                       </tr>
                                                               
-                                                                    
+                                                                    {% endfor %}
                                                                   </tbody>
                                                                   
                                                                 </table>
