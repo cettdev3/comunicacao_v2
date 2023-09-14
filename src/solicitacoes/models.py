@@ -71,7 +71,7 @@ class Solicitacoes(models.Model):
     
 class Entregaveis(models.Model):
     choices_tipo = [('1','SAVE THE DATE'),('2','DIVULGAÇÃO'),('3','PROGRAMAÇÃO'),('4','STAND')]
-    choices_tipo_produto = [('1','DIGITAL'),('2','IMPRESSO'),('3','AUDIOVISUAL'),('4','COBERTURA DE EVENTO'),('5','PRODUÇÃO DE ÁUDIO VISUAL (ORÇAMENTOS E EXECUÇÕES)')]
+    choices_tipo_produto = [('1','DIGITAL'),('2','IMPRESSO'),('3','AUDIOVISUAL'),('4','COBERTURA DE EVENTO'),('5','PRODUÇÃO (ORÇAMENTOS E EXECUÇÕES)'),('6','IDENTIDADE VISUAL')]
     choices_status = [('0','AGUARDANDO ENTREGAS'),('1','AGUARDANDO APROVAÇÃO DA COMUNICAÇÃO'),('2','APROVADA PELA COMUNICAÇÃO, AGUARDANDO APROVAÇÃO DO SOLICITANTE'),('3','DEVOLVIDO'),('4','APROVADO PELO SOLICITANTE'),('5','DEVOLVIDO P/ SOLICITANTE'),('6','NEGADO')]
     id = models.AutoField(primary_key=True)
     evento = models.ForeignKey(Solicitacoes,on_delete=models.CASCADE)
