@@ -230,16 +230,7 @@ def Ajax_Realiza_Solicitacao(request):
                             descricao_save_the_date = request.POST.get('descricao_save_the_date',None)
                             obs_save_the_date = request.POST.get('obs_save_the_date',None)
 
-                            #CONVERTE STRING PADRÃO 
-                            if '    ' in descricao_save_the_date:
-                                if descricao_save_the_date =='<p><br></p>':
-                                    descricao_save_the_date = ''
-                                descricao_save_the_date = descricao_save_the_date.strip()
-                            
-                            if '    ' in obs_save_the_date :
-                                if obs_save_the_date == '<p><br></p>':
-                                    obs_save_the_date = ''
-                                obs_save_the_date = obs_save_the_date.strip()
+                         
 
                             #CODIFICA PARA OBTER A URL E ADICIONAR IMAGEM NO SISTEMA
                             if exemploarte_save_the_date:
@@ -273,16 +264,7 @@ def Ajax_Realiza_Solicitacao(request):
                             descricao_save_the_date = request.POST.get('descricao_save_the_date'+str(index),None)
                             obs_save_the_date = request.POST.get('obs_save_the_date'+str(index),None)
 
-                            #CONVERTE STRING PADRÃO 
-                            if '    ' in descricao_save_the_date:
-                                if descricao_save_the_date =='<p><br></p>':
-                                    descricao_save_the_date = ''
-                                descricao_save_the_date = descricao_save_the_date.strip()
-                            
-                            if '    ' in obs_save_the_date :
-                                if obs_save_the_date == '<p><br></p>':
-                                    obs_save_the_date = ''
-                                obs_save_the_date = obs_save_the_date.strip()
+                          
 
 
                             #CODIFICA PARA OBTER A URL E ADICIONAR IMAGEM NO SISTEMA
@@ -320,16 +302,7 @@ def Ajax_Realiza_Solicitacao(request):
                             descricao_divulgacao = request.POST.get('descricao_divulgacao',None)
                             obs_divulgacao = request.POST.get('obs_divulgacao',None)
 
-                            #CONVERTE STRING PADRÃO 
-                            if '    ' in descricao_divulgacao:
-                                if descricao_divulgacao == '<p><br></p>':
-                                    descricao_divulgacao = ''
-                                descricao_divulgacao = descricao_divulgacao.strip()
-                            
-                            if '    ' in obs_divulgacao:
-                                if obs_divulgacao == '<p><br></p>':
-                                    obs_divulgacao = ''
-                                obs_divulgacao = obs_divulgacao.strip()
+                          
 
                             #CODIFICA PARA OBTER A URL E ADICIONAR IMAGEM NO SISTEMA
                             if exemploarte_divulgacao:
@@ -362,15 +335,7 @@ def Ajax_Realiza_Solicitacao(request):
                             obs_divulgacao = request.POST.get('obs_divulgacao'+str(index),None)
 
                             #CONVERTE STRING PADRÃO 
-                            if '    ' in descricao_divulgacao:
-                                if descricao_divulgacao == '<p><br></p>':
-                                    descricao_divulgacao = ''
-                                descricao_divulgacao = descricao_divulgacao.strip()
-                            
-                            if '    ' in obs_divulgacao:
-                                if obs_divulgacao == '<p><br></p>':
-                                    obs_divulgacao = ''
-                                obs_divulgacao = obs_divulgacao.strip()
+                          
 
                             #CODIFICA PARA OBTER A URL E ADICIONAR IMAGEM NO SISTEMA
                             if exemploarte_divulgacao:
@@ -407,16 +372,7 @@ def Ajax_Realiza_Solicitacao(request):
                             descricao_programacao = request.POST.get('descricao_programacao',None)
                             obs_programacao = request.POST.get('obs_programacao',None)
 
-                            #CONVERTE STRING PADRÃO 
-                            if '    ' in descricao_programacao:
-                                if descricao_programacao == '<p><br></p>':
-                                    descricao_programacao = ''
-                                descricao_programacao = descricao_programacao.strip()
-                            
-                            if '    ' in obs_programacao:
-                                if obs_programacao == '<p><br></p>':
-                                    obs_programacao = ''
-                                obs_programacao = obs_programacao.strip()
+                         
 
                             #CODIFICA PARA OBTER A URL E ADICIONAR IMAGEM NO SISTEMA
                             if exemploarte_programacao:
@@ -448,16 +404,7 @@ def Ajax_Realiza_Solicitacao(request):
                             descricao_programacao = request.POST.get('descricao_programacao'+str(index),None)
                             obs_programacao = request.POST.get('obs_programacao'+str(index),None)
 
-                             #CONVERTE STRING PADRÃO 
-                            if '    ' in descricao_programacao:
-                                if descricao_programacao == '<p><br></p>':
-                                    descricao_programacao = ''
-                                descricao_programacao = descricao_programacao.strip()
-                            
-                            if '    ' in obs_programacao:
-                                if obs_programacao == '<p><br></p>':
-                                    obs_programacao = ''
-                                obs_programacao = obs_programacao.strip()
+                           
 
                             #CODIFICA PARA OBTER A URL E ADICIONAR IMAGEM NO SISTEMA
                             if exemploarte_programacao:
@@ -496,16 +443,7 @@ def Ajax_Realiza_Solicitacao(request):
                             obs_stand = request.POST.get('obs_stand',None)
                             userid = request.user.id
 
-                            #CONVERTE STRING PADRÃO 
-                            if '    ' in descricao_stand:
-                                if descricao_stand == '<p><br></p>':
-                                    descricao_stand = ''
-                                descricao_stand = descricao_stand.strip()
-                            
-                            if '    ' in obs_stand:
-                                if obs_stand == '<p><br></p>':
-                                    obs_stand = ''
-                                obs_stand = obs_stand.strip()
+                          
 
                             #CODIFICA PARA OBTER A URL E ADICIONAR IMAGEM NO SISTEMA
                             if exemploarte_stand:
@@ -538,16 +476,7 @@ def Ajax_Realiza_Solicitacao(request):
                             descricao_stand = request.POST.get('descricao_stand'+str(index),None)
                             obs_stand = request.POST.get('obs_stand'+str(index),None)
 
-                             #CONVERTE STRING PADRÃO 
-                            if '    ' in descricao_stand:
-                                if descricao_stand == '<p><br></p>':
-                                    descricao_stand = ''
-                                descricao_stand = descricao_stand.strip()
-                            
-                            if '    ' in obs_stand:
-                                if obs_stand == '<p><br></p>':
-                                    obs_stand = ''
-                                obs_stand = obs_stand.strip()
+                         
 
                             #CODIFICA PARA OBTER A URL E ADICIONAR IMAGEM NO SISTEMA
                             if exemploarte_stand:
