@@ -578,6 +578,7 @@ z-index: 9999;
                                                             <option value="3">Audiovisual</option>
                                                             <option value="4">Cobertura de Evento</option>
                                                             <option value="5">Produção (Orçamentos e Execuções)</option>
+                                                            <option value="6">Identidade Visual</option>
                                                           </select>
                                                       </div>
                                                       <!-- /.input group -->
@@ -744,12 +745,13 @@ z-index: 9999;
                                                                 <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
                                                             </div>
                                                             <select  class="form-control" id="tipoproduto_divulgacao" name="tipoproduto_divulgacao">
-                                                                <option value="">Selecione o Tipo</option>
-                                                                <option value="1">Digital</option>
-                                                                <option value="2">Impresso</option>
-                                                                <option value="3">Audiovisual</option>
-                                                                <option value="4">Cobertura de Evento</option>
-                                                                <option value="5">Produção (Orçamentos e Execuções)</option>
+                                                              <option value="">Selecione o Tipo</option>
+                                                              <option value="1">Digital</option>
+                                                              <option value="2">Impresso</option>
+                                                              <option value="3">Audiovisual</option>
+                                                              <option value="4">Cobertura de Evento</option>
+                                                              <option value="5">Produção (Orçamentos e Execuções)</option>
+                                                              <option value="6">Identidade Visual</option>
                                                             </select>
                                                           </div>
                                                           <!-- /.input group -->
@@ -915,6 +917,7 @@ z-index: 9999;
                                                                       <option value="3">Audiovisual</option>
                                                                       <option value="4">Cobertura de Evento</option>
                                                                       <option value="5">Produção (Orçamentos e Execuções)</option>
+                                                                      <option value="6">Identidade Visual</option>
                                                                   </select>
                                                                 </div>
                                                                 <!-- /.input group -->
@@ -1078,6 +1081,7 @@ z-index: 9999;
                                                                       <option value="3">Audiovisual</option>
                                                                       <option value="4">Cobertura de Evento</option>
                                                                       <option value="5">Produção (Orçamentos e Execuções)</option>
+                                                                      <option value="6">Identidade Visual</option>
                                                                   </select>
                                                                 </div>
                                                                 <!-- /.input group -->
@@ -1222,11 +1226,12 @@ $("#eventos_gerais").on("change", function() {
  });
 
  var categorias = {
-      "1": ["Post", "Card P/ Instagram", "Card P/ Stories", "Banner P/ Site", "Outros"],
+      "1": ["Post", "Card P/ Instagram", "Card P/ Stories", "Banner P/ Site", "Planejamento","Outros"],
       "2": ["Adesivo", "Anúncio de jornal", "Banner", "Cartaz", "Outdoor", "Panfletos", "Outros"],
       "3": ["Filme para TV (duração)", "Filme para Reels", "Filme para Stories", "Spot de rádio/Streaming", "Carro de som	", "Videos para telas de TV", "Outros"],
       "4": ["Foto", "Vídeo", "Jornalista","Release","Stories","Notícia para Site","Reals","Feed"],
-      "5": ["teste"]
+      "5": ["teste"],
+      "6": ["Logo","Papelaria","Fachada","Outros"]
       // Adicione outras opções aqui
   };
 
@@ -1367,12 +1372,13 @@ $('#add_savethedate').click(function() {
                                   <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
                               </div>
                               <select required  class="form-control" id="tipoproduto_save_the_date`+ count_savethedate +`" name="tipoproduto_save_the_date`+ count_savethedate +`">
-                                  <option value="">Selecione o Tipo</option>
-                                  <option value="1">Digital</option>
-                                  <option value="2">Impresso</option>
-                                  <option value="3">Audiovisual</option>
-                                  <option value="4">Cobertura de Evento</option>
-                                  <option value="5">Produção (Orçamentos e Execuções)</option>
+                                <option value="">Selecione o Tipo</option>
+                                <option value="1">Digital</option>
+                                <option value="2">Impresso</option>
+                                <option value="3">Audiovisual</option>
+                                <option value="4">Cobertura de Evento</option>
+                                <option value="5">Produção (Orçamentos e Execuções)</option>
+                                <option value="6">Identidade Visual</option>
                               </select>
                             </div>
                             <!-- /.input group -->
@@ -1569,12 +1575,13 @@ $('#add_divulgacao').click(function() {
                                   <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
                               </div>
                               <select required  class="form-control" id="tipoproduto_divulgacao`+ count_divulgacao +`" name="tipoproduto_divulgacao`+ count_divulgacao +`">
-                                  <option value="">Selecione o Tipo</option>
-                                  <option value="1">Digital</option>
-                                  <option value="2">Impresso</option>
-                                  <option value="3">Audiovisual</option>
-                                  <option value="4">Cobertura de Evento</option>
-                                  <option value="5">Produção (Orçamentos e Execuções)</option>
+                                <option value="">Selecione o Tipo</option>
+                                <option value="1">Digital</option>
+                                <option value="2">Impresso</option>
+                                <option value="3">Audiovisual</option>
+                                <option value="4">Cobertura de Evento</option>
+                                <option value="5">Produção (Orçamentos e Execuções)</option>
+                                <option value="6">Identidade Visual</option>
                               </select>
                             </div>
                             <!-- /.input group -->
@@ -1773,12 +1780,13 @@ $('#add_programacao_entregavel').click(function() {
                                   <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
                               </div>
                               <select class="form-control" id="tipoproduto_programacao`+ count_programacao +`" name="tipoproduto_programacao`+ count_programacao +`">
-                                  <option value="">Selecione o Tipo</option>
-                                  <option value="1">Digital</option>
-                                  <option value="2">Impresso</option>
-                                  <option value="3">Audiovisual</option>
-                                  <option value="4">Cobertura de Evento</option>
-                                  <option value="5">Produção (Orçamentos e Execuções)</option>
+                                <option value="">Selecione o Tipo</option>
+                                <option value="1">Digital</option>
+                                <option value="2">Impresso</option>
+                                <option value="3">Audiovisual</option>
+                                <option value="4">Cobertura de Evento</option>
+                                <option value="5">Produção (Orçamentos e Execuções)</option>
+                                <option value="6">Identidade Visual</option>
                               </select>
                             </div>
                             <!-- /.input group -->
@@ -1976,12 +1984,13 @@ $('#add_stand').click(function() {
                                   <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
                               </div>
                               <select required class="form-control" id="tipoproduto_stand`+ count_stand +`" name="tipoproduto_stand`+ count_stand +`">
-                                  <option value="">Selecione o Tipo</option>
-                                  <option value="1">Digital</option>
-                                  <option value="2">Impresso</option>
-                                  <option value="3">Audiovisual</option>
-                                  <option value="4">Cobertura de Evento</option>
-                                  <option value="5">Produção (Orçamentos e Execuções)</option>
+                                <option value="">Selecione o Tipo</option>
+                                <option value="1">Digital</option>
+                                <option value="2">Impresso</option>
+                                <option value="3">Audiovisual</option>
+                                <option value="4">Cobertura de Evento</option>
+                                <option value="5">Produção (Orçamentos e Execuções)</option>
+                                <option value="6">Identidade Visual</option>
                               </select>
                             </div>
                             <!-- /.input group -->
