@@ -150,7 +150,7 @@ DATE_INPUT_FORMATS = '%Y-%m-%d'
 DATETIME_INPUT_FORMATS = ['%Y-%m-%d']
 USE_THOUSAND_SEPARATOR = False
 
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
