@@ -703,6 +703,7 @@ def Ajax_Altera_Solicitacao(request):
         solicitacao.evento_json = evento_json
         solicitacao.tipo_projeto = projeto
         solicitacao.publico_evento = publico_evento
+        solicitacao.criado_por_id = solicitacaoID
         solicitacao.save()
 
         return JsonResponse({"success_message": "Tarefa Devolvida!"})
