@@ -64,34 +64,26 @@
                   </div>
                   {% if tarefa.descricao_tarefa %}
                   <div class="col-12 col-sm-12 col-md-12">
-                    <div class="form-group">
-                              
-                      <div class="input-group">
-  
-                          <div class="card" style="width: 100%;">
-                              <div class="card-header" style="background-color: #fafafa;">
-                                <label for="">Tarefa:</label>
-                                
-                              </div>
-                                
-                              <div class="card-body">
-                              <div class="row">
-                                {{tarefa.descricao_tarefa|safe}}
-
-                              </div>
-                              
-                        
-                              
-                              </div>
-                           
+                    <div id="accordion">
+                      <div class="card card-warning">
+                        <div class="card-header">
+                          <h4 class="card-title w-100">
+                            <a class="d-block w-100" data-toggle="collapse" href="#collapseDescricao">
+                            Descrição da Tarefa
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="collapseDescricao" class="collapse" data-parent="#accordion">
+                          <div class="card-body">
+                            {{tarefa.descricao_tarefa|safe}}
                           </div>
-          
-
-                      
-                      </div>
-                      <!-- /.input group -->
+                        </div>
                       </div>
                     </div>
+                    
+                    </div>
+
+                
                     {% endif %}
                     {% endif %}
                     <div class="col-lg-3 col-12">
@@ -160,6 +152,7 @@
                   
                    
                     {% if tarefa.entregavel.descricao_audio_visual %}
+                    
                     <div class="col-12 col-sm-12 col-md-12">
                       <div class="card" style="width: 100%;">
                           <div class="card-header" style="background-color: #fafafa;">
@@ -184,80 +177,181 @@
 
                     {% if tarefa.entregavel.observacao %}
                     <div class="col-12 col-sm-12 col-md-12">
-                      <div class="card" style="width: 100%;">
-                          <div class="card-header" style="background-color: #fafafa;">
-                            <label for="">Observações Gerais</label>
-                            
-                          </div>
-                            
+                    <div id="accordion">
+                      <div class="card card-primary">
+                        <div class="card-header">
+                          <h4 class="card-title w-100">
+                            <a class="d-block w-100" data-toggle="collapse" href="#collapseOne">
+                            Observações Gerais
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="collapseOne" class="collapse" data-parent="#accordion">
                           <div class="card-body">
-                           <div class="row" style="width: 100%;">
                             {% if tarefa.entregavel.observacao %}
                             {{tarefa.entregavel.observacao|safe}}
                             {% else %}
                             Sem observações
                             {% endif %}
-                           </div>
                           </div>
+                        </div>
                       </div>
                     </div>
-
+                    
+                    </div>
                    
+         
                     {% endif %}
 
                     {% if tarefa.entregavel.exemplo_arte %}
                     <div class="col-12 col-sm-12 col-md-12">
-                      <div class="card" style="width: 100%;">
-                          <div class="card-header" style="background-color: #fafafa;">
-                            <label for="">Exemplos de Artes</label>
-                            
-                          </div>
-                            
-                          <div class="card-body">
-                           <div class="row">
-                            <div class="col-sm-2">
-                              
-                              <a style="width: 100%;" href="{{entregavel.exemplo_arte}}" data-toggle="lightbox" data-title="Exemplo de Arte" data-gallery="gallery">
-                                <img src="{{entregavel.exemplo_arte}}" class="img-fluid mb-2" alt="white sample"/>
+                      <div id="accordion">
+                        <div class="card card-primary">
+                          <div class="card-header">
+                            <h4 class="card-title w-100">
+                              <a class="d-block w-100" data-toggle="collapse" href="#collapseOne">
+                             Exemplos de Artes
                               </a>
-
-                            </div>
-                           </div>
-
+                            </h4>
                           </div>
+                          <div id="collapseOne" class="collapse" data-parent="#accordion">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-sm-2">
+                                  
+                                  <a style="width: 100%;" href="{{entregavel.exemplo_arte}}" data-toggle="lightbox" data-title="Exemplo de Arte" data-gallery="gallery">
+                                    <img src="{{entregavel.exemplo_arte}}" class="img-fluid mb-2" alt="white sample"/>
+                                  </a>
+    
+                                </div>
+                               </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                      
+                      </div>
+
                     {% endif %}
+
+                    <div class="col-12 col-sm-12 col-md-12">
+                      <div id="accordion">
+                        <div class="card card-primary">
+                          <div class="card-header">
+                            <h4 class="card-title w-100">
+                              <a class="d-block w-100" data-toggle="collapse" href="#collapseFour">
+                             Tarefas Relacionadas
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="collapseFour" class="collapse" data-parent="#accordion">
+                            <div class="card-body">
+                              <table style="margin-top: 10px; font-size: 12px;">
+                                <thead>
+                                  <tr>
+                                    <th>#</th>
+                                    <th>Data da Solicitação</th>
+                                    <th>Título</th>
+                                    <th>Prazo de Entrega</th>
+                                    <th>Data da Entrega</th>
+                                    <th>Usuário Designado</th>
+                                    <th>Prioridade</th>
+                                    <th>Status</th>
+                                   
+            
+                                    
+                                  </tr>
+                                </thead>
+                                <tbody >
+                        
+                              
+                                  {% for tarefa in allTasks  %}
+                                    <tr  onclick="modalTarefaBacklog('{{tarefa.id}}')">
+              
+                                     <td>#{{tarefa.id}}</td>
+                                     <td>{{tarefa.data_tarefa|date:'d/m/Y'}}</td>
+                                     <td>{{tarefa.titulo_tarefa}}</td>
+                                     <td>{{tarefa.prazo_entrega|date:'d/m/Y'}}</td>
+                                     <td>{% if tarefa.data_entrega %} {{tarefa.data_entrega|date:'d/m/Y'}} {%else%} Aguardando Entrega {% endif %}</td>
+                                     <td>{{tarefa.usuario.first_name}}</td>
+                                     <td>{% if tarefa.prioridade == 1 %}   <span class="badge bg-primary" style="padding: 5px; width: 100%;"> {{tarefa.get_prioridade_display}}</span> {% else %} <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{tarefa.get_prioridade_display}}</span>{% endif %}</td>
+                                     
+                                     <td>
+                                      {% if tarefa.status == 0 %}
+                                      <span class="badge bg-warning" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
+
+                                        {% elif tarefa.status == 1 %}
+                                        <span class="badge bg-warning" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
+                                       
+                                        {% elif tarefa.status == 2 %}
+                                        <span class="badge bg-danger" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
+
+                                        {% elif tarefa.status == 3 %}
+                                        <span onclick="editarEntregavel('{{entregavel.id}}')" class="badge bg-success" style="padding: 5px; width: 100%;"> {{tarefa.get_status_display}}</span>
+                                      {% endif %}
+                                     </td>
+
+                               
+                                    </tr>
+                            
+                                  {% endfor %}
+                                </tbody>
+                                
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      </div>
 
                     {% if tarefa.descricao_entrega %}
                     <div class="col-12 col-sm-12 col-md-12">
-                      <div class="card" style="width: 100%;">
-                          <div class="card-header" style="background-color: #fafafa;">
-                            <label for="">Entrega Realizada</label>
-                            
+                      <div id="accordion">
+                        <div class="card card-primary">
+                          <div class="card-header">
+                            <h4 class="card-title w-100">
+                              <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
+                             Descrição da Entrega
+                              </a>
+                            </h4>
                           </div>
-                            
-                          <div class="card-body">
-                           <div class="row">
-                   
-                              
+                          <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                            <div class="card-body">
                               {{tarefa.descricao_entrega|safe}}
-
-                   
-                           </div>
-
-                           <div class="row" style="text-align: right;">{% if arquivos %}
-                            {% for arquivo in arquivos %}
-                            <a href="{{arquivo}}" class="btn btn-app">
-                              <i class="fas fa-file"></i> Download
-                            </a>
-                            {% endfor %}
-                            {% endif %}
+                            </div>
                           </div>
-
-                          </div>
+                        </div>
                       </div>
-                    </div>
+                      
+                      </div>
+                   
+                    {% endif %}
+                
+                    {% if arquivos %}
+                    <div class="col-12 col-sm-12 col-md-12">
+                      <div id="accordion">
+                        <div class="card card-primary">
+                          <div class="card-header">
+                            <h4 class="card-title w-100">
+                              <a class="d-block w-100" data-toggle="collapse" href="#collapseTree">
+                             Arquivos
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="collapseTree" class="collapse" data-parent="#accordion">
+                            <div class="card-body">
+                              {% for arquivo in arquivos %}
+                              <a href="{{arquivo}}" class="btn btn-app">
+                                <i class="fas fa-file"></i> Download
+                              </a>
+                              {% endfor %}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      </div>
                     {% endif %}
                
                     {% if tarefa.status == 1 and 'solicitacoes/visualizar' not in url_atual or tarefa.status == 2 and 'solicitacoes/visualizar' not in url_atual %}
@@ -298,7 +392,7 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" onclick="fecharModal('exampleModalCenter')">Fechar</button>
+        <button type="button" class="btn btn-secondary" onclick="fecharModalTaskView('exampleModalCenter')">Fechar</button>
 
 
 
@@ -319,10 +413,11 @@
     </div>
   </div>
   </form>
+  <div class="modal  fade" id="viewTaskBackLog"  aria-labelledby="viewTaskBackLog" style="display: none;" aria-hidden="true"></div>
+  <div class="modal" id="editarTarefa" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">  </div>
 
-  <div class="modal fade" id="editarTarefa" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+   
 
-  </div>
   <script>
 function editarTarefa(idtask){
      
@@ -347,16 +442,30 @@ function editarTarefa(idtask){
   });
 }
 
-$(function () {
-  //Initialize Select2 Elements
-  $('.select2').select2()
+function modalTarefaBacklog(tarefaId){
 
-  //Initialize Select2 Elements
-  $('.select2bs4').select2({
-    theme: 'bootstrap4'
-  })
-  })
-function fecharModal(id){
+  url = '/ajax/view-task'
+  var urlAtual = window.location.href
+  $.ajax({
+  url: url,
+  data: {'tarefaId':tarefaId,'urlAtual':urlAtual},
+
+  success: function(data) {
+
+    $("#viewTaskBackLog").html(data);
+    $("#viewTaskBackLog").modal('show')
+  },
+  error: function(xhr, status, error) {
+    Swal.fire({
+          icon: 'error',
+          title: 'Ops!',
+          text: 'Não foi possível obter resultados!'
+        });  $('.summernote').summernote();
+  }
+  });
+  }
+
+function fecharModalTaskView(id){
   $("#"+id).modal('hide')
 }
 
