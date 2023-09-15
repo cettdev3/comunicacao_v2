@@ -3,6 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenterTitle">{{tarefa.titulo_tarefa}}</h5>
+
         <button type="button" class="close" onclick="fecharModal('exampleModalCenter')">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -259,7 +260,7 @@
                     </div>
                     {% endif %}
                
-                    {% if tarefa.status == 1 or tarefa.status == 2 %}
+                    {% if tarefa.status == 1 and 'solicitacoes/visualizar' not in url_atual or tarefa.status == 2 and 'solicitacoes/visualizar' not in url_atual %}
 
                     <div class="col-12 col-sm-12 col-md-12">
                       <div class="card" style="width: 100%;">
@@ -298,16 +299,20 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" onclick="fecharModal('exampleModalCenter')">Fechar</button>
-   
-        {% if tarefa.status == 0 %}
+
+
+
+        {% if tarefa.status == 0 and 'solicitacoes/visualizar' not in url_atual %}
         <button type="button" onclick="MoveTarefa('{{tarefa.id}}',1)" class="btn btn-primary"> <i class="bi bi-arrow-90deg-right"></i> Mover para Fazendo</button>
-        {% elif tarefa.status == 1 %}
+        {% elif tarefa.status == 1 and 'solicitacoes/visualizar' not in url_atual%}
         <button type="button" onclick="MoveTarefa('{{tarefa.id}}',0)" class="btn btn-primary"> <i class="bi bi-arrow-90deg-left"></i> Voltar para A Fazer</button>
         <button type="button" onclick="MoveTarefa('{{tarefa.id}}',3)" class="btn btn-success"> <i class="bi bi-check-lg"></i> Concluir Tarefa</button>
-
+        {% endif %}
+        {% if 'solicitacoes/visualizar' in url_atual%}
+        <button type="button" onclick="editarTarefa('{{tarefa.id}}',1)" class="btn btn-primary"> <i class="bi bi-pencil"></i> Editar Tarefa</button>
         {% endif %}
 
-        {% if tarefa.status == 2 %}
+        {% if tarefa.status == 2 and 'solicitacoes/visualizar' not in url_atual%}
         <button type="button" onclick="MoveTarefa('{{tarefa.id}}',3)" class="btn btn-success"> <i class="bi bi-check-lg"></i> Concluir Tarefa</button>
       {% endif %}
       </div>
@@ -315,6 +320,38 @@
   </div>
   </form>
 
+  <div class="modal fade" id="editarTarefa" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+  </div>
   <script>
-     $('.summernote').summernote();
+function editarTarefa(idtask){
+     
+  url = '/ajax/edit-task'
+
+  $.ajax({
+  url: url,
+  data: {'tarefaId':idtask},
+
+  success: function(data) {
+
+    $("#editarTarefa").html(data);
+    $("#editarTarefa").modal('show')
+  },
+  error: function(xhr, status, error) {
+    Swal.fire({
+          icon: 'error',
+          title: 'Ops!',
+          text: 'Não foi possível obter resultados!'
+        });
+  }
+  });
+}
+
+
+function fecharModal(id){
+  $("#"+id).modal('hide')
+}
+
+
+  $('.summernote').summernote();
   </script>

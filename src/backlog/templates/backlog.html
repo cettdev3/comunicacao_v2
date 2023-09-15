@@ -329,10 +329,10 @@
 function modalTarefa(tarefaId){
 
         url = '/ajax/view-task'
-        
+        var urlAtual = window.location.href
         $.ajax({
         url: url,
-        data: {'tarefaId':tarefaId},
+        data: {'tarefaId':tarefaId,'urlAtual':urlAtual},
 
         success: function(data) {
 

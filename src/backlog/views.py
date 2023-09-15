@@ -18,9 +18,11 @@ def Backlog(request):
 
 @login_required(login_url='/')
 def Ajax_View_Task(request):
-    permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first
+    permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first()
     idtask = request.GET['tarefaId']
+    url_atual = request.GET['urlAtual']
     tarefa = Tarefas.objects.filter(id=idtask).first()
+
     try:
         arquivos = tarefa.arquivos
         arquivos_list = ast.literal_eval(arquivos)
@@ -28,7 +30,7 @@ def Ajax_View_Task(request):
         arquivos_list = None
 
     
-    return render(request, 'ajax/ajax_view_task.html', {'tarefa': tarefa,'permissoes':permissoes,'arquivos':arquivos_list})
+    return render(request, 'ajax/ajax_view_task.html', {'tarefa': tarefa,'permissoes':permissoes,'arquivos':arquivos_list,'url_atual':url_atual})
 
 @login_required(login_url='/')
 def Ajax_Move_Task(request):
@@ -64,3 +66,25 @@ def Ajax_Move_Task(request):
 
         return render(request, 'ajax/ajax_move_task.html', {'tarefas': tarefas})
         
+@login_required(login_url='/')
+def Ajax_Edit_Task(request):
+    tarefaId = request.GET['tarefaId']
+    tarefa = Tarefas.objects.filter(id=tarefaId).first()
+    
+    return render(request, 'ajax/ajax_edit_stask.html', {'tarefa': tarefa})
+
+        
+@login_required(login_url='/')
+def Ajax_Altera_Task(request):
+    with transaction.atomic():
+        tarefaId = request.POST.get('tarefa_edit_id')
+        status_tarefa_edit = request.POST.get('status_tarefa_edit',None)
+        tarefa = Tarefas.objects.get(id=tarefaId)
+        tarefa.prazo_entrega = request.POST.get('prazo_modal_edit','')
+        tarefa.titulo_tarefa = request.POST.get('titulo_tarefa_edit','')
+        tarefa.prioridade = request.POST.get('prioridade_modal_edit','')
+        if status_tarefa_edit != '4':
+            tarefa.status = status_tarefa_edit
+        tarefa.descricao_tarefa = request.POST.get('descricao_task_edit','')
+        tarefa.save()
+        return JsonResponse({"success_message": "Tarefa Editada!"})

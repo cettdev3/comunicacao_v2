@@ -78,11 +78,13 @@ def Visualizar_Solicitacao(request,codigo):
             entregavel['prazo'] = datetime.datetime.strptime(entregavel['prazo'], '%Y-%m-%d').date()
             entregavel['data_solicitacao'] = datetime.datetime.strptime(entregavel['data_solicitacao'], '%Y-%m-%d').date()
             try:
-                tarefas_relacionadas = Tarefas.objects.filter(entregavel_id=entregavel['id']).all()
+                tarefas_relacionadas = Tarefas.objects.filter(entregavel_id=entregavel['id']).all().order_by('-id')
+                ultima_tarefa_id = Tarefas.objects.filter(entregavel_id=entregavel['id']).latest('id')
             except:
                 tarefas_relacionadas = {}
 
             entregavel['tarefas_relacionadas'] = tarefas_relacionadas
+            entregavel['ultima_tarefa_id'] = ultima_tarefa_id
 
         usuarios = User.objects.all().order_by('first_name')
         context = {'solicitacao':solicitacao,'entregaveis':entregaveis,'programacao_adicional':programacao_adicional,'usuarios':usuarios,'tarefas_por_entregavel': tarefas_por_entregavel,'permissoes':permissoes,'escola':escola}
@@ -502,8 +504,6 @@ def Ajax_Realiza_Solicitacao(request):
                     
             
             return JsonResponse({"success_message": "Solicitação Realizada!"}) 
-        
-    
 
 @login_required(login_url='/')
 def Ajax_Cria_Tarefa(request):
@@ -531,7 +531,6 @@ def Ajax_Cria_Tarefa(request):
         return render(request,'ajax/ajax_load_tbl_tarefas.html',{'tarefas':tarefas})
     except Exception as e:
         return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)
-    
 
 @login_required(login_url='/')
 def Ajax_Realiza_Entrega(request):
