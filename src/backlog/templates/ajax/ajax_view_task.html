@@ -233,7 +233,7 @@
                       </div>
 
                     {% endif %}
-
+                      {% if 'solicitacoes/visualizar' not in url_atual %}
                     <div class="col-12 col-sm-12 col-md-12">
                       <div id="accordion">
                         <div class="card card-primary">
@@ -304,7 +304,7 @@
                       </div>
                       
                       </div>
-
+                      {% endif %}
                     {% if tarefa.descricao_entrega %}
                     <div class="col-12 col-sm-12 col-md-12">
                       <div id="accordion">
