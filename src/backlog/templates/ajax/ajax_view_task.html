@@ -308,7 +308,7 @@
         <button type="button" onclick="MoveTarefa('{{tarefa.id}}',0)" class="btn btn-primary"> <i class="bi bi-arrow-90deg-left"></i> Voltar para A Fazer</button>
         <button type="button" onclick="MoveTarefa('{{tarefa.id}}',3)" class="btn btn-success"> <i class="bi bi-check-lg"></i> Concluir Tarefa</button>
         {% endif %}
-        {% if 'solicitacoes/visualizar' in url_atual%}
+        {% if 'solicitacoes/visualizar' in url_atual and '11' in permissoes.permissao %}
         <button type="button" onclick="editarTarefa('{{tarefa.id}}',1)" class="btn btn-primary"> <i class="bi bi-pencil"></i> Editar Tarefa</button>
         {% endif %}
 

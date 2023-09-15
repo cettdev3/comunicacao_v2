@@ -101,7 +101,9 @@
 </form>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" onclick="fecharModal('editarTarefa')">Fechar</button>
-        <button type="button" onclick="alteraTarefa()" class="btn btn-primary">Alterar Tarefa</button>
+        {% if '11' in permissoes.permissao %}
+        <button type="button" onclick="alteraTarefa()" class="btn btn-primary">Alterar Tarefa {{permissoes.permissao}}</button>
+        {% endif %}
       </div>
  
     </div>
