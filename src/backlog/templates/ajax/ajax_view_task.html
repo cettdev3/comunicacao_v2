@@ -466,13 +466,19 @@ function modalTarefaBacklog(tarefaId){
   }
 
   function fecharModalTaskView(id) {
-    $("#" + id).on('hidden.bs.modal', function () {
+    const url = window.location.href;
+
+    // Verifica se a string "minhas-tarefas" está presente na URL
+    if (url.includes("minhas-tarefas")) {
+      $("#" + id).modal('hide');
+    } else {
+      $("#" + id).on('hidden.bs.modal', function () {
         const bodyElement = document.body;
         bodyElement.classList.add("sidebar-mini", "layout-fixed", "light-mode", "modal-open");
     });
+    }
 
-    // Fecha a modal
-    $("#" + id).modal('hide');
+
 }
 
 
