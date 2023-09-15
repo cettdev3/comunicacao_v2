@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 @login_required(login_url='/')
 def Backlog(request):
     permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first
-    tarefas = Tarefas.objects.filter(usuario=request.user.id).all()
+    tarefas = Tarefas.objects.filter(usuario=request.user.id).all().order_by('prazo_entrega')
     
     return render(request, 'backlog.html',{'tarefas':tarefas,'permissoes':permissoes})
 
