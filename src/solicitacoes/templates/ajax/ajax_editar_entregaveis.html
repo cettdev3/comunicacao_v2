@@ -26,6 +26,7 @@
               <div class="card-body">
                 <input style="display: none;" type="text" id="entregavelId" name="entregavelId" value="{{entregavel.id}}">
                 <div class="row">
+
                     <div class="col-12 col-sm-12 col-md-3">
                         <div class="form-group">
                     
@@ -41,94 +42,91 @@
                           </div>
                           <!-- /.input group -->
                           </div>
-                        </div>
+                    </div>
 
 
-              <div class="col-12 col-sm-12 col-md-3">
-                <div class="form-group">
-                <label>Prazo:</label>
+                    <div class="col-12 col-sm-12 col-md-3">
+                      <div class="form-group">
+                      <label>Prazo:</label>
 
-                <div class="input-group">
-                  <input class="form-control" type="date" name="prazo" id="prazo" value="{{entregavel.prazo|date:'Y-m-d'}}">
-                 
-                </div>
-                <!-- /.input group -->
-                </div>
-              </div>
+                      <div class="input-group">
+                        <input class="form-control" type="date" name="prazo" id="prazo" value="{{entregavel.prazo|date:'Y-m-d'}}">
+                      
+                      </div>
+                      <!-- /.input group -->
+                      </div>
+                    </div>
             
-              
-            <div class="col-12 col-sm-12 col-md-3">
-              <div class="form-group">
-              <label>Categoria do Produto:</label>
-              <div class="input-group">
+                      
+                    <div class="col-12 col-sm-12 col-md-3">
+                      <div class="form-group">
+                      <label>Categoria do Produto:</label>
+                      <div class="input-group">
 
 
-                <select style="width: 100%;"  class="form-control select2" id="categoria_entregavel" name="categoria_entregavel" required>
-                <option value="1" {% if entregavel.tipo_produto == 1 %} selected {% endif %}>Digital</option>
-                  <option value="2" {% if entregavel.tipo_produto == 2 %} selected {% endif %}>Impresso</option>
-                  <option value="3" {% if entregavel.tipo_produto == 3 %} selected {% endif %}>Audiovisual</option>
-                  <option value="4" {% if entregavel.tipo_produto == 4 %} selected {% endif %}>Cobertura de Evento</option>
-                  <option value="5" {% if entregavel.tipo_produto == 5 %} selected {% endif %}>Produção (Orçamentos e Execuções)</option>
-                  <option value="6" {% if entregavel.tipo_produto == 6 %} selected {% endif %}>Identidade Visual</option>
-                  <option value="7" {% if entregavel.tipo_produto == 7 %} selected {% endif %}>Planejamento</option>
-                  <option value="8" {% if entregavel.tipo_produto == 8 %} selected {% endif %}>Brindes</option>
-                  <option value="9" {% if entregavel.tipo_produto == 9 %} selected {% endif %}>Comunicação Visual</option>
-               </select>
+                        <select style="width: 100%;"  class="form-control select2" id="categoria_entregavel" name="categoria_entregavel" required>
+                        <option value="1" {% if entregavel.tipo_produto == 1 %} selected {% endif %}>Digital</option>
+                          <option value="2" {% if entregavel.tipo_produto == 2 %} selected {% endif %}>Impresso</option>
+                          <option value="3" {% if entregavel.tipo_produto == 3 %} selected {% endif %}>Audiovisual</option>
+                          <option value="4" {% if entregavel.tipo_produto == 4 %} selected {% endif %}>Cobertura de Evento</option>
+                          <option value="5" {% if entregavel.tipo_produto == 5 %} selected {% endif %}>Produção (Orçamentos e Execuções)</option>
+                          <option value="6" {% if entregavel.tipo_produto == 6 %} selected {% endif %}>Identidade Visual</option>
+                          <option value="7" {% if entregavel.tipo_produto == 7 %} selected {% endif %}>Planejamento</option>
+                          <option value="8" {% if entregavel.tipo_produto == 8 %} selected {% endif %}>Brindes</option>
+                          <option value="9" {% if entregavel.tipo_produto == 9 %} selected {% endif %}>Comunicação Visual</option>
+                      </select>
 
-              </div>
-              <!-- /.input group -->
-              </div>
-            </div>
+                      </div>
+                      <!-- /.input group -->
+                      </div>
+                    </div>
 
-            <div class="col-12 col-sm-12 col-md-3" id="categoria_field_save_the_date">
-              <div class="form-group">
-              <label>Tipo do Produto:</label>
-  
-              <div class="input-group">
-                <select style="width: 100%;" class="form-control select2" id="categoria_opcoes" name="categoria_opcoes" required>
-              </div>
-              <!-- /.input group -->
-              </div>
-            </div>
-
-       
+                    <div class="col-12 col-sm-12 col-md-3" id="categoria_field_save_the_date">
+                      <div class="form-group">
+                      <label>Tipo do Produto:</label>
           
+                      <div class="input-group">
+                        <select style="width: 100%;" class="form-control select2" id="categoria_opcoes" name="categoria_opcoes" required>
+                      </div>
+                      <!-- /.input group -->
+                      </div>
+                    </div>
             
-            <!-- {% if entregavel.descricao_audio_visual %}
-            <div class="col-12 col-sm-12 col-md-12" id="descricao_field_save_the_date">
-            <div class="card card-dark card-outline">
-              <div class="card-header">
-                <h3 class="card-title">Descrição Produção de Audiovisual (Orçamentos e Execuções)</h3>
-              </div>
- 
-              <div class="card-body">
-              
-                <div class="form-group">
-                    <textarea id="descricao_save_the_date" name="descricao_save_the_date" class="form-control summernote" style="height: 300px"></textarea>
-                </div>
-              
-              </div>
-
-            
-            </div>
-
-            </div>
-            {% endif %} -->
-            
-            <div class="col-12 col-sm-12 col-md-12" id="categoria_field_save_the_date">
-              <div class="form-group">
-              <label>Descrição:</label>
-  
-              <div class="input-group">
-                <select style="width: 100%;" class="form-control select2" id="categoria_opcoes" name="categoria_opcoes" required>
-              </div>
-              <!-- /.input group -->
-              </div>
-            </div>
-
+                    {% if entregavel.descricao_audio_visual %}
+                    <div class="col-12 col-sm-12 col-md-12" id="descricao_field_save_the_date">
+                    <div class="card card-dark card-outline">
+                      <div class="card-header">
+                        <h3 class="card-title">Descrição Produção de Audiovisual (Orçamentos e Execuções)</h3>
+                      </div>
+        
+                      <div class="card-body">
+                      
+                        <div class="form-group">
+                            <textarea id="descricao_save_the_date" name="descricao_save_the_date" class="form-control summernote" style="height: 300px"></textarea>
                         </div>
+                      
+                      </div>
+
+                    
+                    </div>
+
+                    </div>
+                    {% endif %}
+            
+                    <div class="col-12 col-sm-12 col-md-12" id="categoria_field_save_the_date">
+                      <div class="form-group">
+                      <label>Descrição:</label>
+          
+                      <div class="input-group">
+                        <select style="width: 100%;" class="form-control select2" id="categoria_opcoes" name="categoria_opcoes" required>
+                      </div>
+                      <!-- /.input group -->
+                      </div>
+                    </div>
+
+                </div>
               </div>
-              </div>
+             </div>
             </div>
 
       </div>

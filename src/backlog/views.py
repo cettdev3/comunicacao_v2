@@ -23,6 +23,8 @@ def Ajax_View_Task(request):
     idtask = request.GET['tarefaId']
     url_atual = request.GET['urlAtual']
     tarefa = Tarefas.objects.filter(id=idtask).first()
+    idEntregavel = tarefa.entregavel_id
+    allTasks = Tarefas.objects.filter(entregavel_id=idEntregavel).all()
 
     try:
         arquivos = tarefa.arquivos
@@ -30,8 +32,10 @@ def Ajax_View_Task(request):
     except:
         arquivos_list = None
 
-    
-    return render(request, 'ajax/ajax_view_task.html', {'tarefa': tarefa,'permissoes':permissoes,'arquivos':arquivos_list,'url_atual':url_atual})
+
+
+    return render(request, 'ajax/ajax_view_task.html', {'tarefa': tarefa,'permissoes':permissoes,'arquivos':arquivos_list,'url_atual':url_atual,'allTasks':allTasks})
+        
 
 @login_required(login_url='/')
 def Ajax_Move_Task(request):
@@ -87,6 +91,23 @@ def Ajax_Altera_Task(request):
         if status_tarefa_edit != '4':
             tarefa.status = status_tarefa_edit
         tarefa.descricao_tarefa = request.POST.get('descricao_task_edit','')
-        tarefa.ususario_id = request.POST.get('designar_usuario_edit','')
+        tarefa.usuario_id = request.POST.get('designar_usuario_edit','')
         tarefa.save()
         return JsonResponse({"success_message": "Tarefa Editada!"})
+
+@login_required(login_url='/')
+def Ajax_Task_For_Task(request):
+    permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first()
+    idtask = request.GET['tarefaId']
+    url_atual = request.GET['urlAtual']
+    tarefa = Tarefas.objects.filter(id=idtask).first()
+    idEntregavel = tarefa.entregavel_id
+    allTasks = Tarefas.objects.filter(entregavel_id=idEntregavel).all()
+
+    try:
+        arquivos = tarefa.arquivos
+        arquivos_list = ast.literal_eval(arquivos)
+    except:
+        arquivos_list = None
+
+    return render(request, 'ajax/ajax_view_task_ftask.html', {'tarefa': tarefa,'permissoes':permissoes,'arquivos':arquivos_list,'url_atual':url_atual,'allTasks':allTasks})

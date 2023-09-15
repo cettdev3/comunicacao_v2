@@ -1,0 +1,316 @@
+
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+    
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle">{{tarefa.titulo_tarefa}}</h5>
+  
+          <button type="button" class="close" onclick="fecharModalTaskView('fecharModalTaskView')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            {% if '3' in permissoes.permissao %}
+            <div class="col-12 col-sm-12 col-md-3">
+              <div class="form-group">
+                
+              <label>Data da Solicitaçãooo:</label>
+  
+                <div class="input-group">
+                 
+                 {{tarefa.data_tarefa|date:'d/m/Y'}}
+                </div>
+                <!-- /.input group -->
+                </div>
+              </div>
+  
+              <div class="col-12 col-sm-12 col-md-3">
+                <div class="form-group">
+                  
+                <label>Prazo de Entrega::</label>
+    
+                  <div class="input-group">
+                   
+                   {{tarefa.prazo_entrega|date:'d/m/Y'}}
+                  </div>
+                  <!-- /.input group -->
+                  </div>
+                </div>
+  
+                <div class="col-12 col-sm-12 col-md-3">
+                  <div class="form-group">
+                    
+                  <label>Solicitante:</label>
+      
+                    <div class="input-group">
+                     
+                     {{tarefa.usuario_designou.first_name}}
+                    </div>
+                    <!-- /.input group -->
+                    </div>
+                  </div>
+  
+                  <div class="col-12 col-sm-12 col-md-3">
+                    <div class="form-group">
+                      
+                    <label>Prioridade:</label>
+        
+                      <div class="input-group">
+                       
+                        {% if tarefa.prioridade == 1 %}   <span class="badge bg-primary" style="padding: 5px;"> {{tarefa.get_prioridade_display}}</span> {% else %} <span class="badge bg-danger" style="padding: 5px;"> {{tarefa.get_prioridade_display}}</span>{% endif %}
+                      </div>
+                      <!-- /.input group -->
+                      </div>
+                    </div>
+                    {% if tarefa.descricao_tarefa %}
+                    <div class="col-12 col-sm-12 col-md-12">
+                      <div class="form-group">
+                        
+                      <label>Tarefa:</label>
+          
+                        <div class="input-group">
+                         
+                          {{tarefa.descricao_tarefa|safe}}
+                        </div>
+                        <!-- /.input group -->
+                        </div>
+                      </div>
+
+                
+                     
+                      
+                      {% endif %}
+                      {% endif %}
+                      <div class="col-lg-3 col-12">
+                        <div class="form-group">
+                            <label>Tipo do Entregável:</label>
+                            <div class="input-group">
+                              {% if tarefa.entregavel.get_tipoentregavel_display %}
+                              {{tarefa.entregavel.get_tipoentregavel_display}}
+                              {% else %}
+                              Não Informado
+                              {% endif %}
+                              
+                          
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+  
+                      <div class="col-lg-3 col-12">
+                        <div class="form-group">
+                            <label>Categoria do Produto:</label>
+                            <div class="input-group">
+                              {% if tarefa.entregavel.get_tipoproduto_display %}
+                              {{tarefa.entregavel.get_tipoproduto_display}}
+                              {% else %}
+                              Não Informado
+                              {% endif %}
+                              
+                          
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+  
+                      <div class="col-lg-3 col-12">
+                        <div class="form-group">
+                            <label>Tipo do Produto:</label>
+                            <div class="input-group">
+                              {% if tarefa.entregavel.categoria_produto %}
+                              {{tarefa.entregavel.categoria_produto}}
+                              {% else %}
+                              Não Informado
+                              {% endif %}
+                              
+                          
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+  
+                      <div class="col-lg-3 col-12">
+                        <div class="form-group">
+                            <label>Data da Solicitação:</label>
+                            <div class="input-group">
+                              {% if tarefa.entregavel.data_solicitacao %}
+                              {{tarefa.entregavel.data_solicitacao|date:'d/m/Y'}}
+                              {% else %}
+                              Não Informado
+                              {% endif %}
+                              
+                          
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                      </div>
+                    
+                     
+                      {% if tarefa.entregavel.descricao_audio_visual %}
+                        <div class="col-12 col-sm-12 col-md-12">
+                      <div class="form-group">
+                        
+                      <label>Descrição Audiovisual:</label>
+          
+                        <div class="input-group">
+                         
+                          {% if tarefa.entregavel.descricao_audio_visual %}
+                              {{tarefa.entregavel.descricao_audio_visual|safe}}
+                              {% else %}
+                              Sem descrições
+                              {% endif %}
+                        </div>
+                        <!-- /.input group -->
+                        </div>
+                      </div>
+
+                      {% endif %}
+  
+                      {% if tarefa.entregavel.observacao %}
+                      <div class="col-12 col-sm-12 col-md-12">
+                        <div class="form-group">
+                          
+                        <label>Observações Gerais</label>
+            
+                          <div class="input-group">
+                           
+                            {% if tarefa.entregavel.descricao_audio_visual %}
+                                {{tarefa.entregavel.descricao_audio_visual|safe}}
+                                {% else %}
+                                Sem descrições
+                                {% endif %}
+                          </div>
+                          <!-- /.input group -->
+                          </div>
+                        </div>
+                     
+                      {% endif %}
+  
+                      {% if tarefa.entregavel.exemplo_arte %}
+
+                      <div class="col-12 col-sm-12 col-md-12">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-header" style="background-color: #fafafa;">
+                              <label for="">Exemplos de Artes</label>
+                              
+                            </div>
+                              
+                            <div class="card-body">
+                             <div class="row">
+                              <div class="col-sm-2">
+                                
+                                <a style="width: 100%;" href="{{entregavel.exemplo_arte}}" data-toggle="lightbox" data-title="Exemplo de Arte" data-gallery="gallery">
+                                  <img src="{{entregavel.exemplo_arte}}" class="img-fluid mb-2" alt="white sample"/>
+                                </a>
+  
+                              </div>
+                             </div>
+  
+                            </div>
+                        </div>
+                      </div>
+                      {% endif %}
+  
+                      {% if tarefa.descricao_entrega %}
+                      <div class="col-12 col-sm-12 col-md-12">
+                        <div class="form-group">
+                          
+                        <label>Entrega Realizada</label>
+            
+                          <div class="input-group">
+                           
+                            {{tarefa.descricao_entrega|safe}}
+                          </div>
+                          <!-- /.input group -->
+                          </div>
+                        </div>
+
+                    
+                      </div>
+                      {% endif %}
+                      {% if arquivos %}
+                      <div class="col-12 col-sm-12 col-md-12">
+                        <div class="form-group">
+                          
+                        <label>Arquivos</label>
+            
+                          <div class="input-group">
+                           
+                            {% for arquivo in arquivos %}
+                        <a href="{{arquivo}}" class="btn btn-app">
+                          <i class="fas fa-file"></i> Download
+                        </a>
+                        {% endfor %}
+                          </div>
+                          <!-- /.input group -->
+                          </div>
+                        </div>
+                        {% endif %}
+            
+                      
+                       
+                      {% if tarefa.status == 1 and 'solicitacoes/visualizar' not in url_atual or tarefa.status == 2 and 'solicitacoes/visualizar' not in url_atual %}
+  
+                      <div class="col-12 col-sm-12 col-md-12">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-header" style="background-color: #fafafa;">
+                              <label for="">Arquivos: <span class=" badge bg-warning" ></label>
+                              
+                            </div>
+                              
+                            <div class="card-body">
+                           
+                              <input type="file" name="arquivos_task" id="arquivos_task" multiple>
+                          
+                            </div>
+                        </div>
+                      </div>
+                     
+                     
+  
+                      <div class="col-12 col-sm-12 col-md-12">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-header" style="background-color: #fafafa;">
+                              <label for="">Entrega: <span class=" badge bg-warning" ><i class="bi bi-info-circle-fill"></i> <b>Para adicionar imagens, arraste e solte :)</b></span></label>
+                              
+                            </div>
+                              
+                            <div class="card-body">
+                           
+                              <textarea name="entrega_backlog" id="entrega_backlog" class=" summernote" rows="10"></textarea>
+                          
+                            </div>
+                        </div>
+                      </div>
+                      {% endif %}
+          </div>
+  
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="fecharModalTaskView('viewTaskBackLog')">Fechar</button>
+  
+  
+        </div>
+      </div>
+
+    </div>
+
+  
+  
+
+    <script>
+
+  $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
+  
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
+    })
+
+  
+    $('.summernote').summernote();
+    </script>

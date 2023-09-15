@@ -103,7 +103,7 @@
           {% if tarefa.status == 3 %}
           <div class="card card-secondary card-outline">
             <div class="card-header">
-              <h5 class="card-title"><b>#{{tarefa.id}} Prazo: {{tarefa.prazo_entrega|date:'d/m/Y'}} </b></h5>
+              <a href="/solicitacoes/visualizar/{{tarefa.entregavel.evento_id}}" class="btn btn-tool"> <h5 class="card-title"><b>#{{tarefa.id}} Prazo: {{tarefa.prazo_entrega|date:'d/m/Y'}} </b></h5></a>
               <div class="card-tools">
                 <span  class="btn btn-tool btn-link"> {% if tarefa.prioridade == 2 %} <span class="badge bg-danger">URGENTE</span>{% endif %}</span>
                 <a onclick="modalTarefa('{{tarefa.id}}')" class="btn btn-tool">

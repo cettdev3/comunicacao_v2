@@ -413,9 +413,9 @@
     </div>
   </div>
   </form>
-  <div class="modal  fade" id="viewTaskBackLog"  aria-labelledby="viewTaskBackLog" style="display: none;" aria-hidden="true"></div>
+ 
   <div class="modal" id="editarTarefa" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">  </div>
-
+  <div class="modal  fade" id="viewTaskBackLog" tabindex="-1"  aria-labelledby="viewTaskBackLog" style="display: none;" aria-hidden="true"></div>
    
 
   <script>
@@ -444,7 +444,7 @@ function editarTarefa(idtask){
 
 function modalTarefaBacklog(tarefaId){
 
-  url = '/ajax/view-task'
+  url = 'ajax/view-task-ftask'
   var urlAtual = window.location.href
   $.ajax({
   url: url,
@@ -465,8 +465,14 @@ function modalTarefaBacklog(tarefaId){
   });
   }
 
-function fecharModalTaskView(id){
-  $("#"+id).modal('hide')
+  function fecharModalTaskView(id) {
+    $("#" + id).on('hidden.bs.modal', function () {
+        const bodyElement = document.body;
+        bodyElement.classList.add("sidebar-mini", "layout-fixed", "light-mode", "modal-open");
+    });
+
+    // Fecha a modal
+    $("#" + id).modal('hide');
 }
 
 

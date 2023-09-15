@@ -37,7 +37,7 @@
               <span class="input-group-text"><i style="color: #000000" class="fa fa-user"></i></span>
              
             </div> 
-            <select  class="form-control" id="designar_usuario_edit" name="designar_usuario_edit">
+            <select  class="form-control select2" id="designar_usuario_edit" name="designar_usuario_edit">
               {% for usuario in usuarios %}
               <option value="{{usuario.id}}" {% if tarefa.usuario_id == usuario.id %} selected {% endif %}>{{usuario.first_name}}</option>
               {% endfor %}
@@ -119,7 +119,7 @@
     </div>
 </form>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" onclick="fecharModal('editarTarefa')">Fechar</button>
+        <button type="button" class="btn btn-secondary" onclick="fecharModalTask('editarTarefa')">Fechar</button>
 
         <button type="button" onclick="alteraTarefa()" class="btn btn-primary">Alterar Tarefa </button>
 
@@ -129,8 +129,8 @@
   </div>
 <script>
 
-    function fecharModal(id){
-        $("#"+id).modal('hide')
+    function fecharModalTask(id){
+      $("#"+id).modal('hide')
     }
 
     function alteraTarefa() {
@@ -185,6 +185,7 @@
         }
     });
 }
+
 
 
 
