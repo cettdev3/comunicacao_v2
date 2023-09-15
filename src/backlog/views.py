@@ -8,6 +8,7 @@ from gerir_time.models import Permissoes
 from django.core.files.storage import FileSystemStorage
 import json
 import ast
+from django.contrib.auth.models import User
 # Create your views here.
 @login_required(login_url='/')
 def Backlog(request):
@@ -70,8 +71,8 @@ def Ajax_Move_Task(request):
 def Ajax_Edit_Task(request):
     tarefaId = request.GET['tarefaId']
     tarefa = Tarefas.objects.filter(id=tarefaId).first()
-    
-    return render(request, 'ajax/ajax_edit_stask.html', {'tarefa': tarefa})
+    usuarios = User.objects.all().order_by('first_name')
+    return render(request, 'ajax/ajax_edit_stask.html', {'tarefa': tarefa,'usuarios':usuarios})
 
         
 @login_required(login_url='/')
@@ -86,5 +87,6 @@ def Ajax_Altera_Task(request):
         if status_tarefa_edit != '4':
             tarefa.status = status_tarefa_edit
         tarefa.descricao_tarefa = request.POST.get('descricao_task_edit','')
+        tarefa.ususario_id = request.POST.get('designar_usuario_edit','')
         tarefa.save()
         return JsonResponse({"success_message": "Tarefa Editada!"})

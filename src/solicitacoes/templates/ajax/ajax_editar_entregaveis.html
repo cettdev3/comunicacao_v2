@@ -24,6 +24,7 @@
               </div>
 
               <div class="card-body">
+                <input style="display: none;" type="text" id="entregavelId" name="entregavelId" value="{{entregavel.id}}">
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-3">
                         <div class="form-group">
@@ -55,17 +56,23 @@
                 </div>
               </div>
             
-          
+              
             <div class="col-12 col-sm-12 col-md-3">
               <div class="form-group">
               <label>Categoria do Produto:</label>
               <div class="input-group">
+
+
                 <select style="width: 100%;"  class="form-control select2" id="categoria_entregavel" name="categoria_entregavel" required>
-                  <option value="1" {% if entregavel.tipo_produto == 1 %} selected {% endif %}>DIGITAL</option>
-                  <option value="2" {% if entregavel.tipo_produto == 2 %} selected {% endif %}>IMPRESSO</option>
-                  <option value="3" {% if entregavel.tipo_produto == 3 %} selected {% endif %}>AUDIOVISUAL</option>
-                  <option value="4" {% if entregavel.tipo_produto == 4 %} selected {% endif %}>COBERTURA DE EVENTO</option>
-                  <option value="5" {% if entregavel.tipo_produto == 5 %} selected {% endif %}>PRODUÇÃO DE ÁUDIO VISUAL (ORÇAMENTOS E EXECUÇÕES)</option>
+                <option value="1" {% if entregavel.tipo_produto == 1 %} selected {% endif %}>Digital</option>
+                  <option value="2" {% if entregavel.tipo_produto == 2 %} selected {% endif %}>Impresso</option>
+                  <option value="3" {% if entregavel.tipo_produto == 3 %} selected {% endif %}>Audiovisual</option>
+                  <option value="4" {% if entregavel.tipo_produto == 4 %} selected {% endif %}>Cobertura de Evento</option>
+                  <option value="5" {% if entregavel.tipo_produto == 5 %} selected {% endif %}>Produção (Orçamentos e Execuções)</option>
+                  <option value="6" {% if entregavel.tipo_produto == 6 %} selected {% endif %}>Identidade Visual</option>
+                  <option value="7" {% if entregavel.tipo_produto == 7 %} selected {% endif %}>Planejamento</option>
+                  <option value="8" {% if entregavel.tipo_produto == 8 %} selected {% endif %}>Brindes</option>
+                  <option value="9" {% if entregavel.tipo_produto == 9 %} selected {% endif %}>Comunicação Visual</option>
                </select>
 
               </div>
@@ -73,29 +80,6 @@
               </div>
             </div>
 
-          
-            <input style="display: none;" type="text" id="entregavelId" name="entregavelId" value="{{entregavel.id}}">
-            
-            {% if entregavel.descricao_audio_visual %}
-            <div class="col-12 col-sm-12 col-md-12" id="descricao_field_save_the_date">
-            <div class="card card-dark card-outline">
-              <div class="card-header">
-                <h3 class="card-title">Descrição Produção de Audiovisual (Orçamentos e Execuções)</h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-              
-                <div class="form-group">
-                    <textarea id="descricao_save_the_date" name="descricao_save_the_date" class="form-control summernote" style="height: 300px"></textarea>
-                </div>
-              
-              </div>
-              <!-- /.card-body -->
-            
-            </div>
-            <!-- /.card -->
-            </div>
-            {% endif %}
             <div class="col-12 col-sm-12 col-md-3" id="categoria_field_save_the_date">
               <div class="form-group">
               <label>Tipo do Produto:</label>
@@ -107,37 +91,40 @@
               </div>
             </div>
 
-            <div class="col-12 col-sm-12 col-md-3" id="categoria_field_save_the_date">
+       
+          
+            
+            <!-- {% if entregavel.descricao_audio_visual %}
+            <div class="col-12 col-sm-12 col-md-12" id="descricao_field_save_the_date">
+            <div class="card card-dark card-outline">
+              <div class="card-header">
+                <h3 class="card-title">Descrição Produção de Audiovisual (Orçamentos e Execuções)</h3>
+              </div>
+ 
+              <div class="card-body">
+              
+                <div class="form-group">
+                    <textarea id="descricao_save_the_date" name="descricao_save_the_date" class="form-control summernote" style="height: 300px"></textarea>
+                </div>
+              
+              </div>
+
+            
+            </div>
+
+            </div>
+            {% endif %} -->
+            
+            <div class="col-12 col-sm-12 col-md-12" id="categoria_field_save_the_date">
               <div class="form-group">
-              <label>Tipo do Produto:</label>
+              <label>Descrição:</label>
   
               <div class="input-group">
                 <select style="width: 100%;" class="form-control select2" id="categoria_opcoes" name="categoria_opcoes" required>
               </div>
               <!-- /.input group -->
               </div>
-              </div>
-   
-            <div class="col-12 col-sm-12 col-md-12" id="observacao_field_save_the_date">
-              <div class="col-md-12">
-                <div class="card card-dark card-outline">
-                  <div class="card-header">
-                    <h3 class="card-title">Observações</h3>
-                  </div>
-      
-                  <div class="card-body">
-                  
-                    <div class="form-group">
-                        <textarea id="obs_save_the_date" name="obs_save_the_date" class="form-control summernote" style="height: 300px"></textarea>
-                    </div>
-                  
-                  </div>
-         
-                
-                </div>
-    
-              </div>
-            </div> 
+            </div>
 
                         </div>
               </div>
@@ -161,12 +148,16 @@
 
   var categoriaEntregavelSelect = document.getElementById("categoria_entregavel");
   var categoriaOpcoesSelect = document.getElementById('categoria_opcoes');  
-   var categorias = {
-      "1": ["Post", "Card P/ Instagram", "Card P/ Stories", "Banner P/ Site", "Outros"],
+  var categorias = {
+      "1": ["Post", "Card P/ Instagram", "Card P/ Stories", "Banner P/ Site", "Planejamento","Publicação","Site","Outros"],
       "2": ["Adesivo", "Anúncio de jornal", "Banner", "Cartaz", "Outdoor", "Panfletos", "Outros"],
-      "3": ["Filme para TV (duração)", "Filme para Reels", "Filme para Stories", "Spot de rádio/Streaming", "Carro de som	", "Videos para telas de TV", "Outros"],
-      "4": ["Foto", "Vídeo", "Jornalista","Release","Stories","Notícia para Site","Reals","Feed"],
-      "5": ["teste"]
+      "3": ["Filme para TV (duração)", "Filme para Reels", "Filme para Stories", "Spot de rádio/Streaming", "Carro de som	", "Videos para telas de TV","Tela para Comutador", "Outros"],
+      "4": ["Foto", "Vídeo", "Jornalista","Release","Stories","Notícia para Site","Reals","Feed","Outros"],
+      "5": ["teste"],
+      "6": ["Logo","Papel Timbrado","Envelope","Cartão de Visitas","Pasta","Molesquine","Manual de Marca","Iniforme","Outros"],
+      "7": ["Planejamento","BI","Plano de Mídia","Outros"],
+      "8": ["Sacochila","Sacola","Squeeze","Copo","Caderno","Caderneta","Caneta","Chaveiro","Camiseta","Pen Drive","Mouse Pad","Pasta","Outros"],
+      "9": ["Adesivo","Fachada","Placa de Identificação","Faixa","Totem","Testeira","Adesivo para Superfícies","Adesivo para Octanorm","Placa","Windflag","Outros"]
       // Adicione outras opções aqui
   };
   
@@ -174,16 +165,15 @@
     var categoriaSelecionada = categoriaEntregavelSelect.value;
     var opcoes = categorias[categoriaSelecionada] || [];
 
-    // Limpa o segundo select
-    categoriaOpcoesSelect.innerHTML = '';
 
-    // Adiciona as opções ao segundo select
-    opcoes.forEach(function (opcao) {
-        var option = document.createElement('option');
-        option.value = opcao;
-        option.text = opcao;
-        categoriaOpcoesSelect.appendChild(option);
-    });
+      // Adiciona as opções ao segundo select
+      opcoes.forEach(function (opcao) {
+          var option = document.createElement('option');
+          option.value = opcao;
+          option.text = opcao;
+          categoriaOpcoesSelect.appendChild(option);
+      });
+   
 }
 
   function alterarEntregavel(){
@@ -263,8 +253,15 @@
 
   
   $('#categoria_entregavel').on('change', function (e) {
+    var categoriaOpcoesSelect = document.getElementById('categoria_field_save_the_date');
+    if(categoriaEntregavelSelect.value == '5'){
 
-    atualizarCategoriaOpcoes();
+      categoriaOpcoesSelect.style.display = 'none'
+    }else{
+        categoriaOpcoesSelect.style.display = 'block'
+        atualizarCategoriaOpcoes();
+    }
+   
 });
 
 

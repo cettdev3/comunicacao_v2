@@ -13,7 +13,7 @@
       <input style="display: none;" type="text" value="{{tarefa.id}}" id="tarefa_edit_id"  class="form-control" name="tarefa_edit_id">
 
           
-      <div class="col-12 col-sm-12 col-md-12">
+      <div class="col-12 col-sm-12 col-md-6">
         <div class="form-group">
           <label>Título da Tarefa:</label>
     
@@ -23,6 +23,25 @@
              
             </div> 
            <input type="text" name="titulo_tarefa_edit" id="titulo_tarefa_edit" class="form-control" value="{{tarefa.titulo_tarefa}}">
+          </div>
+          <!-- /.input group -->
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-12 col-md-6">
+        <div class="form-group">
+          <label>Alterar Usuário:</label>
+    
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i style="color: #000000" class="fa fa-user"></i></span>
+             
+            </div> 
+            <select  class="form-control" id="designar_usuario_edit" name="designar_usuario_edit">
+              {% for usuario in usuarios %}
+              <option value="{{usuario.id}}" {% if tarefa.usuario_id == usuario.id %} selected {% endif %}>{{usuario.first_name}}</option>
+              {% endfor %}
+            </select>
           </div>
           <!-- /.input group -->
         </div>
@@ -101,9 +120,9 @@
 </form>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" onclick="fecharModal('editarTarefa')">Fechar</button>
-        {% if '11' in permissoes.permissao %}
-        <button type="button" onclick="alteraTarefa()" class="btn btn-primary">Alterar Tarefa {{permissoes.permissao}}</button>
-        {% endif %}
+
+        <button type="button" onclick="alteraTarefa()" class="btn btn-primary">Alterar Tarefa </button>
+
       </div>
  
     </div>

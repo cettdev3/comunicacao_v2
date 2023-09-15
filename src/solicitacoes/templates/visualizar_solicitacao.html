@@ -504,58 +504,66 @@
                                                        {% if entregavel.status == '2' %}
                                                        <div class="col-lg-3 col-12">
                                                           <button onclick="enviaAprovacao('{{entregavel.id}}',4)" type="button" class="btn btn-block btn-dark"><i class="bi bi-check2-circle"></i> Marcar como Recebido</button>
-                                                      </div>
-                                                      <div class="col-lg-3 col-12">
-                                                          <button onclick="devolveComunicacao('{{entregavel.id}}',4)" type="button" class="btn btn-block btn-dark"><i class="bi bi-arrow-counterclockwise"></i> Devolver p/ Correções</button>
-                                                      </div>
-                                                       <div class="col-lg-3 col-12">
+                                                        </div>
+
+                                                        <div class="col-lg-3 col-12">
+                                                            <button onclick="devolveComunicacao('{{entregavel.id}}',4)" type="button" class="btn btn-block btn-dark"><i class="bi bi-arrow-counterclockwise"></i> Devolver p/ Correções</button>
+                                                        </div>
+                                                       
+                                                        <div class="col-lg-3 col-12">
                                                             <button onclick="modalTarefa('{{entregavel.ultima_tarefa_id.id}}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-eye-fill"></i> Visualizar Entregas</button>
                                                         </div>
+
                                                         {% endif %}
                                                        
                                                         {% if entregavel.status == '1' %}
-                                                        {% if '6' in permissoes.permissao %}
-                                                        <div class="col-lg-3 col-12">
-                                                            <button onclick="modalTarefas('{{entregavel.id}}','{{ forloop.counter }}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-people-fill"></i> Designar Usuário</button>
-                                                        </div>
-                                                        {% endif %}
+                                                          {% if '6' in permissoes.permissao %}
+                                                          <div class="col-lg-3 col-12">
+                                                              <button onclick="modalTarefas('{{entregavel.id}}','{{ forloop.counter }}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-people-fill"></i> Designar Usuário</button>
+                                                          </div>
+                                                          {% endif %}
 
                                                         {% if '8' in permissoes.permissao %}
-                                                        <div class="col-lg-3 col-12">
-                                                            <button onclick="enviaAprovacao('{{entregavel.id}}',2)" type="button" class="btn btn-block btn-dark"><i class="bi bi-send-plus"></i> Enviar p/ Solicitante</button>
-                                                        </div>
+                                                          <div class="col-lg-3 col-12">
+                                                              <button onclick="enviaAprovacao('{{entregavel.id}}',2)" type="button" class="btn btn-block btn-dark"><i class="bi bi-send-plus"></i> Enviar p/ Solicitante</button>
+                                                          </div>
                                                         {% endif %}
 
                                                         {% if '7' in permissoes.permissao %}
-                                                        <div class="col-lg-3 col-12">
-                                                          <button onclick="revisaoTask('{{entregavel.tarefas_relacionadas.id}}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-card-text"></i> Solicitar Revisão de Tarefa</button>
-                                                        </div>
+                                                          <div class="col-lg-3 col-12">
+                                                            <button onclick="revisaoTask('{{entregavel.tarefas_relacionadas.id}}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-card-text"></i> Solicitar Revisão de Tarefa</button>
+                                                          </div>
                                                         {% endif %}
                                                         
                                                         {%  elif  entregavel.status == '0' and not entregavel.tarefas_relacionadas or entregavel.status == '4' or entregavel.status == '3' %}
                                                        
-                                                        {% if '6' in permissoes.permissao %}
-                                                        <div class="col-lg-3 col-12">
-                                                            <button onclick="modalTarefas('{{entregavel.id}}','{{ forloop.counter }}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-people-fill"></i> Designar Usuário</button>
-                                                        </div>
-                                                        {% endif %}
+                                                            {% if '6' in permissoes.permissao %}
+                                                            <div class="col-lg-3 col-12">
+                                                                <button onclick="modalTarefas('{{entregavel.id}}','{{ forloop.counter }}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-people-fill"></i> Designar Usuário</button>
+                                                            </div>
+                                                            {% endif %}
                                                        
                                                         {% if entregavel.status == '0'  and not entregavel.tarefas_relacionadas%}
-                                                        {% if '6' in permissoes.permissao %}
-                                                        <div class="col-lg-3 col-12">
-                                                          <button onclick="negarEntregavel('{{entregavel.id}}',6)" type="button" class="btn btn-block btn-dark"><i class="bi bi-x-circle-fill"></i> Negar Entregável</button>
-                                                      </div>
-                                                      <div class="col-lg-3 col-12">
-                                                        <button onclick="negarEntregavel('{{entregavel.id}}',5)" type="button" class="btn btn-block btn-dark"> <i class="bi bi-arrow-return-left"></i> Devolver Entregável</button>
-                                                    </div>
-                                                    <div class="col-lg-3 col-12">
-                                                      <button onclick="editarEntregavelModal('{{entregavel.id}}')" type="button" class="btn btn-block btn-dark"> <i class="bi bi-pencil-square"></i> Editar Entregável</button>
-                                                  </div>
-                                                    {% endif %}
-                                                        {% endif %}
-                                                        {% endif %}
+                                                            {% if '6' in permissoes.permissao %}
+                                                              <div class="col-lg-3 col-12">
+                                                                  <button onclick="negarEntregavel('{{entregavel.id}}',6)" type="button" class="btn btn-block btn-dark"><i class="bi bi-x-circle-fill"></i> Negar Entregável</button>
+                                                              </div>
 
-                                                   
+                                                            <div class="col-lg-3 col-12">
+                                                                <button onclick="negarEntregavel('{{entregavel.id}}',5)" type="button" class="btn btn-block btn-dark"> <i class="bi bi-arrow-return-left"></i> Devolver Entregável</button>
+                                                            </div>
+                                                  
+                                                            {% endif %}
+
+                                                        {% endif %}
+                                                       
+                                                        {% endif %}
+                                                        
+                                                         {% if '12' in permissoes.permissao %}
+                                                        <div class="col-lg-3 col-12">
+                                                          <button onclick="editarEntregavelModal('{{entregavel.id}}')" type="button" class="btn btn-block btn-dark"> <i class="bi bi-pencil-square"></i> Editar Entregável</button>
+                                                      </div>
+                                                        {% endif %}
 
                                                       </div>
                                            
@@ -836,7 +844,7 @@
   </section>
 
 <!-- Full screen modal -->
-<div class="modal fade modal-fullscreen-xl" id="modal-fullscreen-xl" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade modal-fullscreen-xl" id="modal-fullscreen-xl"  role="dialog" aria-hidden="true">
   <div class="modal-dialog-full" role="document">
     <div class="modal-content-full">
       <div class="modal-header">
@@ -856,7 +864,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="revisaoTask" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="revisaoTask"  role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -917,7 +925,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" style="display: none;" aria-hidden="true">
+<div class="modal fade" id="exampleModalCenter"  aria-labelledby="exampleModalCenterTitle" style="display: none;" aria-hidden="true">
   <form id="formTarefas" method="POST"  enctype="multipart/form-data">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
@@ -939,7 +947,7 @@
   </form>
 </div>
 
-<div class="modal fade" id="modalEditTask" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="modalEditTask"  role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -1045,7 +1053,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="devolverComunicacao" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="devolverComunicacao"  role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -1093,7 +1101,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="motivoNegado" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="motivoNegado"  role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -1140,11 +1148,11 @@
   </div>
 </div>
 
-<div class="modal fade" id="editarEntregavelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="editarEntregavelModal" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   
 </div>
 
-<div class="modal fade" id="editarSolicitacao" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="editarSolicitacao"  role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   
 </div>
 <script>
