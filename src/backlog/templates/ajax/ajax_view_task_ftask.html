@@ -63,6 +63,7 @@
                       <!-- /.input group -->
                       </div>
                     </div>
+
                     {% if tarefa.descricao_tarefa %}
                     <div class="col-12 col-sm-12 col-md-12">
                       <div class="form-group">
@@ -76,12 +77,9 @@
                         <!-- /.input group -->
                         </div>
                       </div>
+                      {% endif %}
+            {% endif %}
 
-                
-                     
-                      
-                      {% endif %}
-                      {% endif %}
                       <div class="col-lg-3 col-12">
                         <div class="form-group">
                             <label>Tipo do Entregável:</label>
@@ -163,7 +161,7 @@
                         </div>
                         <!-- /.input group -->
                         </div>
-                      </div>
+                         </div>
 
                       {% endif %}
   
@@ -267,7 +265,6 @@
                         </div>
                       </div>
                      
-                     
   
                       <div class="col-12 col-sm-12 col-md-12">
                         <div class="card" style="width: 100%;">
@@ -285,13 +282,13 @@
                       </div>
                       {% endif %}
           </div>
-  
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="fecharModalFtask()">Fechar</button>
+    
+    
+          </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" onclick="fecharModalTaskView('viewTaskBackLog')">Fechar</button>
-  
-  
-        </div>
+      
       </div>
 
     </div>
@@ -300,7 +297,15 @@
   
 
     <script>
-
+      function fecharModalFtask(){
+        
+        $("#viewTaskBackLog").on('hidden.bs.modal', function () {
+        const bodyElement = document.body;
+        bodyElement.classList.add("sidebar-mini", "layout-fixed", "light-mode", "modal-open");
+    });
+    $("#viewTaskBackLog").modal('hide')
+      }
+      
   $(function () {
     //Initialize Select2 Elements
     $('.select2').select2()

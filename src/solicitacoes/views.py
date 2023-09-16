@@ -710,3 +710,31 @@ def Ajax_Altera_Solicitacao(request):
 
     except Exception as e:
         return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)
+
+@login_required(login_url='/')
+def Ajax_Change_Entregavel(request):
+    print(request.POST)
+
+    with transaction.atomic():
+        entregavelId = request.POST.get('entregavelID','')
+        prazo = request.POST.get('prazo_save_the_date','')
+        tipo_produto = request.POST.get('tipoproduto_save_the_date','')
+        categoria = request.POST.get('categoriaproduto_save_the_date','')
+        tipo_entregavel = request.POST.get('tipo_entregavel','')
+        audiovisual =  request.POST.get('audio_visual','')
+        observacoes =  request.POST.get('obs_save_the_date','')
+
+        entregavel = Entregaveis.objects.get(id=entregavelId)
+        entregavel.prazo = prazo
+        entregavel.tipo_produto = tipo_produto
+        entregavel.categoria_produto = categoria
+        entregavel.tipo_entregavel = tipo_entregavel
+        entregavel.descricao_audio_visual = audiovisual
+        entregavel.observaca = observacoes
+        entregavel.save()
+
+
+
+
+    return JsonResponse({"success_message": "Tarefa Devolvida!"})
+

@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from datetime import datetime, timedelta
 
 # Create your models here.
@@ -89,8 +91,9 @@ class Entregaveis(models.Model):
 
     @property
     def status_entregaveis(self):
-        total_tarefas = self.tarefas_set.exclude(status=3).count()
         total_geral_tarefas =  self.tarefas_set.count()
+        total_tarefas = self.tarefas_set.exclude(status=3).exclude(status=4).count()
+        
 
         if total_tarefas  > 0:
             self.status = 0
@@ -134,7 +137,7 @@ class Programacao_Adicional(models.Model):
         db_table = 'programacao_adicional'
 
 class Tarefas(models.Model):
-    choices_status = [('0','A FAZER'),('1','FAZENDO'),('2','EM REVISÃO'),('3','FEITO')]
+    choices_status = [('0','A FAZER'),('1','FAZENDO'),('2','EM REVISÃO'),('3','FEITO'),('4','ARQUIVADO')]
     choices_prioridade = [('1','NORMAL'),('2','PRIORIDADE')]
 
     id = models.AutoField(primary_key=True)
@@ -201,3 +204,10 @@ class Escolas(models.Model):
     convenio = models.CharField(max_length=10,null=True,blank=True)
     class  Meta:
         db_table = 'escolas'
+
+# Sinal que será acionado quando um entregável for marcado como concluído
+@receiver(post_save, sender=Entregaveis)
+def atualizar_status_tarefas(sender, instance, **kwargs):
+    if instance.status == '4':
+        # Atualiza o status de todas as tarefas relacionadas ao entregável para "concluído"
+       Tarefas.objects.filter(entregavel_id=instance.id).update(status=4)

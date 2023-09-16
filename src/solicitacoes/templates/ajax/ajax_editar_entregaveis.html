@@ -6,127 +6,170 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-     
+      <form id="altera_entregavel" method="POST"  enctype="multipart/form-data">
       <div class="modal-body">
         <div class="row">
         
-      <input style="display: none;" type="text" value="" id="entregavelID"  class="form-control" name="entregavelID">
+      <input style="display: none;" type="text" value="{{entregavel.id}}" id="entregavelID"  class="form-control" name="entregavelID">
 
 
       <div class="card-body">
         <div class="form-group" id="save_the_date_container" >
             <div class="row">
+              <div class="col-12 col-sm-12 col-md-12">
+                <div class="card" style="width: 100%;">
+                    <div class="card-header" style="background-color: #fafafa;">
+                      <label>Alterar Entregável</label>
+                           
                       
-            <div class="card" style="width: 100%;">
-              <div class="card-header" style="background-color: #fafafa;">
-                  <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i> {{entregavel.get_tipoentregavel_display}}</h3>
-                  
-              </div>
+                    </div>
+                      
+                    <div class="card-body">
+                      <div class="form-group" id="save_the_date_container" >
+                        <div class="row">
+                         
 
-              <div class="card-body">
-                <input style="display: none;" type="text" id="entregavelId" name="entregavelId" value="{{entregavel.id}}">
-                <div class="row">
-
-                    <div class="col-12 col-sm-12 col-md-3">
+                      <div class="col-12 col-sm-12 col-md-6">
                         <div class="form-group">
-                    
-                        <label>Tipo</label>
+                        <label>Prazo:</label>
         
-                          <div class="input-group">
-                            <select style="width: 100%;"  class="form-control select2" id="tipo_entregavel" name="tipo_entregavel" required>
-                               <option value="1" {% if entregavel.tipo_entregavel == 1 %} selected {% endif %}>SAVE THE DATE</option>
-                               <option value="2" {% if entregavel.tipo_entregavel == 2 %} selected {% endif %}>DIVULGAÇÃO</option>
-                               <option value="3" {% if entregavel.tipo_entregavel == 3 %} selected {% endif %}>PROGRAMAÇÃO</option>
-                               <option value="4" {% if entregavel.tipo_entregavel == 4 %} selected {% endif %}>STAND</option>
-                            </select>
-                          </div>
-                          <!-- /.input group -->
-                          </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                            <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
+                            </div>
+                            <input value="{{entregavel.prazo|date:'Y-m-d'}}" type="date" id="prazo_save_the_date"   class="form-control" name="prazo_save_the_date">
+                        </div>
+                        <!-- /.input group -->
+                        </div>
+                      </div>
+                    
+
+                    <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_save_the_date_space" style="display: none;">
+                      
                     </div>
 
-
-                    <div class="col-12 col-sm-12 col-md-3">
+                    <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_save_the_date" style="display: none;">
                       <div class="form-group">
-                      <label>Prazo:</label>
-
+                      <label>Exemplo de Arte:</label>
+      
                       <div class="input-group">
-                        <input class="form-control" type="date" name="prazo" id="prazo" value="{{entregavel.prazo|date:'Y-m-d'}}">
-                      
+                          <div class="input-group-prepend">
+                          <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                          </div>
+                          <input type="file" name="exemploarte_save_the_date" id="exemploarte_save_the_date" class="form-control" >
                       </div>
                       <!-- /.input group -->
                       </div>
                     </div>
-            
-                      
-                    <div class="col-12 col-sm-12 col-md-3">
+
+                    <div class="col-12 col-sm-12 col-md-6">
                       <div class="form-group">
                       <label>Categoria do Produto:</label>
+      
                       <div class="input-group">
-
-
-                        <select style="width: 100%;"  class="form-control select2" id="categoria_entregavel" name="categoria_entregavel" required>
-                        <option value="1" {% if entregavel.tipo_produto == 1 %} selected {% endif %}>Digital</option>
-                          <option value="2" {% if entregavel.tipo_produto == 2 %} selected {% endif %}>Impresso</option>
-                          <option value="3" {% if entregavel.tipo_produto == 3 %} selected {% endif %}>Audiovisual</option>
-                          <option value="4" {% if entregavel.tipo_produto == 4 %} selected {% endif %}>Cobertura de Evento</option>
-                          <option value="5" {% if entregavel.tipo_produto == 5 %} selected {% endif %}>Produção (Orçamentos e Execuções)</option>
-                          <option value="6" {% if entregavel.tipo_produto == 6 %} selected {% endif %}>Identidade Visual</option>
-                          <option value="7" {% if entregavel.tipo_produto == 7 %} selected {% endif %}>Planejamento</option>
-                          <option value="8" {% if entregavel.tipo_produto == 8 %} selected {% endif %}>Brindes</option>
-                          <option value="9" {% if entregavel.tipo_produto == 9 %} selected {% endif %}>Comunicação Visual</option>
-                      </select>
-
+                          <div class="input-group-prepend">
+                          <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                          </div>
+                          <select  class="form-control" id="tipoproduto_save_the_date" name="tipoproduto_save_the_date">
+                            <option value="1" {% if entregavel.tipo_produto == 1 %} selected {% endif %}>Digital</option>
+                            <option value="2" {% if entregavel.tipo_produto == 2 %} selected {% endif %}>Impresso</option>
+                            <option value="3" {% if entregavel.tipo_produto == 3 %} selected {% endif %}>Audiovisual</option>
+                            <option value="4" {% if entregavel.tipo_produto == 4 %} selected {% endif %}>Cobertura de Evento</option>
+                            <option value="5" {% if entregavel.tipo_produto == 5 %} selected {% endif %}>Produção (Orçamentos e Execuções)</option>
+                            <option value="6" {% if entregavel.tipo_produto == 6 %} selected {% endif %}>Identidade Visual</option>
+                            <option value="7" {% if entregavel.tipo_produto == 7 %} selected {% endif %}>Planejamento</option>
+                            <option value="8" {% if entregavel.tipo_produto == 8 %} selected {% endif %}>Brindes</option>
+                            <option value="9" {% if entregavel.tipo_produto == 9 %} selected {% endif %}>Comunicação Visual</option>
+                          </select>
                       </div>
                       <!-- /.input group -->
                       </div>
                     </div>
 
-                    <div class="col-12 col-sm-12 col-md-3" id="categoria_field_save_the_date">
+                    <div class="col-12 col-sm-12 col-md-6" id="categoria_field_save_the_date">
+                    <div class="form-group">
+                    <label>Tipo do Produto:</label>
+    
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                        </div>
+                        <select  class="form-control" id="categoriaproduto_save_the_date" name="categoriaproduto_save_the_date">
+                       
+                        </select>
+                    </div>
+                    <!-- /.input group -->
+                    </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6">
                       <div class="form-group">
-                      <label>Tipo do Produto:</label>
-          
+                      <label>Tipo do Entregável:</label>
+      
                       <div class="input-group">
-                        <select style="width: 100%;" class="form-control select2" id="categoria_opcoes" name="categoria_opcoes" required>
+                          <div class="input-group-prepend">
+                          <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                          </div>
+                          <select  class="form-control" id="tipo_entregavel" name="tipo_entregavel">
+                            <option value="1" {% if entregavel.tipo_entregavel == 1 %} selected {% endif %}>Save The Date</option>
+                            <option value="2" {% if entregavel.tipo_entregavel == 2 %} selected {% endif %}>Divulgação</option>
+                            <option value="3" {% if entregavel.tipo_entregavel == 3 %} selected {% endif %}>Programação</option>
+                            <option value="4" {% if entregavel.tipo_entregavel == 4 %} selected {% endif %}>Stand</option>
+                          </select>
                       </div>
                       <!-- /.input group -->
                       </div>
                     </div>
-            
-                    {% if entregavel.descricao_audio_visual %}
-                    <div class="col-12 col-sm-12 col-md-12" id="descricao_field_save_the_date">
+                    <div class="col-12 col-sm-12 col-md-12" id="descricao_field_save_the_date" style="display: none;">
+                  <div class="col-md-12">
                     <div class="card card-dark card-outline">
                       <div class="card-header">
-                        <h3 class="card-title">Descrição Produção de Audiovisual (Orçamentos e Execuções)</h3>
+                        <h3 class="card-title">Descrição Produção (Orçamentos e Execuções)</h3>
                       </div>
-        
+                      <!-- /.card-header -->
                       <div class="card-body">
                       
                         <div class="form-group">
-                            <textarea id="descricao_save_the_date" name="descricao_save_the_date" class="form-control summernote" style="height: 300px"></textarea>
+                            <textarea name="audio_visual" id="audio_visual" class="form-control summernote" style="height: 300px"></textarea>
                         </div>
                       
                       </div>
-
+                      <!-- /.card-body -->
                     
                     </div>
-
-                    </div>
-                    {% endif %}
-            
-                    <div class="col-12 col-sm-12 col-md-12" id="categoria_field_save_the_date">
-                      <div class="form-group">
-                      <label>Descrição:</label>
-          
-                      <div class="input-group">
-                        <select style="width: 100%;" class="form-control select2" id="categoria_opcoes" name="categoria_opcoes" required>
-                      </div>
-                      <!-- /.input group -->
-                      </div>
+                    <!-- /.card -->
+                  </div>
                     </div>
 
-                </div>
+                 
+
+                    <div class="col-12 col-sm-12 col-md-12" id="observacao_field_save_the_date">
+                      <div class="col-md-12">
+                        <div class="card card-dark card-outline">
+                          <div class="card-header">
+                            <h3 class="card-title">Observações</h3>
+                          </div>
+                          <!-- /.card-header -->
+                          <div class="card-body">
+                          
+                            <div class="form-group">
+                                <textarea name="obs_save_the_date" id="obs_save_the_date" class="form-control summernote" style="height: 300px"></textarea>
+                            </div>
+                          
+                          </div>
+                          <!-- /.card-body -->
+                        
+                        </div>
+                        <!-- /.card -->
+                      </div>
+                    </div>
+
+                                </div>
+
+                    </div>
+                      
+                    </div>
               </div>
-             </div>
+              </div>
             </div>
 
       </div>
@@ -135,134 +178,208 @@
 
       </div>
     </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-        <button type="button"n onclick="alterarEntregavel()" class="btn btn-primary">Alterar Entregável</button>
-      </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+      <button type="button"n onclick="ChangeEntregavel()" class="btn btn-primary">Alterar Entregável</button>
+    </div>
+  </form>
+  
  
     </div>
   </div>
-<script>
 
-  var categoriaEntregavelSelect = document.getElementById("categoria_entregavel");
-  var categoriaOpcoesSelect = document.getElementById('categoria_opcoes');  
+<script>
+  
+   
   var categorias = {
-      "1": ["Post", "Card P/ Instagram", "Card P/ Stories", "Banner P/ Site", "Planejamento","Publicação","Site","Outros"],
-      "2": ["Adesivo", "Anúncio de jornal", "Banner", "Cartaz", "Outdoor", "Panfletos", "Outros"],
-      "3": ["Filme para TV (duração)", "Filme para Reels", "Filme para Stories", "Spot de rádio/Streaming", "Carro de som	", "Videos para telas de TV","Tela para Comutador", "Outros"],
-      "4": ["Foto", "Vídeo", "Jornalista","Release","Stories","Notícia para Site","Reals","Feed","Outros"],
-      "5": ["teste"],
-      "6": ["Logo","Papel Timbrado","Envelope","Cartão de Visitas","Pasta","Molesquine","Manual de Marca","Iniforme","Outros"],
-      "7": ["Planejamento","BI","Plano de Mídia","Outros"],
-      "8": ["Sacochila","Sacola","Squeeze","Copo","Caderno","Caderneta","Caneta","Chaveiro","Camiseta","Pen Drive","Mouse Pad","Pasta","Outros"],
-      "9": ["Adesivo","Fachada","Placa de Identificação","Faixa","Totem","Testeira","Adesivo para Superfícies","Adesivo para Octanorm","Placa","Windflag","Outros"]
+    "1": ["Banner P/ Site", "Card P/ Instagram", "Card P/ Stories", "Planejamento", "Post", "Publicação", "Site","Outros"],
+    "2": ["Adesivo", "Anúncio de jornal", "Banner", "Cartaz", "Outdoor", "Panfletos","Outros"],
+    "3": ["Carro de som", "Filme para Reels", "Filme para Stories", "Filme para TV (duração)", "Spot de rádio/Streaming", "Tela para Comutador", "Videos para telas de TV","Outros"],
+    "4": ["Feed", "Foto", "Jornalista", "Notícia para Site", "Reals", "Release", "Stories", "Vídeo","Outros"],
+    "5": ["Produção (Orçamentos e Execuções)"],
+    "6": ["Cartão de Visitas", "Envelope", "Iniforme", "Logo", "Manual de Marca", "Molesquine", "Papel Timbrado", "Pasta","Outros"],
+    "7": ["BI", "Planejamento", "Plano de Mídia","Outros"],
+    "8": ["Caderno", "Caderneta", "Camiseta", "Caneta", "Chaveiro", "Copo", "Mouse Pad", "Pasta", "Pen Drive", "Sacochila", "Sacola", "Squeeze","Outros"],
+    "9": ["Adesivo", "Adesivo para Octanorm", "Adesivo para Superfícies", "Faixa", "Fachada", "Placa", "Placa de Identificação", "Testeira", "Totem", "Windflag","Outros"]
+
       // Adicione outras opções aqui
   };
+
+
+  var tipoproduto_save_the_date = $("#tipoproduto_save_the_date");
+  var categoriaproduto_save_the_date = $("#categoriaproduto_save_the_date");
+
+  var categoria_field_save_the_date = $("#categoria_field_save_the_date");
+  var descricao_field_save_the_date = $("#descricao_field_save_the_date");
+  var descricao_save_the_date = $("#descricao_save_the_date");
+
+  var pecas_save_the_date = $("#pecas_save_the_date");
+  var show_exemple_arte_save_the_date = $("#show_exemple_arte_save_the_date");
+  var show_exemple_arte_save_the_date_space = $("#show_exemple_arte_save_the_date_space");
+      
+  pecas_save_the_date.on("change", function() {
+      var selectedValue = $(this).val();
+      var campoArte = $('#exemploarte_save_the_date')
+      if (selectedValue === "arte_existente") {
+        show_exemple_arte_save_the_date.show();
+        show_exemple_arte_save_the_date_space.show();
+        
+      } else {
+        show_exemple_arte_save_the_date.hide();
+        show_exemple_arte_save_the_date_space.hide();
+        
+      }
+  });
   
-  function atualizarCategoriaOpcoes() {
-    var categoriaSelecionada = categoriaEntregavelSelect.value;
-    var opcoes = categorias[categoriaSelecionada] || [];
+  tipoproduto_save_the_date.on("change", function() {
+        
+    var selectedValue = $(this).val();
+    console.log(selectedValue)
+    if (selectedValue === "5") {
+      categoria_field_save_the_date.hide();
+      descricao_field_save_the_date.show();
+      descricao_save_the_date.summernote('reset');
+      var options = categorias[selectedValue] || [];
 
+      categoriaproduto_save_the_date.empty();
 
-      // Adiciona as opções ao segundo select
-      opcoes.forEach(function (opcao) {
-          var option = document.createElement('option');
-          option.value = opcao;
-          option.text = opcao;
-          categoriaOpcoesSelect.appendChild(option);
+      options.forEach(function(option) {
+        categoriaproduto_save_the_date.append($("<option>", {
+            value: option,
+            text: option
+        }));
       });
-   
+    }else{
+      descricao_save_the_date.summernote('reset');
+      var options = categorias[selectedValue] || [];
+
+      categoriaproduto_save_the_date.empty();
+
+      options.forEach(function(option) {
+        categoriaproduto_save_the_date.append($("<option>", {
+            value: option,
+            text: option
+        }));
+      });
+      categoria_field_save_the_date.show();
+      descricao_field_save_the_date.hide();
+    }
+
+});
+  
+  function atualizarCategorias(selectedValue) {
+  console.log(selectedValue);
+
+  if (selectedValue === "5") {
+    descricao_save_the_date.summernote('reset');
+    var options = categorias[selectedValue] || [];
+    var categoriaProduto = "{{entregavel.categoria_produto}}"; // Substitua isso pela forma correta de obter o valor da variável de modelo
+
+    categoriaproduto_save_the_date.empty();
+
+    options.forEach(function(option) {
+      var $option = $("<option>", {
+        value: option,
+        text: option
+      });
+
+      // Verifica se a opção atual é igual ao valor da variável de modelo e define como selecionada se for o caso.
+      if (option === categoriaProduto) {
+        $option.prop("selected", true);
+      }
+
+      categoriaproduto_save_the_date.append($option);
+    });
+
+    categoria_field_save_the_date.hide();
+    descricao_field_save_the_date.show();
+  } else {
+    descricao_save_the_date.summernote('reset');
+    var options = categorias[selectedValue] || [];
+    var categoriaProduto = "{{entregavel.categoria_produto}}"; // Substitua isso pela forma correta de obter o valor da variável de modelo
+
+    categoriaproduto_save_the_date.empty();
+
+    options.forEach(function(option) {
+      var $option = $("<option>", {
+        value: option,
+        text: option
+      });
+
+      // Verifica se a opção atual é igual ao valor da variável de modelo e define como selecionada se for o caso.
+      if (option === categoriaProduto) {
+        $option.prop("selected", true);
+      }
+
+      categoriaproduto_save_the_date.append($option);
+    });
+
+    categoria_field_save_the_date.show();
+    descricao_field_save_the_date.hide();
+  }
 }
 
-  function alterarEntregavel(){
-      var identregavel = document.getElementById('entregavelId').value
-      var descricao = document.getElementById('obs_save_the_date').value
-      var descricao_audiovisual = document.getElementById('descricao_save_the_date')
 
-      if (descricao_audiovisual){
-        var obs_audiovisual = descricao_audiovisual.value;
-      }else{
-        var obs_audiovisual = ''
-      }
+  var descricao_task = '{{entregavel.observacao|escapejs}}'
+  var descricao_orcamento = '{{entregavel.descricao_audio_visual|escapejs}}'
 
-      Swal.fire({
-      title: 'Tem certeza?',
-      text: 'Ao realizar esta operação irá para análise da comunicação!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Sim',
-      cancelButtonText: 'Não'
+  $('.summernote').summernote();
+  $('#audio_visual').summernote('code', descricao_orcamento);
+  $('#obs_save_the_date').summernote('code', descricao_task);
+
+  atualizarCategorias("{{entregavel.tipo_produto}}");
+
+  function ChangeEntregavel() {
+    var form = document.getElementById("altera_entregavel");
+    var formData = new FormData(form);
+
+    Swal.fire({
+        title: 'Tem certeza?',
+        text: 'Realmente deseja alterar este entregável?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sim',
+        cancelButtonText: 'Não'
     }).then((result) => {
-      if (result.isConfirmed) {
-
-        var XCSRFToken = '{{ csrf_token }}'
-        const url = "/ajax/ajax-alterar-entregavel";
-        $.ajax({
+        if (result.isConfirmed) {
+            var XCSRFToken = '{{ csrf_token }}';
+            const url = "/ajax/change-entregavel";
             
-            url: url,
-            type:"post",
-            data: { 'identregavel':identregavel,'descricao':descricao,'descricao_audiovisual':obs_audiovisual},
-            headers: { "X-CSRFToken":  XCSRFToken },
-            success: function (data) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Entregável Alterado!',
-                    text: "Entregável alterado e em revisão!"
-                }).then((result) => {
-                    // Ação a ser realizada após o botão "OK" ser clicado
-                    if (result.isConfirmed) {
-                        // Redirecionar ou atualizar a página aqui
-                        location.reload(); // Isso atualizará a página
-                    }
-                });
-            },
-            error: function (data) {
-                if (data.responseJSON && data.responseJSON.error_message) {
+            // Use a função $.ajax do jQuery para fazer a solicitação AJAX
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: formData,
+                headers: { "X-CSRFToken": XCSRFToken },
+                processData: false,  // Evita que o jQuery transforme os dados em uma string
+                contentType: false,  // Evita que o jQuery defina o cabeçalho Content-Type
+                success: function (data) {
                     Swal.fire({
-                        icon: 'error',
-                        title: 'Ops!',
-                        text: data.responseJSON.error_message
+                        icon: 'success',
+                        title: 'Entregável Editado!',
+                        text: "Entregável editado com sucesso!"
+                    }).then((result) => {
+                        // Ação a ser realizada após o botão "OK" ser clicado
+                        if (result.isConfirmed) {
+                            // Redirecionar ou atualizar a página aqui
+                            location.reload(); // Isso atualizará a página
+                        }
                     });
+                },
+                error: function (data) {
+                    if (data.responseJSON && data.responseJSON.error_message) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Ops!',
+                            text: data.responseJSON.error_message
+                        });
+                    }
                 }
-            }
-        });
-      }
+            });
+        }
     });
-    }
+}
 
-    var descricao = '{{entregavel.observacao|escapejs}}'
-    $('.summernote').summernote();
-    $('#obs_save_the_date').summernote('code', descricao);
-
-    
-  $(function () {
-  //Initialize Select2 Elements
-  $('.select2').select2()
-
-  //Initialize Select2 Elements
-  $('.select2bs4').select2({
-    theme: 'bootstrap4'
-  })
-  });
-  atualizarCategoriaOpcoes();
-  $('#categoria_entregavel').select2();
-
-  
-  $('#categoria_entregavel').on('change', function (e) {
-    var categoriaOpcoesSelect = document.getElementById('categoria_field_save_the_date');
-    if(categoriaEntregavelSelect.value == '5'){
-
-      categoriaOpcoesSelect.style.display = 'none'
-    }else{
-        categoriaOpcoesSelect.style.display = 'block'
-        atualizarCategoriaOpcoes();
-    }
-   
-});
-
-
-
-  
  </script>

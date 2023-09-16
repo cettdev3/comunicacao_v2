@@ -67,7 +67,7 @@ def Ajax_Move_Task(request):
         tarefa.arquivos = arquivos_task
         tarefa.save()
 
-        tarefas = Tarefas.objects.filter(usuario_id=request.user.id).all()
+        tarefas = Tarefas.objects.filter(usuario_id=request.user.id).all().order_by('prazo_entrega')
 
         return render(request, 'ajax/ajax_move_task.html', {'tarefas': tarefas})
         
