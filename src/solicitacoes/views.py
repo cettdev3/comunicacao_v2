@@ -730,7 +730,7 @@ def Ajax_Change_Entregavel(request):
         entregavel.categoria_produto = categoria
         entregavel.tipo_entregavel = tipo_entregavel
         entregavel.descricao_audio_visual = audiovisual
-        entregavel.observaca = observacoes
+        entregavel.observacao = observacoes
         entregavel.save()
 
 
@@ -738,3 +738,29 @@ def Ajax_Change_Entregavel(request):
 
     return JsonResponse({"success_message": "Tarefa Devolvida!"})
 
+@login_required(login_url='/')
+def Ajax_Add_Entregavel(request):
+    print(request.POST)
+    user_loggin = request.user.id
+    with transaction.atomic():
+        evento_id = request.POST.get('solicitacaoId','')
+        prazo = request.POST.get('prazo_save_the_date','')
+        tipo_produto = request.POST.get('tipoproduto_save_the_date','')
+        categoria = request.POST.get('categoriaproduto_save_the_date','')
+        tipo_entregavel = request.POST.get('tipo_entregavel','')
+        audiovisual =  request.POST.get('audio_visual','')
+        observacoes =  request.POST.get('obs_save_the_date','')
+
+        entregavel = Entregaveis.objects.create(prazo = prazo, tipo_produto = tipo_produto, categoria_produto = categoria,tipo_entregavel = tipo_entregavel, descricao_audio_visual = audiovisual, observacao = observacoes, status = 0,criado_por_id = user_loggin,evento_id = evento_id)
+
+        return JsonResponse({"success_message": "Tarefa Devolvida!"})
+
+@login_required(login_url='/')
+def Ajax_Reenvia_Entregavel(request):
+    with transaction.atomic():
+        entregavelId = request.POST.get('idEntregavel','')
+        entregavel = Entregaveis.objects.get(id=entregavelId)
+        entregavel.status = 0
+        entregavel.save()
+
+        return JsonResponse({"success_message": "Tarefa Devolvida!"})

@@ -72,7 +72,7 @@
           
                         <div class="input-group">
                          
-                          {{tarefa.descricao_tarefa|safe}}
+                          <span>{{tarefa.descricao_tarefa|safe}}</span>
                         </div>
                         <!-- /.input group -->
                         </div>
@@ -154,7 +154,7 @@
                         <div class="input-group">
                          
                           {% if tarefa.entregavel.descricao_audio_visual %}
-                              {{tarefa.entregavel.descricao_audio_visual|safe}}
+                             <span> {{tarefa.entregavel.descricao_audio_visual|safe}}</span>
                               {% else %}
                               Sem descrições
                               {% endif %}
@@ -174,7 +174,7 @@
                           <div class="input-group">
                            
                             {% if tarefa.entregavel.descricao_audio_visual %}
-                                {{tarefa.entregavel.descricao_audio_visual|safe}}
+                                <span>{{tarefa.entregavel.descricao_audio_visual|safe}}</span>
                                 {% else %}
                                 Sem descrições
                                 {% endif %}
