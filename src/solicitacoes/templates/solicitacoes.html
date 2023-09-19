@@ -237,7 +237,9 @@ z-index: 9999;
                                                             <option value="{{evento.id}}">{{evento.tipo_formatado}} de {{evento.data_inicio|date:'d/m/Y'}} até {{evento.data_fim|date:'d/m/Y'}} em {{evento.cidade.nome}}</option>
                                                             {% endif %}
                                                             {% endfor %}
+                                                            {% if permissoes.departamento_id == 1 %}
                                                             <option value="und">Outros</option>
+                                                            {% endif %}
                                                           </select>
                                                       </div>
                                                       <!-- /.input group -->
