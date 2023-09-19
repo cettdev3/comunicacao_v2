@@ -218,15 +218,16 @@
                             <div class="card-body">
                               <div class="row">
                                 <div class="col-sm-2">
-                                  {% if '.pdf' in tarefa.entregavel.exemplo_arte %}
-                                  <a href="{{tarefa.entregavel.exemplo_arte}}" class="btn btn-app">
-                                    <i class="fas fa-file"></i> Download
-                                  </a>
-                                  {% else %}
-                                  
+                                  {% if '.jpg' in tarefa.entregavel.exemplo_arte or '.png' in tarefa.entregavel.exemplo_arte or '.jpeg' in tarefa.entregavel.exemplo_arte %}
                                   <a style="width: 100%;" href="{{tarefa.entregavel.exemplo_arte}}" data-toggle="lightbox" data-title="Exemplo de Arte" data-gallery="gallery">
                                     <img src="{{taarefa.entregavel.exemplo_arte}}" class="img-fluid mb-2" alt="white sample"/>
                                   </a>
+                                  
+                                  {% else %}
+                                  <a href="{{tarefa.entregavel.exemplo_arte}}" class="btn btn-app">
+                                    <i class="fas fa-file"></i> Download
+                                  </a>
+                                 
                                   {% endif %}
                                 </div>
                                </div>
