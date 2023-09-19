@@ -225,7 +225,7 @@
                           <tbody id="resultados">
                 
                             {% for solicitacao in solicitacoes %}
-                            {% if solicitacao.status_solicitacao != '3' %}
+                            {% if solicitacao.status_solicitacao != 3 %}
                               <tr style="cursor: pointer;" onclick="acessarSolicitacao('{{solicitacao.id}}')">
                               <td>#{{solicitacao.id}}</td>
                               <td>
