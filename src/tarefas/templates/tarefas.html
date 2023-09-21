@@ -273,6 +273,7 @@
                           <table style="margin-top: 10px;">
                             <thead>
                               <tr>
+                                <th>#</th>
                                 <th>Evento</th>
                                 <th>Data da Tarefa</th>
                                 <th>Prazo de Entrega</th>
@@ -290,6 +291,7 @@
                               {% for tarefa in tarefas %}
                                 {% if tarefa.status == 3 or tarefa.status == 4 %}
                                 <tr style="{{tarefa.calcular_status_entrega}}"  onclick="acessarSolicitacao('{{tarefa.entregavel.evento.id}}')">
+                                  <td>{{tarefa.id}}</td>
                                   <td>
                                     {% if tarefa.entregavel.evento.evento_json.tipo_formatado %}
                                     {{tarefa.entregavel.evento.evento_json.tipo_formatado}}
