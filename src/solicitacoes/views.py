@@ -138,7 +138,7 @@ def Ajax_Realiza_Solicitacao(request):
                 print(request.user.id)
 
                 #ANTES VERIFICA SE A SOLICITAÇÃO JÁ EXISTE
-                solicitacao = Solicitacoes.objects.filter(evento_json__id = idEvento).first()
+                solicitacao = Solicitacoes.objects.filter(evento_json__id = idEvento,criado_por_id = request.user.id).first()
                 if solicitacao:
                     print(solicitacao.id)
                 else:
