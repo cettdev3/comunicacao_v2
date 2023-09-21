@@ -209,20 +209,26 @@
                         <div class="card card-primary">
                           <div class="card-header">
                             <h4 class="card-title w-100">
-                              <a class="d-block w-100" data-toggle="collapse" href="#collapseOne">
+                              <a class="d-block w-100" data-toggle="collapse" href="#collapsetwo">
                              Exemplos de Artes
                               </a>
                             </h4>
                           </div>
-                          <div id="collapseOne" class="collapse" data-parent="#accordion">
+                          <div id="collapsetwo" class="collapse" data-parent="#accordion">
                             <div class="card-body">
                               <div class="row">
                                 <div class="col-sm-2">
-                                  
-                                  <a style="width: 100%;" href="{{entregavel.exemplo_arte}}" data-toggle="lightbox" data-title="Exemplo de Arte" data-gallery="gallery">
-                                    <img src="{{entregavel.exemplo_arte}}" class="img-fluid mb-2" alt="white sample"/>
+                                  {% if '.jpg' in tarefa.entregavel.exemplo_arte or '.png' in tarefa.entregavel.exemplo_arte or '.jpeg' in tarefa.entregavel.exemplo_arte %}
+                                  <a style="width: 100%;" href="{{tarefa.entregavel.exemplo_arte}}" data-toggle="lightbox" data-title="Exemplo de Arte" data-gallery="gallery">
+                                    <img src="{{taarefa.entregavel.exemplo_arte}}" class="img-fluid mb-2" alt="white sample"/>
                                   </a>
-    
+                                  
+                                  {% else %}
+                                  <a href="{{tarefa.entregavel.exemplo_arte}}" class="btn btn-app">
+                                    <i class="fas fa-file"></i> Download
+                                  </a>
+                                 
+                                  {% endif %}
                                 </div>
                                </div>
                             </div>
@@ -239,12 +245,12 @@
                         <div class="card card-primary">
                           <div class="card-header">
                             <h4 class="card-title w-100">
-                              <a class="d-block w-100" data-toggle="collapse" href="#collapseFour">
+                              <a class="d-block w-100" data-toggle="collapse" href="#collapsetree">
                              Tarefas Relacionadas
                               </a>
                             </h4>
                           </div>
-                          <div id="collapseFour" class="collapse" data-parent="#accordion">
+                          <div id="collapsetree" class="collapse" data-parent="#accordion">
                             <div class="card-body">
                               <table style="margin-top: 10px; font-size: 12px;">
                                 <thead>
@@ -311,12 +317,12 @@
                         <div class="card card-primary">
                           <div class="card-header">
                             <h4 class="card-title w-100">
-                              <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
+                              <a class="d-block w-100" data-toggle="collapse" href="#collapseFour">
                              Descrição da Entrega
                               </a>
                             </h4>
                           </div>
-                          <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                          <div id="collapseFour" class="collapse" data-parent="#accordion">
                             <div class="card-body">
                               {{tarefa.descricao_entrega|safe}}
                             </div>
@@ -334,12 +340,12 @@
                         <div class="card card-primary">
                           <div class="card-header">
                             <h4 class="card-title w-100">
-                              <a class="d-block w-100" data-toggle="collapse" href="#collapseTree">
+                              <a class="d-block w-100" data-toggle="collapse" href="#collapseFive">
                              Arquivos
                               </a>
                             </h4>
                           </div>
-                          <div id="collapseTree" class="collapse" data-parent="#accordion">
+                          <div id="collapseFive" class="collapse" data-parent="#accordion">
                             <div class="card-body">
                               {% for arquivo in arquivos %}
                               <a href="{{arquivo}}" class="btn btn-app">

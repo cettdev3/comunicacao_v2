@@ -721,10 +721,18 @@
                                                               <div class="card-body">
                                                                <div class="row">
                                                                 <div class="col-sm-2">
-                                                                  
+                                                                  {% if '.jpg' in entregavel.exemplo_arte or '.png' in entregavel.exemplo_arte or '.jpeg' in entregavel.exemplo_arte %}
                                                                   <a href="{{entregavel.exemplo_arte}}" data-toggle="lightbox" data-title="Exemplo de Arte" data-gallery="gallery">
                                                                     <img src="{{entregavel.exemplo_arte}}" class="img-fluid mb-2" alt="white sample"/>
                                                                   </a>
+                                                                  
+                                                                  {% else %}
+                                                                  <a href="{{entregavel.exemplo_arte}}" class="btn btn-app">
+                                                                    <i class="fas fa-file"></i> Download
+                                                                  </a>
+
+                                                                  
+                                                                  {% endif %}
                     
                                                                 </div>
                                                                </div>
