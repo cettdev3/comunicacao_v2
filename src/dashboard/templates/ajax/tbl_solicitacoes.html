@@ -1,0 +1,37 @@
+{% for solicitacao in solicitacoes %}
+{% if solicitacao.status_solicitacao != 3 %}
+  <tr style="cursor: pointer;" onclick="acessarSolicitacao('{{solicitacao.id}}')">
+  <td>#{{solicitacao.id}}</td>
+  <td>
+
+    {% if solicitacao.tipo_projeto == 1 %}
+    <span class="badge bg-success" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
+      {% elif solicitacao.tipo_projeto == 2 %}
+      <span class="badge bg-warning" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
+      {% elif solicitacao.tipo_projeto == 3 %}
+      <span class="badge bg-info" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
+      {% elif solicitacao.tipo_projeto == 4 %}
+      <span class="badge bg-dark" style="padding: 5px;">{{solicitacao.get_projeto_display}}</span>
+      {% endif %}
+    </td>
+    <td>{{solicitacao.data_solicitacao|date:'d/m/Y'}}</td>
+  <td>{% if solicitacao.evento_json.tipo_formatado %}{{solicitacao.evento_json.tipo_formatado}}{%else%}{{solicitacao.evento_json.titulo_evento}}  {% endif %}</td>
+  <td>{% if solicitacao.evento_json.data_inicio_formatada %} {{solicitacao.evento_json.data_inicio_formatada}} até {{solicitacao.evento_json.data_fim_formatada}} {% else %} {{solicitacao.evento_json.data_inicio}} até {{solicitacao.evento_json.data_fim}} {% endif %}</td>
+  <td>{{solicitacao.criado_por.first_name}}</td>
+  <td><span style="color:#c5221f">{{solicitacao.entregaveis_pendentes}}</span> / <span style="color:#c5221f">{{solicitacao.entregaveis_totais}}</span></td>
+  <td><span style="color:#0b942b">{{solicitacao.entregaveis_concluidos}}</span> / <span style="color:#0b942b">{{solicitacao.entregaveis_totais}}</span></td>
+  <td>
+
+
+    {% if solicitacao.status_solicitacao == 1 %}
+    <span class="badge bg-primary">{{solicitacao.get_status_display}}</td></span>
+    {% elif solicitacao.status_solicitacao == 2 %}
+    <span class="badge bg-warning">{{solicitacao.get_status_display}}</td></span>
+    {% elif solicitacao.status_solicitacao == 3 %}
+    <span class="badge bg-success">{{solicitacao.get_status_display}}</td></span>
+    {% elif solicitacao.status_solicitacao == 4 %}
+    <span class="badge bg-danger">{{solicitacao.get_status_display}}</td></span>
+  {% endif %}
+  </tr>
+  {% endif %}
+{% endfor %}

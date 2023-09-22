@@ -30,6 +30,7 @@
   padding: 10px;
   text-align: left;
   position: relative;
+  font-size: 13px;
   }
 
   
@@ -147,6 +148,7 @@
 
   
   </style>
+  <script src="https://unpkg.com/htmx.org@1.9.5" integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO" crossorigin="anonymous"></script>
    <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -203,7 +205,87 @@
     
                     </ul>
                   </div>
+
                   <div class="card-body">
+                    <form id="formFilters">
+                      <div class="row">
+
+                        <div class="col-12 col-sm-12 col-md-3">
+                          <div class="form-group">
+                          <label>Projeto:</label>
+                        
+                          <div class="input-group">
+                  
+                              <select style="width: 100%;"  class="form-control" name="projeto" onchange="sendFilter()" >
+                                  <option value="">Selecione o Projeto</option>
+                                  <option value="1">EFG</option>
+                                  <option value="2">COTEC</option>
+                                  <option value="3">CETT</option>
+                                  <option value="4">BASILEU</option>
+                                </select>
+                          </div>
+                          <!-- /.input group -->
+                          </div>
+                        </div>
+
+                        
+
+                        <div class="col-12 col-sm-12 col-md-3">
+                          <div class="form-group">
+                          <label>Data da Solicitação:</label>
+                        
+                          <div class="input-group">
+                  
+                             <input type="date" name="data_solicitacao" id="data_solicitacao" class="form-control">
+                          </div>
+                          <!-- /.input group -->
+                          </div>
+                        </div>
+
+                        <div class="col-12 col-sm-12 col-md-3">
+                          <div class="form-group">
+                          <label>Evento:</label>
+                        
+                          <div class="input-group">
+                  
+                              <select style="width: 100%;"  class="form-control select2" name="evento" onchange="sendFilter()" >
+                                <option value="">Selecione o Evento</option>
+                                {% for solicitacao in solicitacoes %}
+                                  {% if solicitacao.evento_json.id %}
+                                    <option value="{{solicitacao.evento_json.id}}">{{solicitacao.evento_json.tipo_formatado}}</option>
+                                  {% else %}
+                                  <option value="{{solicitacao.evento_json.titulo_evento}}">{{solicitacao.evento_json.titulo_evento}}</option>
+                                  {% endif %}
+                                  {% endfor %}
+
+                                </select>
+                          </div>
+                          <!-- /.input group -->
+                          </div>
+                        </div>
+
+                   
+
+                        <div class="col-12 col-sm-12 col-md-3">
+                          <div class="form-group">
+                          <label>Solicitante:</label>
+                        
+                          <div class="input-group">
+                  
+                              <select style="width: 100%;"  class="form-control select2" name="solicitante" onchange="sendFilter()" >
+                                <option value="">Selecione um Usuário</option>
+                                {% for usuario in usuarios %}
+                                   <option value="{{usuario.id}}">{{usuario.first_name}}</option>
+                                 {% endfor %}
+                                </select>
+                          </div>
+                          <!-- /.input group -->
+                          </div>
+                        </div>
+                      </div>
+                    
+                    </form>
+                   
                     <div class="tab-content" id="custom-tabs-two-tabContent">
                       <div class="tab-pane fade show active" id="custom-tabs-two-home" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
                         <table style="margin-top: 10px;">
@@ -222,7 +304,7 @@
                               
                             </tr>
                           </thead>
-                          <tbody id="resultados">
+                          <tbody id="resultados_andamento">
                 
                             {% for solicitacao in solicitacoes %}
                             {% if solicitacao.status_solicitacao != 3 %}
@@ -285,7 +367,7 @@
                                   
                                 </tr>
                               </thead>
-                              <tbody id="resultados">
+                              <tbody id="resultados_concluidos">
                     
                                 {% for solicitacao in solicitacoes %}
                                 {% if solicitacao.status_solicitacao == 3 %}
@@ -534,7 +616,18 @@
 
   <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
   <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Obtém o campo de data
+        const dataSolicitacaoInput = document.getElementById("data_solicitacao");
+        const dataEventoInput = document.getElementById("reservation");
 
+        // Adiciona um ouvinte de evento ao campo de data para detectar mudanças
+        dataSolicitacaoInput.addEventListener("input", function() {
+           sendFilter()
+        });
+
+
+    });
     function acessarSolicitacao(solicitacaoId){
       window.location.href = "/solicitacoes/visualizar/"+solicitacaoId;
     }
@@ -624,5 +717,73 @@
                 }
             });
     }
+  
+    function sendFilter(){
+      var form = document.getElementById("formFilters");
+      var formData = new FormData(form);
+      var url = '/filter-project';
+      var url2 = '/filter-project-concluido'
+      // Adiciona manualmente os valores dos campos do formulário ao objeto formData
+      // formData.append("campo_extra", "valor_extra");
+
+      // Converte o objeto formData em uma string no formato de consulta GET $("#resultados_concluidos").html(data);
+      var queryString = new URLSearchParams(formData).toString();
+
+      // Concatena a string de consulta GET à URL
+      url += "?" + queryString;
+      url2 += "?" + queryString;
+
+      $.ajax({
+          url: url,
+          type: 'GET',
+          beforeSend: function(xhr) {
+              // Exibe o spinner com fundo escuro enquanto aguarda a resposta
+              $('#spinner-background').show();
+          },
+          success: function(data) {
+              $("#resultados_andamento").html(data);
+              
+          },
+          complete: function() {
+              // Esconde o spinner com fundo escuro quando a resposta é recebida
+              $('#spinner-background').hide();
+          },
+          error: function(xhr, status, error) {
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Ops!',
+                  text: 'Não foi possível obter resultados!'
+              });
+          }
+      });
+
+      $.ajax({
+          url: url2,
+          type: 'GET',
+          beforeSend: function(xhr) {
+              // Exibe o spinner com fundo escuro enquanto aguarda a resposta
+              $('#spinner-background').show();
+          },
+          success: function(data) {
+              $("#resultados_concluidos").html(data)
+              
+          },
+          complete: function() {
+              // Esconde o spinner com fundo escuro quando a resposta é recebida
+              $('#spinner-background').hide();
+          },
+          error: function(xhr, status, error) {
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Ops!',
+                  text: 'Não foi possível obter resultados!'
+              });
+          }
+      });
+
+    }
+
   </script>
+
+
   {% endblock %}
