@@ -26,7 +26,7 @@ def Dashboard(request):
     permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first()
     departamento = permissoes.departamento_id
     if departamento == 1:
-        solicitacao = Solicitacoes.objects.all()
+        solicitacao = Solicitacoes.objects.all().order_by('prazo_entrega')
         solicitacoes = Solicitacao_Serializar(solicitacao,many=True).data
         usuarios = User.objects.all()
 
@@ -44,17 +44,20 @@ def Dashboard(request):
 
     for solicitacao in solicitacoes:
         solicitacao['data_solicitacao'] = datetime.datetime.strptime(solicitacao['data_solicitacao'], '%Y-%m-%d').date()
+        try:
+            solicitacao['prazo_entrega'] = datetime.datetime.strptime(solicitacao['prazo_entrega'], '%Y-%m-%d').date()
+        except:
+             solicitacao['prazo_entrega'] = ''
         
     return render(request,'dashboard.html',{'solicitacoes':solicitacoes,'permissoes':permissoes, 'usuarios':usuarios})
 
 @login_required(login_url='/')
 def Filter(request):
-    {'projeto': ['2'], 'data_solicitacao': ['2023-10-10'], 'evento': ['1'], 'data_evento': ['21/09/2023 - 29/09/2023'], 'solicitante': ['4']}
-    {"escola": "24", "endereco": "1\u00aa Avenida - Setor Leste Universit\u00e1rio - N\u00ba 815 - 74605-020 - GOI\u00c2NIA", "data_inicio": "10/10/2023", "data_fim": "11/10/2023", "titulo_evento": "Evento de Teste"}
+ 
     projeto = request.GET.get('projeto','')
     data_solicitacao = request.GET.get('data_solicitacao','')
     evento = request.GET.get('evento','').strip()
-    data_evento = request.GET.get('data_evento','')
+    prazo_entrega = request.GET.get('prazo_entrega','')
     solicitante = request.GET.get('solicitante','')
     solicitacao = Solicitacoes.objects.all()
 
@@ -64,6 +67,9 @@ def Filter(request):
 
     if data_solicitacao:
         solicitacao = solicitacao.filter(data_solicitacao=data_solicitacao)
+
+    if prazo_entrega:
+        solicitacao = solicitacao.filter(prazo_entrega=prazo_entrega)
 
     if evento:
         try:

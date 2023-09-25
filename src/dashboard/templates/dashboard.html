@@ -210,7 +210,7 @@
                     <form id="formFilters">
                       <div class="row">
 
-                        <div class="col-12 col-sm-12 col-md-3">
+                        <div class="col-12 col-sm-12 col-md-2">
                           <div class="form-group">
                           <label>Projeto:</label>
                         
@@ -230,7 +230,7 @@
 
                         
 
-                        <div class="col-12 col-sm-12 col-md-3">
+                        <div class="col-12 col-sm-12 col-md-2">
                           <div class="form-group">
                           <label>Data da Solicitação:</label>
                         
@@ -241,6 +241,19 @@
                           <!-- /.input group -->
                           </div>
                         </div>
+
+                        <div class="col-12 col-sm-12 col-md-2">
+                          <div class="form-group">
+                          <label>Prazo de Entrega</label>
+                        
+                          <div class="input-group">
+                  
+                             <input type="date" name="prazo_entrega" id="prazo_entrega" class="form-control">
+                          </div>
+                          <!-- /.input group -->
+                          </div>
+                        </div>
+
 
                         <div class="col-12 col-sm-12 col-md-3">
                           <div class="form-group">
@@ -297,8 +310,8 @@
                               <th>Evento</th>
                               <th>Data do Evento</th>
                               <th>Solicitante</th>
-                              <th>Demandas Pendentes</th>
-                              <th>Demandas Concluidas</th>
+                              <th>Prazo de Entrega</th>
+                              <th>Demandas Concluídas</th>
                               <th>Status</th>
       
                               
@@ -326,8 +339,8 @@
                               <td>{% if solicitacao.evento_json.tipo_formatado %}{{solicitacao.evento_json.tipo_formatado}}{%else%}{{solicitacao.evento_json.titulo_evento}}  {% endif %}</td>
                               <td>{% if solicitacao.evento_json.data_inicio_formatada %} {{solicitacao.evento_json.data_inicio_formatada}} até {{solicitacao.evento_json.data_fim_formatada}} {% else %} {{solicitacao.evento_json.data_inicio}} até {{solicitacao.evento_json.data_fim}} {% endif %}</td>
                               <td>{{solicitacao.criado_por.first_name}}</td>
-                              <td><span style="color:#c5221f">{{solicitacao.entregaveis_pendentes}}</span> / <span style="color:#c5221f">{{solicitacao.entregaveis_totais}}</span></td>
-                              <td><span style="color:#0b942b">{{solicitacao.entregaveis_concluidos}}</span> / <span style="color:#0b942b">{{solicitacao.entregaveis_totais}}</span></td>
+                              <td>{% if solicitacao.prazo_entrega %}{{solicitacao.prazo_entrega|date:'d/m/Y'}} {% else %} N/A {% endif %}</td>
+                              <td> <span style="color:#0b942b">{{solicitacao.entregaveis_concluidos}}</span> / <span style="color:#0b942b">{{solicitacao.entregaveis_totais}}</span></td>
                               <td>
                       
               
@@ -360,7 +373,7 @@
                                   <th>Evento</th>
                                   <th>Data do Evento</th>
                                   <th>Solicitante</th>
-                                  <th>Demandas Pendentes</th>
+                                  <th>Prazo de Entrega</th>
                                   <th>Demandas Concluidas</th>
                                   <th>Status</th>
           
@@ -389,8 +402,8 @@
                                   <td>{% if solicitacao.evento_json.tipo_formatado %}{{solicitacao.evento_json.tipo_formatado}}{%else%}{{solicitacao.evento_json.titulo_evento}}  {% endif %}</td>
                                   <td>{% if solicitacao.evento_json.data_inicio_formatada %} {{solicitacao.evento_json.data_inicio_formatada}} até {{solicitacao.evento_json.data_fim_formatada}} {% else %} {{solicitacao.evento_json.data_inicio}} até {{solicitacao.evento_json.data_fim}} {% endif %}</td>
                                   <td>{{solicitacao.criado_por.first_name}}</td>
-                                  <td><span style="color:#c5221f">{{solicitacao.entregaveis_pendentes}}</span> / <span style="color:#c5221f">{{solicitacao.entregaveis_totais}}</span></td>
-                                  <td><span style="color:#0b942b">{{solicitacao.entregaveis_concluidos}}</span> / <span style="color:#0b942b">{{solicitacao.entregaveis_totais}}</span></td>
+                                  <td>{% if solicitacao.prazo_entrega %}{{solicitacao.prazo_entrega|date:'d/m/Y'}} {% else %} N/A {% endif %}</td>
+                                  <td> <span style="color:#0b942b">{{solicitacao.entregaveis_concluidos}}</span> / <span style="color:#0b942b">{{solicitacao.entregaveis_totais}}</span></td>
                                   <td>
                           
                   
@@ -619,10 +632,15 @@
     document.addEventListener("DOMContentLoaded", function() {
         // Obtém o campo de data
         const dataSolicitacaoInput = document.getElementById("data_solicitacao");
+        const prazoEntregaInput = document.getElementById("prazo_entrega");
         const dataEventoInput = document.getElementById("reservation");
 
         // Adiciona um ouvinte de evento ao campo de data para detectar mudanças
         dataSolicitacaoInput.addEventListener("input", function() {
+           sendFilter()
+        });
+
+        prazoEntregaInput.addEventListener("input", function() {
            sendFilter()
         });
 

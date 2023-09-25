@@ -13,6 +13,7 @@ class  Solicitacao_Serializar(serializers.ModelSerializer):
                 "publico_evento",
                 "criado_por",
                 "data_solicitacao",
+                "prazo_entrega",
                 "entregaveis_concluidos",
                 "entregaveis_totais",
                 "entregaveis_pendentes",

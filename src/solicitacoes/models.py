@@ -17,6 +17,7 @@ class Solicitacoes(models.Model):
     publico_evento = models.TextField(null=True,blank=True)
     criado_por = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
     data_solicitacao = models.DateField(default=timezone.now,null=True,blank=True)
+    prazo_entrega =  models.DateField(null=True,blank=True)
     status = models.IntegerField(choices=choices_status, blank=False, null=False,default=1)
 
 
@@ -184,10 +185,7 @@ class Tarefas(models.Model):
     
     def get_status_display(self):
         return dict(self.choices_status)[str(self.status)]
-    
-    def get_tipo_display(self):
-        return dict(self.choices_tipo)[str(self.tipo)]
-    
+
 
     class  Meta:
         db_table = 'tarefas'

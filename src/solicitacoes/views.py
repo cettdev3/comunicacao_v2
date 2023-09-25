@@ -66,6 +66,10 @@ def Visualizar_Solicitacao(request,codigo):
     if solicitacao.criado_por_id == request.user.id or permissoes.departamento_id == 1:
         solicitacao = Solicitacao_Serializar(solicitacao).data
         solicitacao['data_solicitacao'] = datetime.datetime.strptime(solicitacao['data_solicitacao'], '%Y-%m-%d').date()
+        try:
+            solicitacao['prazo_entrega'] = datetime.datetime.strptime(solicitacao['prazo_entrega'], '%Y-%m-%d').date()
+        except:
+                solicitacao['prazo_entrega'] = ''
         
         programacao_adicional = Programacao_Adicional.objects.filter(solicitacao_id=codigo).all()
 
@@ -128,13 +132,14 @@ def Ajax_Realiza_Solicitacao(request):
             divulgacao_check = request.POST.get('divulgacao_check',None)
             programacao_check = request.POST.get('programacao_check',None)
             stand_check = request.POST.get('stand_check',None)
+            prazo_entrega = request.POST.get('prazo_entrega',None)
             userid = request.user.id
 
             if idEvento != 'und':
                 tipoUnidade = request.POST.get('tipo_und',None)
                 token = get_token_api_eventos()
                 json_evento = get_evento(token,idEvento)
-                # json_string = str(json_evento).replace("'", "\"")
+
                 print(request.user.id)
 
                 #ANTES VERIFICA SE A SOLICITAÇÃO JÁ EXISTE
@@ -148,6 +153,7 @@ def Ajax_Realiza_Solicitacao(request):
                         publico_evento = publicoEvento,
                         criado_por_id = userid,
                         evento_json = json_evento,
+                        prazo_entrega = prazo_entrega,
                     )
         
                 
@@ -180,6 +186,7 @@ def Ajax_Realiza_Solicitacao(request):
                     publico_evento = publicoEvento,
                     criado_por_id = userid,
                     evento_json = json_evento,
+                    prazo_entrega = prazo_entrega,
                 )
 
 
@@ -228,7 +235,7 @@ def Ajax_Realiza_Solicitacao(request):
                 for dado in dadosForm:
                     if 'prazo_save_the_date' in dado:
                         if dado == 'prazo_save_the_date':
-                            prazo_save_the_date = request.POST.get(dado,None)
+                            prazo_save_the_date = prazo_entrega
                             exemploarte_save_the_date = request.FILES.get('exemploarte_save_the_date',None)
                             tipoproduto_save_the_date = request.POST.get('tipoproduto_save_the_date',None)
                             categoriaproduto_save_the_date = request.POST.get('categoriaproduto_save_the_date',None)
@@ -300,7 +307,7 @@ def Ajax_Realiza_Solicitacao(request):
                 for dado in dadosForm:
                     if 'prazo_divulgacao' in dado:
                         if dado == 'prazo_divulgacao':
-                            prazo_divulgacao = request.POST.get('prazo_divulgacao',None)
+                            prazo_divulgacao = prazo_entrega
                             exemploarte_divulgacao = request.FILES.get('exemploarte_divulgacao',None)
                             tipoproduto_divulgacao = request.POST.get('tipoproduto_divulgacao',None)
                             categoriaproduto_divulgacao = request.POST.get('categoriaproduto_divulgacao',None)
@@ -370,7 +377,7 @@ def Ajax_Realiza_Solicitacao(request):
                 for dado in dadosForm:
                     if 'prazo_programacao' in dado:
                         if dado == 'prazo_programacao':
-                            prazo_programacao = request.POST.get('prazo_programacao',None)
+                            prazo_programacao = prazo_entrega
                             exemploarte_programacao = request.FILES.get('exemploarte_programacao',None)
                             tipoproduto_programacao = request.POST.get('tipoproduto_programacao',None)
                             categoriaproduto_programacao = request.POST.get('categoriaproduto_programacao',None)
@@ -440,7 +447,7 @@ def Ajax_Realiza_Solicitacao(request):
                 for dado in dadosForm:
                     if 'prazo_stand' in dado:
                         if dado == 'prazo_stand':
-                            prazo_stand = request.POST.get('prazo_stand',None)
+                            prazo_stand = prazo_entrega
                             exemploarte_stand = request.FILES.get('exemploarte_stand',None)
                             tipoproduto_stand = request.POST.get('tipoproduto_stand',None)
                             categoriaproduto_stand = request.POST.get('categoriaproduto_stand',None)
