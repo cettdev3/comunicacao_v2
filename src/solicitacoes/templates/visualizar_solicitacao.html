@@ -232,7 +232,7 @@
             
                     <div class="small-box" style="background-color: #ffffff; color: #000000">
                       <div class="inner" style="text-align: center;">
-                        <h4>{{ solicitacao.prazo_entrega|date:'d/m/Y' }}</h4>
+                        <h4>{% if solicitacao.prazo_entrega%}{{ solicitacao.prazo_entrega|date:'d/m/Y' }} {% else %} N/A {% endif %}</h4>
                       </div>
                    
                       <div style="background-color: #000000;color: #FFF;" class="small-box-footer">PRAZO DE ENTREGA</div>
