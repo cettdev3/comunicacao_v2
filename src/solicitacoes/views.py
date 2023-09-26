@@ -63,7 +63,7 @@ def Visualizar_Solicitacao(request,codigo):
     evento_json = solicitacao.evento_json
 
     escola = Escolas.objects.filter(id=evento_json['escola']).first()
-    if solicitacao.criado_por_id == request.user.id or permissoes.departamento_id == 1:
+    if solicitacao.criado_por_id == request.user.id or permissoes.departamento_id == 1 or '9' in permissoes.permissao:
         solicitacao = Solicitacao_Serializar(solicitacao).data
         solicitacao['data_solicitacao'] = datetime.datetime.strptime(solicitacao['data_solicitacao'], '%Y-%m-%d').date()
         try:
