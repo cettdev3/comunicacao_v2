@@ -34,7 +34,7 @@ def Get_Notifications(request):
 
 @login_required(login_url='/')
 def Read_Notify(request):
-    idNotify = request.GET['id']
-    notificacao = Notificacoes.objects.filter(id=idNotify).first()
-    # permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first()
+    idNotify = request.POST['id']
+    notificacao = Notificacoes.objects.get(id=idNotify)
+    notificacao.readonly = ''
     return render(request, 'ajax/modal_notifications.html',{'notificacao':notificacao})

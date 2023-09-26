@@ -1,0 +1,10 @@
+{% for notificacao in notificacoes %}
+{% if notificacao.readonly == 1  %}
+    <tr onclick="ModalNotifications('{{notificacao.id}}')">
+        <td>{{notificacao.id}}</td>
+        <td>{{notificacao.data|date:"d/m/Y H:i:s"}}</td>
+        <td>{{notificacao.descricao|truncatechars:50}}</td>
+        <td>{{notificacao.origem.first_name}}</td>
+    </tr>
+{% endif %}
+{% endfor %}

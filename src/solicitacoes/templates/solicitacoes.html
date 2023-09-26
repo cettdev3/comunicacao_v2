@@ -1188,7 +1188,7 @@ z-index: 9999;
                          
 
                             <div class="input-group">
-                                <button style="border: 2px solid #d4d4d4; background-color: #fafafa; color: #000000;" type="button" onclick="realizaSolicitacao()" class="btn btn-block btn-lg"><i class="fa fa-check-circle" aria-hidden="true"></i> Enviar Solicitação para Análise</button>
+                                <button style="border: 2px solid #d4d4d4; background-color: #fafafa; color: #000000;" type="button" id="btnSendSolicitacao" onclick="realizaSolicitacao()" class="btn btn-block btn-lg"><i class="fa fa-check-circle" aria-hidden="true"></i> Enviar Solicitação para Análise</button>
                             </div>
                             <!-- /.row (main row) -->
                         </form>
@@ -2409,6 +2409,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 function realizaSolicitacao(user_id, solicitacao_id) {
+    btnDesignar = document.getElementById('btnSendSolicitacao')
+    btnDesignar.disabled = true;
+
     const url = "/ajax/realiza-solicitacao";
     var form = document.getElementById("form_eventos");
     var formData = new FormData(form);  // Use FormData para incluir campos de arquivo

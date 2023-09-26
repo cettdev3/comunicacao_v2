@@ -310,6 +310,7 @@
 executarBuscaPeriodicamente();
   buscaNotificacao()
 
+
 function buscaNotificacao() {
   var XCSRFToken = '{{ csrf_token }}';
   const url = "/busca-notificacao";
@@ -332,10 +333,11 @@ function buscaNotificacao() {
         // Se houver mais de uma notificação não lida, adicione uma classe CSS para estilizar o menu
         $('.nav-link-notificacoes').addClass('com-notificacoes');
         $('#quantidade-notificacoes').text(data.notificacoes);
+       
         Swal.fire({
         icon: 'info',
         title: 'Nova Notificação!',
-        text: descricao
+        text: descricao,
       }).then((result) => {
         // Ação a ser realizada após o botão "OK" ser clicado
         if (result.isConfirmed) {

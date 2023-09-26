@@ -1080,7 +1080,7 @@
     </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-        <button type="button"n onclick="designarUsuario()" class="btn btn-primary">Designar Usuário</button>
+        <button type="button" id="designUser" onclick="designarUsuario()" class="btn btn-primary">Designar Usuário</button>
       </div>
  
     </div>
@@ -1411,6 +1411,8 @@ function modalTarefa(tarefaId){
   }
     
 function designarUsuario(){
+  btnDesignar = document.getElementById('designUser')
+  btnDesignar.disabled = true;
     var titulo_tarefa = $("#tituloTarefa_edit").val()
     var usuario_designado = $("#designar_usuario_edit").val()
     console.log(usuario_designado)
