@@ -549,7 +549,7 @@
 
                                                         {% if '7' in permissoes.permissao %}
                                                           <div class="col-lg-3 col-12">
-                                                            <button onclick="revisaoTask('{{entregavel.tarefas_relacionadas.id}}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-card-text"></i> Solicitar Revisão de Tarefa</button>
+                                                            <button onclick="revisaoTask('{{entregavel.ultima_tarefa_id.id}}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-card-text"></i> Solicitar Revisão de Tarefa</button>
                                                           </div>
                                                         {% endif %}
                                                         
@@ -911,7 +911,7 @@
       <div class="modal-body">
         <div class="row">
         
-      <input style="display: none;" type="text" value="" id="task_id"  class="form-control" name="task_id">
+      <input style="display: block;" type="text" value="" id="task_id"  class="form-control" name="task_id">
 
 
       <div class="col-12 col-sm-12 col-md-12">
