@@ -1,0 +1,395 @@
+{% extends 'menu.html' %}
+{% load static %}
+{% block content %}
+<style>
+
+
+
+  table {
+  
+    border: 1px solid #cacaca;
+  border-collapse: collapse;
+  text-align: left;
+  width: 100%;
+  align-items: center;
+  font-family: 'Open Sans', sans-serif;
+  }
+  
+  table thead th {
+  
+  padding: 10px;
+  font-size: 12px;
+  color: #000;
+  font-weight: 600;
+  }
+  
+  table tbody tr td {
+  
+  display: table-cell;
+  font-weight: 400;
+  padding: 10px;
+  text-align: left;
+  position: relative;
+  }
+
+  
+  
+  table tbody tr {
+  
+  border: 1px solid #cacaca;
+  display: table-row;
+  }
+  
+  table tbody tr:nth-child(odd) {
+  
+  background: #dddddd4a;
+  }
+  
+  table tbody tr td button {
+  
+  display: inline-block;
+  padding: 10px 15px;
+  position: initial;
+  transform: translate(0);
+  width: auto;
+  }
+  
+  table tbody tr td button {
+  
+  background: #4CAF50;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(34, 34, 34, 0.2);
+  color: #fff;
+  font-weight: 700;;
+  padding: 10px 0;
+  width: 100%;
+  }
+  
+  table thead {
+  
+  display: table-header-group;
+  font-weight: 500;
+  }
+  
+  table tbody tr:hover {
+    background-color: #7e7e7e8d; /* Cor de fundo quando o mouse passa por cima */
+    cursor: pointer; /* Altera o cursor para indicar que é clicável */
+}
+  
+  table tbody tr td:before {
+  
+  display: none;
+  }
+  
+  table tbody tr td button:hover, table tbody tr td button:focus {
+  
+  background: #0C504B;
+  color: #ffffff;
+  cursor: pointer;
+  }
+  
+  @media all and (max-width: 800px) {
+  
+  table tbody tr td {
+  
+      display: block;
+      text-align: center;
+  }
+  
+  table tbody tr td:before {
+  
+      content: attr(data-title);
+      position: absolute;
+      left: 15px;
+      display: block;
+      font-weight: 600;
+      font-size: 1em;
+  }
+  
+  table {
+  
+      border: none;
+  }
+  
+  table thead {
+  
+      display: none;
+  }
+  
+  table tbody tr {
+  
+      margin-bottom: 10px;
+      display: block;
+      border: 1px solid #dad6eb;
+  }
+  
+  
+  }
+
+  .modal-dialog-full {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+  }
+  
+  .modal-content-full {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+  }
+  
+  .modal-body-full {
+    overflow-y: auto;
+  }
+ 
+
+  
+  </style>
+   <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Notificações</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="/solicitacoes">Home</a></li>
+              <li class="breadcrumb-item active">Notificações</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+<section class="content">
+    <div class="container-fluid">
+    
+      
+
+          
+      <div class="card">
+        <div class="card-header" style="background-color: #fafafa;">
+          <h3 class="card-title" style="color:#000000; font-weight: bold;">Gerenciamento de Notificações</h3>
+
+        </div>
+        <!-- /.card-header -->
+        <div class="card">
+          {% if messages %}
+          {% for message in messages%}
+          <div {% if message.tags %} class="{{ message.tags }}"{% endif %} style="text-align: center;" role="alert">
+          {{message}}
+          </div>
+          {% endfor %}
+          {% endif  %}
+          <!-- /.card-header -->
+          
+          <div class="card-body">
+            <div class="form-group">
+              <div class="card card-dark card-tabs">
+                <div class="card-header p-0 pt-1">
+                  <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+                    <li class="pt-2 px-3"><h3 class="card-title">Notificações</h3></li>
+                    <li class="nav-item">
+                      <a class="nav-link active" id="notify-receiver-tab" data-toggle="pill" href="#notify-receiver" role="tab" aria-controls="notify-receiver" aria-selected="true">Notificações Não Lidas</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="notify-read-tab" data-toggle="pill" href="#notify-read" role="tab" aria-controls="notify-read" aria-selected="false">Notificações Lidas</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="notify-send-tab" data-toggle="pill" href="#notify-send" role="tab" aria-controls="notify-send" aria-selected="false">Notificações Enviadas</a>
+                      </li>
+  
+
+                  </ul>
+                </div>
+                <div class="card-body">
+                  <div class="tab-content" id="custom-tabs-two-tabContent">
+
+                    <div class="tab-pane fade active show" id="notify-receiver" role="tabpanel" aria-labelledby="notify-receiver-tab">
+                      <div class="row">
+
+                        <div class="col-12 col-sm-12 col-md-12">
+                          <table style="margin-top: 10px;">
+                            <thead>
+                              <tr>
+                                <th>#</th>
+                                <th>Data/Hora</th>
+                                <th>Notificação</th>
+                                <th>Origem</th>
+                               
+        
+                                
+                              </tr>
+                            </thead>
+                            <tbody id="notifyReceiver">
+                            {% for notificacao in notificacoes %}
+                                {% if notificacao.readonly == 1  %}
+                                    <tr onclick="ModalNotifications('{{notificacao.id}}')">
+                                        <td>{{notificacao.id}}</td>
+                                        <td>{{notificacao.data|date:"d/m/Y H:i:s"}}</td>
+                                        <td>{{notificacao.descricao|truncatechars:50}}</td>
+                                        <td>{{notificacao.origem.first_name}}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                            
+                          </table>
+                        </div>
+        
+                      </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="notify-read" role="tabpanel" aria-labelledby="notify-read-tab">
+                      <div class="row">
+
+                        <div class="col-12 col-sm-12 col-md-12">
+                          <table style="margin-top: 10px;">
+                            <thead>
+                              <tr>
+                                   <th>#</th>
+                                <th>Data/Hora</th>
+                                <th>Descricao</th>
+                                <th>Origem</th>
+        
+                                
+                              </tr>
+                            </thead>
+                            <tbody>
+
+                                {% for notificacao in notificacoes %}
+                                    {% if notificacao.readonly == 2  %}
+                                    <tr>
+                                        <td>{{notificacao.id}}</td>
+                                        <td>{{notificacao.data|date:"d/m/Y H:i:s"}}</td>
+                                        <td>{{notificacao.descricao|truncatechars:50}}</td>
+                                        <td>{{notificacao.origem.first_name}}</td>
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                            
+                          </table>
+                        </div>
+        
+                      </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="notify-send" role="tabpanel" aria-labelledby="notify-send-tab">
+                        <div class="row">
+  
+                          <div class="col-12 col-sm-12 col-md-12">
+                            <table style="margin-top: 10px;">
+                              <thead>
+                                <tr>
+                                     <th>#</th>
+                                  <th>Data/Hora</th>
+                                  <th>Descricao</th>
+                                  <th>Origem</th>
+          
+                                  
+                                </tr>
+                              </thead>
+                              <tbody id="resultados">
+                    
+                                  <tr>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                   </tr>
+                                
+                              </tbody>
+                              
+                            </table>
+                          </div>
+          
+                        </div>
+                    </div>
+
+                  
+                  </div>
+                </div>
+                <!-- /.card -->
+              </div>
+            
+              <br>
+    
+              
+              
+              <br><br><br>
+              <!-- /.input group -->
+            </div>
+            
+        
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+        <!-- /.card-body -->
+      </div>
+
+    </div><!-- /.container-fluid -->
+    
+  </section>
+
+<!-- Full screen modal -->
+
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" style="display: none;" aria-hidden="true">
+
+
+
+</div>
+
+
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+
+<script>
+
+function ModalNotifications(notificationsId) {
+  var XCSRFToken = '{{ csrf_token }}';
+  const url = "/get-notifications";
+
+  $.ajax({
+    url: url,
+    type: "get",
+    data: { 'id': notificationsId },
+    headers: { "X-CSRFToken": XCSRFToken },
+    success: function (data) {
+        $("#exampleModalCenter").html(data);
+        $("#exampleModalCenter").modal('show')
+
+    }
+
+  });
+}
+
+function MarcarNotifyRead(idNotify){
+    var XCSRFToken = '{{ csrf_token }}';
+    const url = "/notify-read";
+
+    $.ajax({
+        url: url,
+        type: "post",
+        data: { 'id': notificationsId },
+        headers: { "X-CSRFToken": XCSRFToken },
+        success: function (data) {
+            $("#notifyReceiver").html(data);
+            Swal.fire({
+                        icon: 'success',
+                        title: 'Notificação Lida!',
+                        text: "A notificação foi marcada como lida!"
+                    });
+
+        }
+
+    });
+}
+</script>
+{% endblock %}

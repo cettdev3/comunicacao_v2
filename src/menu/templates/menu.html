@@ -80,6 +80,11 @@
 .close-modalPersonalizada:hover {
     color: red;
 }
+.com-notificacoes {
+  border: 2px solid #ffc107;
+  color: #ffc107 !important
+  /* Outros estilos conforme necessário */
+}
 
   </style>
 </head>
@@ -213,7 +218,7 @@
               <li class="nav-item">
     
                 <a href="/gerir-time" class="nav-link {% if request.path == '/gerir-time' %} active{% endif %}">
-                  <i class="nav-icon fa fa-users"></i>
+                  <i class="nav-icon bi bi-people"></i>
                   <p>
                     Gerir Time
                  
@@ -225,7 +230,7 @@
         {% if '5' in permissoes.permissao %}  
           <li class="nav-item">
             <a href="/realizar-solicitacoes" class="nav-link {% if request.path == '/realizar-solicitacoes' or '/solicitacao/visualizar/' in request.path %} active{% endif %}">
-              <i class="nav-icon fa fa-sticky-note"></i>
+              <i class="nav-icon bi bi-card-checklist"></i>
               <p>
                 Realizar Solicitações
              
@@ -234,7 +239,15 @@
           </li>
           {% endif %}
 
-        
+          <li class="nav-item">
+            <a href="/notificacoes" class="nav-link {% if request.path == '/notificacoes' %} active{% endif %} nav-link-notificacoes">
+              <i class="nav-icon bi bi-bell-fill"> </i> <span style="font-size: 13px; font-weight: bold;" class="badge badge-warning navbar-badge" id="quantidade-notificacoes"></span>
+              <p>
+                Notificações
+             
+              </p>
+            </a>
+          </li>
 
         </ul>
         
@@ -275,6 +288,8 @@
 
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script src="{% static 'plugins/summernote/summernote-bs4.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
   $(function () {
     //Add text editor
@@ -282,6 +297,64 @@
     $('#compose-textarea-modal').summernote()
    
   })
+  
+  async function executarBuscaPeriodicamente() {
+    console.log('Buscando notificacoes')
+  while (true) {
+    await buscaNotificacao();
+    await new Promise(resolve => setTimeout(resolve, 5 * 60 * 1000)); // Aguarda 5 minutos
+  }
+}
+
+// Iniciar a execução periódica
+executarBuscaPeriodicamente();
+  buscaNotificacao()
+
+function buscaNotificacao() {
+  var XCSRFToken = '{{ csrf_token }}';
+  const url = "/busca-notificacao";
+  var descricao = ''
+  $.ajax({
+    url: url,
+    type: "get",
+    data: { 'usuario': '{{ request.user.id }}' },
+    headers: { "X-CSRFToken": XCSRFToken },
+    success: function (data) {
+
+      if (data.notificacoes > 0) {
+        if(data.notificacoes == 1){
+          descricao = "Voce possui " + data.notificacoes + " notificação pendente"
+        }
+
+        if(data.notificacoes > 1){
+          descricao = "Voce possui " + data.notificacoes + " notificações pendente"
+        } 
+        // Se houver mais de uma notificação não lida, adicione uma classe CSS para estilizar o menu
+        $('.nav-link-notificacoes').addClass('com-notificacoes');
+        $('#quantidade-notificacoes').text(data.notificacoes);
+        Swal.fire({
+        icon: 'info',
+        title: 'Nova Notificação!',
+        text: descricao
+      }).then((result) => {
+        // Ação a ser realizada após o botão "OK" ser clicado
+        if (result.isConfirmed) {
+          // Redirecionar ou atualizar a página aqui
+        
+        }
+      });
+      } else {
+        // Se não houver notificações não lidas, remova a classe CSS
+        $('.nav-link-notificacoes').removeClass('com-notificacoes');
+        $('#quantidade-notificacoes').empty();
+      }
+
+
+    },
+
+  });
+}
+
 </script>
 <!-- Ekko Lightbox -->
 <script src="{% static 'plugins/ekko-lightbox/ekko-lightbox.min.js' %}"></script>
