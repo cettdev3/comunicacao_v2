@@ -2446,9 +2446,13 @@ function realizaSolicitacao(user_id, solicitacao_id) {
                     icon: 'success',
                     title: 'Solicitação Realizada!',
                     text: 'Sua solicitação foi realizada com sucesso!'
-                });
-                console.log('')
-                window.location.href = 'solicitacoes';
+                }).then((result) => {
+                // Ação a ser realizada após o botão "OK" ser clicado
+                if (result.isConfirmed) {
+                    // Redirecionar ou atualizar a página aqui
+                    window.location.href = 'solicitacoes';
+                }
+            });              
             },
             error: function (data) {
                 if (data.responseJSON && data.responseJSON.error_message) {

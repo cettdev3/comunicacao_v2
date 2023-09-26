@@ -4,6 +4,8 @@ from gerir_time.models import Permissoes
 from .models import Notificacoes
 from django.http import JsonResponse
 import requests
+from django.contrib.auth.models import User
+from django.db import transaction
 
 @login_required(login_url='/')
 def Permissoes_Menu(request):
@@ -22,8 +24,10 @@ def Notifications(request):
 @login_required(login_url='/')
 def Notificacoes_User(request):
     notificacoes = Notificacoes.objects.filter(user_id = request.user.id).all()
+    notificacoes_enviadas = Notificacoes.objects.filter(origem_id = request.user.id).all()
     permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first()
-    return render(request, 'notificacoes.html',{'notificacoes':notificacoes,'permissoes':permissoes})
+    usuarios = User.objects.all()
+    return render(request, 'notificacoes.html',{'notificacoes':notificacoes,'permissoes':permissoes,'usuarios':usuarios,'notificacoes_enviadas':notificacoes_enviadas})
 
 @login_required(login_url='/')
 def Get_Notifications(request):
@@ -36,5 +40,15 @@ def Get_Notifications(request):
 def Read_Notify(request):
     idNotify = request.POST['id']
     notificacao = Notificacoes.objects.get(id=idNotify)
-    notificacao.readonly = ''
-    return render(request, 'ajax/modal_notifications.html',{'notificacao':notificacao})
+    notificacao.readonly = 2
+    notificacao.save()
+    
+    return render(request, 'ajax/tbl_notify_unread.html',{'notificacao':notificacao})
+
+@login_required(login_url='/')
+def Send_Notify(request):
+
+    user_id = request.POST['user_id']
+    notificacao = request.POST['notificacao']
+    notify = Notificacoes.objects.create(user_id = user_id, descricao = notificacao, origem_id = request.user.id)
+    return JsonResponse({"success_message": "Solicitação Realizada!"}) 

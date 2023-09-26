@@ -247,12 +247,12 @@
 
                     <div class="tab-pane fade" id="notify-read" role="tabpanel" aria-labelledby="notify-read-tab">
                       <div class="row">
-
+            
                         <div class="col-12 col-sm-12 col-md-12">
                           <table style="margin-top: 10px;">
                             <thead>
                               <tr>
-                                   <th>#</th>
+                                <th>#</th>
                                 <th>Data/Hora</th>
                                 <th>Descricao</th>
                                 <th>Origem</th>
@@ -264,7 +264,7 @@
 
                                 {% for notificacao in notificacoes %}
                                     {% if notificacao.readonly == 2  %}
-                                    <tr>
+                                    <tr onclick="ModalNotifications('{{notificacao.id}}')">
                                         <td>{{notificacao.id}}</td>
                                         <td>{{notificacao.data|date:"d/m/Y H:i:s"}}</td>
                                         <td>{{notificacao.descricao|truncatechars:50}}</td>
@@ -282,28 +282,75 @@
 
                     <div class="tab-pane fade" id="notify-send" role="tabpanel" aria-labelledby="notify-send-tab">
                         <div class="row">
-  
+                          <div class="col-12 col-sm-12 col-md-12">
+                            <div class="form-group">
+                            <label>Usuário:</label>
+            
+                            <div class="input-group">
+                               
+                                <select style="width: 100%;"  class="form-control select2" id="notificar_usuario" name="notificar_usuario" required>
+                                    {% for usuario in usuarios %}
+                                      {% if usuario.id != request.user.id %}
+                                        <option value="{{usuario.id}}" {% if solicitacao.criado_por_id == usuario.id %} selected {% endif %}>{{usuario.first_name}}</option>
+                                      {%  endif %}
+                                    {% endfor %}
+                                  </select>
+                            </div>
+                            <!-- /.input group -->
+                            </div>
+                          </div>
+
+                          <div class="col-12 col-sm-12 col-md-12" id="observacao_field_save_the_date">
+                
+                              <div class="card card-dark card-outline">
+                                <div class="card-header">
+                                  <h3 class="card-title">Notificação</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                
+                                  <div class="form-group">
+                                      <textarea name="notificacao" id="notificacao" class="form-control summernote" style="height: 300px"></textarea>
+                                  </div>
+                                  <button style="width: 100%;" onclick="EnviarNotificacao()" type="button" class="btn btn-warning">Enviar Notificação</button>
+                                </div>
+                                <!-- /.card-body -->
+                               
+                              </div>
+                              <!-- /.card -->
+                         
+                          </div>
+
                           <div class="col-12 col-sm-12 col-md-12">
                             <table style="margin-top: 10px;">
                               <thead>
                                 <tr>
-                                     <th>#</th>
+                                  <th>#</th>
                                   <th>Data/Hora</th>
                                   <th>Descricao</th>
+                                  <th>Destino</th>
                                   <th>Origem</th>
+                                  <th>Status</th>
           
                                   
                                 </tr>
                               </thead>
-                              <tbody id="resultados">
-                    
-                                  <tr>
-                                      <td></td>
-                                      <td></td>
-                                      <td></td>
-                                      <td></td>
-                                   </tr>
-                                
+                              <tbody id="notify_sends">
+                                {% for notificacao in notificacoes_enviadas %}
+                   
+                                  {% if notificacao.origem.id == request.user.id %}
+
+                                  <tr onclick="ModalNotifications('{{notificacao.id}}')">
+                                      <td>{{notificacao.id}} </td>
+                                      <td>{{notificacao.data|date:"d/m/Y H:i:s"}}</td>
+                                      <td><span>{{notificacao.descricao|striptags|truncatechars:50|safe}}</span></td>
+                                      <td>{{notificacao.user.first_name}}</td>
+                                      <td>{{notificacao.origem.first_name}}</td>
+                                      <td>{% if notificacao.readonly == 1 %} <span class="badge bg-danger">Não Lido</span> {% else %} <span class="badge bg-success">Lido</span> {% endif %}</td>
+                                    </tr>
+
+                                    {% endif %}
+                                {% endfor %}
                               </tbody>
                               
                             </table>
@@ -377,7 +424,7 @@ function MarcarNotifyRead(idNotify){
     $.ajax({
         url: url,
         type: "post",
-        data: { 'id': notificationsId },
+        data: { 'id': idNotify },
         headers: { "X-CSRFToken": XCSRFToken },
         success: function (data) {
             $("#notifyReceiver").html(data);
@@ -385,11 +432,53 @@ function MarcarNotifyRead(idNotify){
                         icon: 'success',
                         title: 'Notificação Lida!',
                         text: "A notificação foi marcada como lida!"
-                    });
+                    }).then((result) => {
+                // Ação a ser realizada após o botão "OK" ser clicado
+                if (result.isConfirmed) {
+                    // Redirecionar ou atualizar a página aqui
+                    location.reload(); // Isso atualizará a página
+                }
+            });;
+                   
 
         }
+        
 
     });
 }
+
+function EnviarNotificacao(){
+    userId = document.getElementById('notificar_usuario').value
+    notificacao = document.getElementById('notificacao').value
+
+    var XCSRFToken = '{{ csrf_token }}';
+    const url = "/notify-send";
+
+    $.ajax({
+        url: url,
+        type: "post",
+        data: { 'user_id': userId,'notificacao':notificacao },
+        headers: { "X-CSRFToken": XCSRFToken },
+        success: function (data) {
+            $("#notify_sends").html(data);
+            Swal.fire({
+                        icon: 'success',
+                        title: 'Notificação Enviada!',
+                        text: "A notificação foi enviada com sucesso!"
+                    }).then((result) => {
+                // Ação a ser realizada após o botão "OK" ser clicado
+                if (result.isConfirmed) {
+                    // Redirecionar ou atualizar a página aqui
+                    location.reload(); // Isso atualizará a página
+                }
+            });
+                   
+
+        }
+        
+
+    });
+}
+
 </script>
 {% endblock %}

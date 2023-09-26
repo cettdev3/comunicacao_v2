@@ -9,7 +9,7 @@ class Notificacoes(models.Model):
     user = models.ForeignKey(User,models.CASCADE,null=True,blank=True)
     descricao = models.TextField(null=True,blank=True)
     origem =  models.ForeignKey(User,models.CASCADE,null=True,blank=True, related_name='origem')
-    readonly = models.IntegerField(choices=choice_readonly, blank=False, null=False)
+    readonly = models.IntegerField(choices=choice_readonly, blank=False, null=False,default=1)
 
     class  Meta:
         db_table = 'notificacoes'

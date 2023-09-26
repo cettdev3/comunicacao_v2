@@ -7,11 +7,13 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>{{notificacao.descricao}}</p>
+        <span>{{notificacao.descricao|safe}}</span>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary"  data-dismiss="modal" aria-label="Close" >Fechar</button>
-        <button type="button" class="btn btn-primary">Marcar como Lida</button>
+        {% if notificacao.readonly == 1 and notificacao.user_id == request.user.id %}
+        <button type="button" onclick="MarcarNotifyRead('{{notificacao.id}}')" class="btn btn-primary">Marcar como Lida</button>
+        {% endif %}
       </div>
     </div>
   </div>
