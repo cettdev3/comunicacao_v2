@@ -15,7 +15,7 @@ import json
 from django.db.models import Q
 
 def convert_data_formatada(data):
-    print(data)
+
     data = data.split('/')
     data = data[2]+'-'+data[1]+'-'+data[0]
     return data
@@ -81,7 +81,7 @@ def Filter(request):
        
     if solicitante:
         solicitacao = solicitacao.filter(criado_por_id=solicitante)
-    print(solicitacao.values())
+
     return render(request, 'ajax/tbl_solicitacoes.html', {'solicitacoes': solicitacao})
 
 @login_required(login_url='/')
@@ -112,5 +112,4 @@ def Filter_Concluido(request):
     if solicitante:
         solicitacao = solicitacao.filter(criado_por_id=solicitante)
 
-    print(solicitacao.values())
     return render(request, 'ajax/tbl_solicitacao_finalizada.html', {'solicitacoes': solicitacao})

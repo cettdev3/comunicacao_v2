@@ -16,7 +16,7 @@ from django.contrib.auth.models import User
 from gerir_time.models import Permissoes
 
 def convert_data_formatada(data):
-    print(data)
+
     data = data.split('-')
     data = data[2]+'/'+data[1]+'/'+data[0]
     return data
@@ -103,7 +103,7 @@ def Visualizar_Solicitacao(request,codigo):
 
 @login_required(login_url='/')
 def Dados_Gerais_Evento(request):
-    print(request.GET)
+
     idEvento = request.GET['idEvento']
     if idEvento != "und":
         token = get_token_api_eventos()
@@ -120,7 +120,7 @@ def Dados_Gerais_Evento(request):
 @login_required(login_url='/')
 def Ajax_Realiza_Solicitacao(request):
     dadosForm = request.POST
-    print(dadosForm)
+
 
     with transaction.atomic():
 
@@ -140,7 +140,7 @@ def Ajax_Realiza_Solicitacao(request):
                 token = get_token_api_eventos()
                 json_evento = get_evento(token,idEvento)
 
-                print(request.user.id)
+            
 
                 #ANTES VERIFICA SE A SOLICITAÇÃO JÁ EXISTE
                 solicitacao = Solicitacoes.objects.filter(evento_json__id = idEvento,criado_por_id = request.user.id).first()
@@ -720,7 +720,7 @@ def Ajax_Altera_Solicitacao(request):
 
 @login_required(login_url='/')
 def Ajax_Change_Entregavel(request):
-    print(request.POST)
+
 
     with transaction.atomic():
         entregavelId = request.POST.get('entregavelID','')
@@ -747,7 +747,7 @@ def Ajax_Change_Entregavel(request):
 
 @login_required(login_url='/')
 def Ajax_Add_Entregavel(request):
-    print(request.POST)
+
     user_loggin = request.user.id
     with transaction.atomic():
         evento_id = request.POST.get('solicitacaoId','')

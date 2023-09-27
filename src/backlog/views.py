@@ -41,7 +41,7 @@ def Ajax_View_Task(request):
 def Ajax_Move_Task(request):
 
     with transaction.atomic():
-        print(request.POST)
+ 
         idtask = request.POST['taskId']
         step = request.POST['step']
         entrega = request.POST.get('entrega',None)
