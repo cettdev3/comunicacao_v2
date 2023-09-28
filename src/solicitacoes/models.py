@@ -105,10 +105,6 @@ class Entregaveis(models.Model):
             self.save()
 
 
-        
-
-
-
  
 
     def get_status_display(self):
