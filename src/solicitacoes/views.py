@@ -300,7 +300,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 criado_por_id = userid
                                 )
                             
- 
+
             #VERIFICA DIVULGAÇÃO
             indice = 0
             if divulgacao_check:
