@@ -79,9 +79,10 @@ def Visualizar_Solicitacao(request,codigo):
         tarefas_por_entregavel = {}
 
         for entregavel in entregaveis:
-            entregavel['prazo'] = datetime.datetime.strptime(entregavel['prazo'], '%Y-%m-%d').date()
-            entregavel['data_solicitacao'] = datetime.datetime.strptime(entregavel['data_solicitacao'], '%Y-%m-%d').date()
             try:
+                entregavel['prazo'] = datetime.datetime.strptime(entregavel['prazo'], '%Y-%m-%d').date()
+                entregavel['data_solicitacao'] = datetime.datetime.strptime(entregavel['data_solicitacao'], '%Y-%m-%d').date()
+            
                 tarefas_relacionadas = Tarefas.objects.filter(entregavel_id=entregavel['id']).all().order_by('-id')
                 
             except:
