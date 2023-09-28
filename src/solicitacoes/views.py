@@ -233,8 +233,8 @@ def Ajax_Realiza_Solicitacao(request):
             indice = 0
             if save_the_date:
                 for dado in dadosForm:
-                    if 'prazo_save_the_date' in dado:
-                        if dado == 'prazo_save_the_date':
+                    if 'pecas_save_the_date' in dado:
+                        if dado == 'pecas_save_the_date':
                             prazo_save_the_date = prazo_entrega
                             exemploarte_save_the_date = request.FILES.get('exemploarte_save_the_date',None)
                             tipoproduto_save_the_date = request.POST.get('tipoproduto_save_the_date',None)
@@ -305,8 +305,8 @@ def Ajax_Realiza_Solicitacao(request):
             indice = 0
             if divulgacao_check:
                 for dado in dadosForm:
-                    if 'prazo_divulgacao' in dado:
-                        if dado == 'prazo_divulgacao':
+                    if 'pecas_divulgacao' in dado:
+                        if dado == 'pecas_divulgacao':
                             prazo_divulgacao = prazo_entrega
                             exemploarte_divulgacao = request.FILES.get('exemploarte_divulgacao',None)
                             tipoproduto_divulgacao = request.POST.get('tipoproduto_divulgacao',None)
@@ -375,8 +375,8 @@ def Ajax_Realiza_Solicitacao(request):
             indice = 0
             if programacao_check:
                 for dado in dadosForm:
-                    if 'prazo_programacao' in dado:
-                        if dado == 'prazo_programacao':
+                    if 'pecas_programacao' in dado:
+                        if dado == 'pecas_programacao':
                             prazo_programacao = prazo_entrega
                             exemploarte_programacao = request.FILES.get('exemploarte_programacao',None)
                             tipoproduto_programacao = request.POST.get('tipoproduto_programacao',None)
@@ -438,15 +438,14 @@ def Ajax_Realiza_Solicitacao(request):
                                 observacao = obs_programacao,
                                 criado_por_id = userid
                                 )
-                            
-                  
+
             
             #VERIFICA STAND
             indice = 0
             if stand_check:
                 for dado in dadosForm:
-                    if 'prazo_stand' in dado:
-                        if dado == 'prazo_stand':
+                    if 'pecas_stand' in dado:
+                        if dado == 'pecas_stand':
                             prazo_stand = prazo_entrega
                             exemploarte_stand = request.FILES.get('exemploarte_stand',None)
                             tipoproduto_stand = request.POST.get('tipoproduto_stand',None)
