@@ -205,7 +205,6 @@ class Tarefas(models.Model):
         db_table = 'tarefas'
 
 # Create your models here.
-# asdlkjfsakdd
 
 
 class Escolas(models.Model):
