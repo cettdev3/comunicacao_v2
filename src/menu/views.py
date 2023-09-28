@@ -11,7 +11,7 @@ from django.db import transaction
 def Permissoes_Menu(request):
 
     permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first()
-    print(permissoes)
+
 
     return {'permissoes':permissoes}
 
