@@ -105,9 +105,6 @@ class Entregaveis(models.Model):
             self.save()
 
 
-        
-
-
 
  
 
