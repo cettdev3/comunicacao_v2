@@ -1,0 +1,41 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pillow = "*"
+django = "*"
+django-user-agents = "*"
+envconfiguration = "*"
+mysqlclient = "*"
+django-bootstrap-v5 = "*"
+django-compressor = "*"
+django-libsass = "*"
+django-crispy-forms = "*"
+crispy-bootstrap5 = "*"
+django-minify-html = "*"
+django-tidy = "*"
+pyyaml = "*"
+fontawesomefree = "*"
+gunicorn = "*"
+decorator = "*"
+ipdb = "*"
+ipython = "*"
+jedi = "*"
+matplotlib-inline = "*"
+sqlparse = "*"
+sweetify = "*"
+user-agents = "*"
+django-notifications-hq = "*"
+djangorestframework = "*"
+djangorestframework-simplejwt = "*"
+requests = "*"
+[dev-packages]
+autopep8 = "*"
+djlint = "*"
+pylama = "*"
+pylance = "*"
+
+[requires]
+python_version = "3.9"
