@@ -9,10 +9,8 @@ from datetime import datetime, timedelta
 
 
 class Solicitacoes(models.Model):
-    choices_projeto = [('1', 'EFG'), ('2', 'COTEC'),
-                       ('3', 'CETT'), ('4', 'BASILEU')]
-    choices_status = [('1', 'Solicitação Criada'), ('2',
-                                                    'Aguardando Entregas'), ('3', 'Concluída'), ('4', 'Devolvida')]
+    choices_projeto = [('1', 'EFG'), ('2', 'COTEC'),('3', 'CETT'), ('4', 'BASILEU')]
+    choices_status = [('1', 'Solicitação Criada'), ('2','Aguardando Entregas'), ('3', 'Concluída'), ('4', 'Devolvida')]
 
     id = models.AutoField(primary_key=True)
     evento_json = models.JSONField(null=True, blank=True)
@@ -30,7 +28,7 @@ class Solicitacoes(models.Model):
 
     @property
     def status_solicitacao(self):
-        total_entregaveis = self.entregaveis_set.exclude(
+        total_entregaveis = self.entregaveis.exclude(
             status=4).exclude(status=6).count()
         if total_entregaveis > 0 and self.status != 3:
             self.status = 2
@@ -50,17 +48,19 @@ class Solicitacoes(models.Model):
 
     @property
     def entregaveis_totais(self):
-        total_entregaveis = self.entregaveis_set.exclude(status=6).count()
+        total_entregaveis = self.entregaveis.exclude(status=6).count()
         return total_entregaveis
 
     @property
     def entregaveis_concluidos(self):
-        entregaveis_concluidos = self.entregaveis_set.filter(status=4).count()
+        print(self.entregaveis)
+        entregaveis_concluidos = self.entregaveis.filter(status=4).count()
+        print(entregaveis_concluidos)
         return entregaveis_concluidos
 
     @property
     def entregaveis_pendentes(self):
-        entregaveis_pendentes = self.entregaveis_set.exclude(
+        entregaveis_pendentes = self.entregaveis.exclude(
             status=4).exclude(status=6).count()
         return entregaveis_pendentes
 
@@ -106,8 +106,8 @@ class Entregaveis(models.Model):
 
     @property
     def status_entregaveis(self):
-        total_geral_tarefas = self.tarefas_set.count()
-        total_tarefas = self.tarefas_set.exclude(
+        total_geral_tarefas = self.tarefas.count()
+        total_tarefas = self.tarefas.exclude(
             status=3).exclude(status=4).count()
 
         if total_tarefas > 0:
@@ -117,6 +117,9 @@ class Entregaveis(models.Model):
         elif total_tarefas == 0 and total_geral_tarefas > 0 and self.status == 0:
             self.status = 1
             self.save()
+
+
+ 
 
     def get_status_display(self):
         return dict(self.choices_status)[str(self.status)]
