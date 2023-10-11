@@ -23,30 +23,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^@w1%@#ie2k%)pz&=g4p^&1&0(z*16l61!ezp*t9pwrb9i(k3w'
+SECRET_KEY = config.DJANGO_SECRET_KEY  # type: ignore
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-# CSRF_TRUSTED_ORIGINS = [
-#     'https://*.cett.org.br',
-#     'http://*.cett.org.br',
-#     'https://*.cett.dev.br',
-#     'http://*.cett.dev.br',
-# ]
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.cett.org.br',
+    'http://*.cett.org.br',
+    'https://*.cett.dev.br',
+    'http://*.cett.dev.br',
+]
 
 # Application definition
 
-
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-SESSION_COOKIE_NAME = 'cett_cookie'
-SESSION_SAVE_EVERY_REQUEST = True
-
-# configuração da autenticação
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-]
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -75,7 +66,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
 
 ]
 ROOT_URLCONF = 'setup.urls'
@@ -111,29 +101,17 @@ WSGI_APPLICATION = 'setup.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-   'default': {
+    'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'comunicacao',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTION': {'init_command':"SET sql_mode='STRICT_TRANS_TABLE',"},
-    },
-    'auth_db': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'c1camundadb',  # type: ignore
-        'USER': 'c1camundadb',  # type: ignore
-        'HOST': '127.0.0.1',  # type: ignore
-        'PASSWORD': 'iC7@hdDF',  # type: ignore
-        'PORT': '33306',  # type: ignore
-
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES,TRADITIONAL,NO_AUTO_VALUE_ON_ZERO'",
-        }
+        'NAME': config.DATABASE_NAME,  # type: ignore
+        'USER': config.DATABASE_USER,  # type: ignore
+        'PASSWORD': config.DATABASE_PASS,  # type: ignore
+        'HOST': config.DATABASE_HOST,  # type: ignore
+        'PORT': config.DATABASE_PORT,  # type: ignore
+        'OPTION': {'init_command': "SET sql_mode='STRICT_TRANS_TABLE',"},
     }
 }
-CSRF_COOKIE_VALUE = '@Rpypkkc86xpmfb4'
+
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -152,12 +130,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
 LANGUAGE_CODE = 'pt-br'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
 USE_L10N = True
