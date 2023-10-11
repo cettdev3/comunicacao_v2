@@ -35,7 +35,7 @@ def Permissoes_usuario(request):
     user  = Permissoes.objects.get(usuario_id=usuario)
     user.permissao = permissoes
     user.save()
-    messages.success(request, 'Usuário cadastrado com sucesso!')
+    messages.success(request, 'Permissões de usuários alterada(s) com sucesso!')
     return redirect('/gerir-time')
 
 @login_required(login_url='/')
