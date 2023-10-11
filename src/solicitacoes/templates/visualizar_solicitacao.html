@@ -583,10 +583,11 @@
                                                       </div>
                                                         {% endif %}
 
-                                                         {% if '11' in permissoes.permissao %}
+                                                         {% if entregavel.status == '3' or '11' in permissoes.permissao %}
                                                         <div class="col-lg-3 col-12">
                                                           <button onclick="editarEntregavelModal('{{entregavel.id}}')" type="button" class="btn btn-block btn-dark"> <i class="bi bi-pencil-square"></i> Editar Entregável</button>
                                                       </div>
+                                                      
                                                         {% endif %}
 
                                                       </div>
@@ -911,7 +912,7 @@
       <div class="modal-body">
         <div class="row">
         
-      <input style="display: block;" type="text" value="" id="task_id"  class="form-control" name="task_id">
+      <input style="display: none;" type="text" value="" id="task_id"  class="form-control" name="task_id">
 
 
       <div class="col-12 col-sm-12 col-md-12">

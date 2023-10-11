@@ -232,7 +232,7 @@
                                     <tr onclick="ModalNotifications('{{notificacao.id}}')">
                                         <td>{{notificacao.id}}</td>
                                         <td>{{notificacao.data|date:"d/m/Y H:i:s"}}</td>
-                                        <td>{{notificacao.descricao|truncatechars:50}}</td>
+                                        <td>{{notificacao.descricao|striptags|truncatechars:100|safe}}</td>
                                         <td>{{notificacao.origem.first_name}}</td>
                                     </tr>
                                 {% endif %}
@@ -267,7 +267,7 @@
                                     <tr onclick="ModalNotifications('{{notificacao.id}}')">
                                         <td>{{notificacao.id}}</td>
                                         <td>{{notificacao.data|date:"d/m/Y H:i:s"}}</td>
-                                        <td>{{notificacao.descricao|truncatechars:50}}</td>
+                                        <td>{{notificacao.descricao|striptags|truncatechars:100|safe}}</td>
                                         <td>{{notificacao.origem.first_name}}</td>
                                     </tr>
                                     {% endif %}
