@@ -23,8 +23,10 @@ class Solicitacoes(models.Model):
     data_solicitacao = models.DateField(
         default=timezone.now, null=True, blank=True)
     prazo_entrega = models.DateField(null=True, blank=True)
+    briefing = models.TextField(null=True, blank=True)
     status = models.IntegerField(
         choices=choices_status, blank=False, null=False, default=1)
+    
 
     @property
     def status_solicitacao(self):

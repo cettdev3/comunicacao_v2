@@ -471,6 +471,25 @@
                             </div>
                           </div>
                           {% endif %}
+                          
+                          {% if solicitacao.briefing %}
+                          <div class="col-12 col-sm-12 col-md-12">
+                            <div class="card" style="width: 100%;">
+                                <div class="card-header" style="background-color: #fafafa;">
+                                  <label for="">Briefing</label>
+                                </div>
+                                  
+                                <div class="card-body">
+                                 <div class="row">
+                                  {{solicitacao.briefing|safe}}
+                                 </div>
+                                </div>
+                            </div>
+                          </div>
+                          {% endif %}
+                          
+                          
+                   
                           <div class="col-12 col-sm-12 col-md-12">
                             <div class="card" style="width: 100%;">
                                 <div class="card-header" style="background-color: #fafafa;">
@@ -527,12 +546,14 @@
                                                         <div class="col-lg-3 col-12">
                                                             <button onclick="devolveComunicacao('{{entregavel.id}}',4)" type="button" class="btn btn-block btn-dark"><i class="bi bi-arrow-counterclockwise"></i> Devolver p/ Correções</button>
                                                         </div>
-                                                       
-                                                        <div class="col-lg-3 col-12">
-                                                            <button onclick="modalTarefa('{{entregavel.ultima_tarefa_id.id}}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-eye-fill"></i> Visualizar Entregas</button>
-                                                        </div>
 
                                                         {% endif %}
+                                                        
+                                                        {% if entregavel.status == '2' or entregavel.status == '4' %} 
+                                                        <div class="col-lg-3 col-12">
+                                                          <button onclick="modalTarefa('{{entregavel.ultima_tarefa_id.id}}')" type="button" class="btn btn-block btn-dark"><i class="bi bi-eye-fill"></i> Visualizar Entregas</button>
+                                                      </div>
+                                                      {% endif %}
                                                        
                                                         {% if entregavel.status == '1' %}
                                                           {% if '6' in permissoes.permissao %}

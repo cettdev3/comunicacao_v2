@@ -311,6 +311,268 @@
                       
                       </div>
                       {% endif %}
+                      <div class="col-12 col-sm-12 col-md-12">
+                        <div id="accordion">
+                          <div class="card card-primary">
+                            <div class="card-header">
+                              <h4 class="card-title w-100">
+                                <div class="row">
+                                <div class="col-9 col-sm-9 col-md-9">
+                                  <a class="d-block w-100" style="padding: 5px 0;" data-toggle="collapse" href="#collapseDadosSolicitacao">
+                                    Dados da Solicitação 
+                                     </a>
+                                </div>
+
+                                <div class="col-3 col-sm-3 col-md-3">
+                                  <a style="font-size: 15px; width: 100%;" href="/solicitacoes/visualizar/{{solicitacao.id}}" class="btn bg-warning">
+      
+                                    <i class="fas fa-link"></i> <B> Acessar Solicitação</B>
+                                  </a>
+                            
+                                </div>
+                              </div>
+                              </h4>
+                            </div>
+                            <div id="collapseDadosSolicitacao" class="collapse" data-parent="#accordion">
+                              <div class="card-body">
+                                <div class="card-body">
+                                <div class="row">
+                                 <div class="col-lg-3 col-12">
+                                   <div class="form-group">
+                                       <label>Evento:</label>
+                                       <div class="input-group">
+                                         {% if solicitacao.evento_json.titulo_evento %}
+                                           {{solicitacao.evento_json.titulo_evento}}
+                                         {% else %}
+                                         
+                                           {% if solicitacao.evento_json.tipo_formatado == None %}
+                                             Não Informado
+                                           {% else %}
+                                             {{solicitacao.evento_json.tipo_formatado}}
+                                           {% endif %}
+                                             
+                                         {% endif %}
+                                         
+                                     
+                                       </div>
+                                       <!-- /.input group -->
+                                   </div>
+                                 </div>
+                   
+                                 <div class="col-lg-3 col-12">
+                                   <div class="form-group">
+                                       <label>Data de Início: </label>
+                                       <div class="input-group">
+                                       {% if solicitacao.evento_json.titulo_evento %}
+                                         {{solicitacao.evento_json.data_inicio}}
+                                       {% else %}
+                                       
+                                       {% if solicitacao.evento_json.data_inicio_formatada == None%}
+                                         Não Informado
+                                       {% else %}
+                                        {{solicitacao.evento_json.data_inicio_formatada}}
+                                       {% endif %}
+                                           
+                                       {% endif %}
+       
+                                        
+                                         
+                                     
+                                       </div>
+                                       <!-- /.input group -->
+                                   </div>
+                                 </div>
+                   
+                                 <div class="col-lg-3 col-12">
+                                   <div class="form-group">
+                                       <label>Data Final:</label>
+                                       <div class="input-group">
+                                         {% if solicitacao.evento_json.titulo_evento %}
+                                         {{solicitacao.evento_json.data_fim}}
+                                       {% else %}
+                                       
+                                       {% if solicitacao.evento_json.data_fim_formatada == None%}
+                                         Não Informado
+                                       {% else %}
+                                         {{solicitacao.evento_json.data_fim_formatada}}
+                                       {% endif %}
+                                           
+                                       {% endif %}
+       
+                                        
+                                         
+                                     
+                                       </div>
+                                       <!-- /.input group -->
+                                   </div>
+                                 </div>
+                                 {% if solicitacao.publico_evento %}
+                                 <div class="col-lg-3 col-4">
+                                   <div class="form-group">
+                                       <label>Público do Evento:</label>
+                                       <div class="input-group">
+                                         {{solicitacao.publico_evento}}
+                                       </div>
+                                       <!-- /.input group -->
+                                   </div>
+                                 </div>
+                                 {% endif %}
+       
+       
+                                 {% if solicitacao.evento_json.endereco %}
+                                 <div class="col-lg-3 col-3">
+                                   <div class="form-group">
+                                       <label>Unidade:</label>
+                                       <div class="input-group">
+                   
+                                         {{escola.nome}}
+                           
+                                         
+                                     
+                                       </div>
+                                       <!-- /.input group -->
+                                   </div>
+                                 </div>
+       
+                                 <div class="col-lg-9 col-9">
+                                   <div class="form-group">
+                                       <label>Endereço:</label>
+                                       <div class="input-group">
+                   
+                                         {{solicitacao.evento_json.endereco}}
+                           
+                                         
+                                     
+                                       </div>
+                                       <!-- /.input group -->
+                                   </div>
+                                 </div>
+                                 {% else %}
+                                 <div class="col-lg-3 col-12">
+                                   <div class="form-group">
+                                       <label>Logradouro:</label>
+                                       <div class="input-group">
+                                         {% if solicitacao.evento_json.logradouro == None %}
+                                         Não Informado
+                                         {% else %}
+                                         {{solicitacao.evento_json.logradouro}}
+                                         {% endif %}
+                                         
+                                     
+                                       </div>
+                                       <!-- /.input group -->
+                                   </div>
+                                 </div>
+                   
+                                 <div class="col-lg-3 col-12">
+                                   <div class="form-group">
+                                       <label>Bairro:</label>
+                                       <div class="input-group">
+                                         {% if solicitacao.evento_json.bairro == None %}
+                                         Não Informado
+                                         {% else %}
+                                         {{solicitacao.evento_json.bairro}}
+                                         {% endif %}
+                                         
+                                     
+                                       </div>
+                                       <!-- /.input group -->
+                                   </div>
+                                 </div>
+                   
+                                 <div class="col-lg-3 col-12">
+                                   <div class="form-group">
+                                       <label>Complemento:</label>
+                                       <div class="input-group">
+                                        {% if solicitacao.evento_json.complemento == None %}
+                                        Não Informado
+                                        {% else %}
+                                        {{solicitacao.evento_json.complemento}}
+                                        {% endif %}
+                                     
+                                       </div>
+                                       <!-- /.input group -->
+                                   </div>
+                                 </div>
+       
+                                 <div class="col-lg-3 col-12">
+                                   <div class="form-group">
+                                       <label>Cidade:</label>
+                                       <div class="input-group">
+                                        {% if solicitacao.evento_json.CIDADE == None %}
+                                        Não Informado
+                                        {% else %}
+                                        {{solicitacao.evento_json.cidade}}
+                                        {% endif %}
+                                     
+                                       </div>
+                                       <!-- /.input group -->
+                                   </div>
+                                 </div>
+                                 {% endif %}
+                             
+                                 {% if programacao_adicional %}
+                                 <div class="col-12 col-sm-12 col-md-12">
+                                   <div class="card" style="width: 100%;">
+                                       <div class="card-header" style="background-color: #fafafa;">
+                                         <label for="">Programação do Evento</label>
+                                         
+                                       </div>
+                                         
+                                       <div class="card-body">
+                                        <div class="row">
+                                           <table style="margin-top: 10px;">
+                                               <thead>
+                                                 <tr>
+                                                   <th>Data</th>
+                                                   <th>Hora</th>
+                                                   <th>Hora Final</th>
+                                                   <th>Atividade</th>
+                                                 </tr>
+                                               </thead>
+                                               <tbody>
+                       
+                                                   {% for programacao in programacao_adicional %}
+                                                   <tr>
+                                                       <td>{{programacao.data|date:'d/m/Y'}}</td>
+                                                       <td>{{programacao.hora}}</td>
+                                                       <td>{{programacao.hora_final}}</td>
+                                                       <td>{{programacao.atividade}}</td>
+                                                   {% endfor %}
+                                                   </tr>
+                                               </tbody>
+                                           </table>
+                                        </div>
+                                       </div>
+                                   </div>
+                                 </div>
+                                 {% endif %}
+                                 
+                                 {% if solicitacao.briefing %}
+                                 <div class="col-12 col-sm-12 col-md-12">
+                                   <div class="card" style="width: 100%;">
+                                       <div class="card-header" style="background-color: #fafafa;">
+                                         <label for="">Briefing</label>
+                                       </div>
+                                         
+                                       <div class="card-body">
+                                        <div class="row">
+                                         {{solicitacao.briefing|safe}}
+                                        </div>
+                                       </div>
+                                   </div>
+                                 </div>
+                                 {% endif %}
+                                 
+                                                               
+                                </div>
+                               </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        </div>
                     {% if tarefa.descricao_entrega %}
                     <div class="col-12 col-sm-12 col-md-12">
                       <div id="accordion">

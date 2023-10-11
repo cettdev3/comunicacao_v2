@@ -135,6 +135,7 @@ def Ajax_Realiza_Solicitacao(request):
             programacao_check = request.POST.get('programacao_check',None)
             stand_check = request.POST.get('stand_check',None)
             prazo_entrega = request.POST.get('prazo_entrega',None)
+            briefing = request.POST.get('briefing_solicitacao',None)
             userid = request.user.id
 
             if idEvento != 'und':
@@ -156,6 +157,8 @@ def Ajax_Realiza_Solicitacao(request):
                         criado_por_id = userid,
                         evento_json = json_evento,
                         prazo_entrega = prazo_entrega,
+                        briefing = briefing,
+                        
                     )
         
                 
@@ -189,6 +192,7 @@ def Ajax_Realiza_Solicitacao(request):
                     criado_por_id = userid,
                     evento_json = json_evento,
                     prazo_entrega = prazo_entrega,
+                    briefing = briefing,
                 )
 
 
