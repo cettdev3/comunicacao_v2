@@ -9,6 +9,8 @@ from django.core.files.storage import FileSystemStorage
 import json
 import ast
 from django.contrib.auth.models import User
+from solicitacoes.templates_notify import *
+from solicitacoes.models import Entregaveis,Solicitacoes
 # Create your views here.
 @login_required(login_url='/')
 def Backlog(request):
@@ -66,6 +68,16 @@ def Ajax_Move_Task(request):
         tarefa.status  = step
         tarefa.arquivos = arquivos_task
         tarefa.save()
+
+        #obtem o id do entregavel
+        entregavel = tarefa.entregavel_id
+
+        #obtem a solicitação
+        entr = Entregaveis.objects.filter(id=entregavel).first()
+        solicitacao = entr.evento_id
+
+        if step == '3':
+            tarefa_concluida(request,solicitacao,tarefa.usuario_id,tarefa.id,entregavel)
 
         tarefas = Tarefas.objects.filter(usuario_id=request.user.id).all().order_by('prazo_entrega')
 

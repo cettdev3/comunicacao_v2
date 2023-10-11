@@ -14,6 +14,7 @@ from .models import Entregaveis,Solicitacoes,Programacao_Adicional,Tarefas,Escol
 from .serializers import Solicitacao_Serializar,Tarefas_Serializar,Entregaveis_Serializar
 from django.contrib.auth.models import User
 from gerir_time.models import Permissoes
+from .templates_notify import *
 
 def convert_data_formatada(data):
 
@@ -34,11 +35,12 @@ def Permissoes_usuario(request):
     user  = Permissoes.objects.get(usuario_id=usuario)
     user.permissao = permissoes
     user.save()
-    messages.success(request, 'Usuário cadastrado com sucesso!')
+    messages.success(request, 'Permissões de usuários alterada(s) com sucesso!')
     return redirect('/gerir-time')
 
 @login_required(login_url='/')
 def Form_Solicitacoes(request):
+    
     permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first
     token = get_token_api_eventos()
     eventos = get_all_eventos(token)
@@ -100,7 +102,6 @@ def Visualizar_Solicitacao(request,codigo):
     else:
         messages.error(request, 'Você não tem permissões para acessar!')
         return redirect('/solicitacoes')
-
 
 @login_required(login_url='/')
 def Dados_Gerais_Evento(request):
@@ -512,7 +513,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 )
                             
                     
-            
+            nova_notificacao(request,solicitacao.id)
             return JsonResponse({"success_message": "Solicitação Realizada!"}) 
 
 @login_required(login_url='/')
@@ -536,9 +537,12 @@ def Ajax_Cria_Tarefa(request):
             prazo_entrega = prazo_entrega,
             prioridade = prioridade,
     )
-        tarefas = Tarefas.objects.filter(entregavel_id = entregavel_id ).all()
+        tarefas_all = Tarefas.objects.filter(entregavel_id = entregavel_id ).all()
+        solicitacao_id = Entregaveis.objects.filter(id=entregavel_id).first()
 
-        return render(request,'ajax/ajax_load_tbl_tarefas.html',{'tarefas':tarefas})
+        nova_tarefa(request,solicitacao_id.evento_id,designar_usuario,tarefas.id,entregavel_id)
+
+        return render(request,'ajax/ajax_load_tbl_tarefas.html',{'tarefas':tarefas_all})
     except Exception as e:
         return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)
 
@@ -551,7 +555,10 @@ def Ajax_Realiza_Entrega(request):
         entregavel = Entregaveis.objects.get(id=idEntregavel)
         entregavel.status = statusEntregavel
         entregavel.save()
-
+        if statusEntregavel != '4':
+            enviar_solicitante(request,entregavel.evento_id,entregavel.criado_por_id,request.user.id,entregavel.id)
+        else:
+            confirmar_recebimento(request,entregavel.evento_id)
         return JsonResponse({"success_message": "Entrega Realizada"}) 
     except Exception as e:
         return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)   
@@ -583,7 +590,10 @@ def Ajax_Revisa_Task(request):
         tarefa.tipo = tarefas.id
         tarefa.save()
 
+        entregavel = Entregaveis.objects.filter(id= tarefa_revisao.entregavel_id).first()
+        solicitacao = Solicitacoes.objects.filter(id = entregavel.evento_id).first()
 
+        tarefa_em_revisao(request,solicitacao.id,tarefa_revisao.usuario_id,tarefas.id,tarefa_revisao.entregavel_id)
         return JsonResponse({"success_message": "Tarefa em revisão!"}) 
     except Exception as e:
         return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)
@@ -601,7 +611,7 @@ def Ajax_Devolve_Entregavel(request):
         entregavel.motivo_revisao = motivo
         entregavel.save()
 
-
+        devolver_correcao_entrega(request,entregavel.evento_id,request.user.id,entregavel.id)
         return JsonResponse({"success_message": "Tarefa em revisão!"}) 
     except Exception as e:
         return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)
@@ -640,12 +650,14 @@ def Ajax_Negar_Entregavel(request):
             entregavel.status = 6
             entregavel.motivo_revisao = descricao_negativa
             entregavel.save()
+            negar_entregavel_solicitante(request,entregavel.criado_por_id,request.user.id,entregavel.evento_id,entregavel.id)
             return JsonResponse({"success_message": "Tarefa Negada!"})
         elif tipo == '2':
             entregavel = Entregaveis.objects.get(id=entregavelId)
             entregavel.status = 5
             entregavel.motivo_revisao = descricao_negativa
             entregavel.save()
+            devolver_entregavel_comunicacao(request,entregavel.criado_por_id,request.user.id,entregavel.evento_id, entregavel.id)
             return JsonResponse({"success_message": "Tarefa Devolvida!"})
 
     except Exception as e:
@@ -759,7 +771,7 @@ def Ajax_Add_Entregavel(request):
         observacoes =  request.POST.get('obs_save_the_date','')
 
         entregavel = Entregaveis.objects.create(prazo = prazo, tipo_produto = tipo_produto, categoria_produto = categoria,tipo_entregavel = tipo_entregavel, descricao_audio_visual = audiovisual, observacao = observacoes, status = 0,criado_por_id = user_loggin,evento_id = evento_id)
-
+        nova_notificacao(request,evento_id)
         return JsonResponse({"success_message": "Tarefa Devolvida!"})
 
 @login_required(login_url='/')
@@ -770,4 +782,6 @@ def Ajax_Reenvia_Entregavel(request):
         entregavel.status = 0
         entregavel.save()
 
+
+        devolver_correcao_entrega(request,entregavel.evento_id,request.user.id,entregavel.id)
         return JsonResponse({"success_message": "Tarefa Devolvida!"})

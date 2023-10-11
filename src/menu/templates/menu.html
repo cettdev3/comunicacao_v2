@@ -312,10 +312,15 @@ executarBuscaPeriodicamente();
 
 
 function buscaNotificacao() {
+  var urlAtual = window.location.href;
+  var urlnotificacao = urlAtual.includes('/notificacoes')
   var XCSRFToken = '{{ csrf_token }}';
   const url = "/busca-notificacao";
   var descricao = ''
-  $.ajax({
+  if(urlnotificacao){
+    console.log('não exibir notificação')
+  }else{
+    $.ajax({
     url: url,
     type: "get",
     data: { 'usuario': '{{ request.user.id }}' },
@@ -342,7 +347,7 @@ function buscaNotificacao() {
         // Ação a ser realizada após o botão "OK" ser clicado
         if (result.isConfirmed) {
           // Redirecionar ou atualizar a página aqui
-        
+          window.location.href = "/notificacoes";
         }
       });
       } else {
@@ -355,6 +360,8 @@ function buscaNotificacao() {
     },
 
   });
+  }
+  
 }
 
 </script>
