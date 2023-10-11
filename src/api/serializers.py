@@ -1,6 +1,7 @@
 # todo/todo_api/serializers.py
 from rest_framework import serializers
 from solicitacoes.models import Solicitacoes, Tarefas, Entregaveis, Programacao_Adicional
+from menu.models import Notificacoes
 
 
 class Solicitacao_Serializar_git(serializers.ModelSerializer):
@@ -163,4 +164,17 @@ class Simple_Solicitacao_Serializar(serializers.ModelSerializer):
             'status',
             "status_solicitacao",
             "get_status_display",
+        ]
+
+
+class Notificacao_Serializar(serializers.ModelSerializer):
+    class Meta:
+        model = Notificacoes
+        fields = [
+            "id",
+            "data",
+            "user",
+            "descricao",
+            "origem",
+            "readonly",
         ]

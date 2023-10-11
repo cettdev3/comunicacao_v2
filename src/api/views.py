@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from solicitacoes.models import Entregaveis, Solicitacoes, Tarefas, Programacao_Adicional
+from menu.models import Notificacoes
 from . import serializers
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,7 +10,7 @@ from datetime import datetime
 import json
 from django.core.files.storage import FileSystemStorage
 from django.forms.models import model_to_dict
-from .util import createEntregavel, createTarefa, createSolicitacao, createProgramacao, updateEntregavel, updateSolicitacao, updateTarefa, updateProgramacao, getAllInstances, getSingleInstance
+from .util import createEntregavel, createTarefa, createSolicitacao, createProgramacao, createNotificacao, updateEntregavel, updateSolicitacao, updateTarefa, updateProgramacao, updateNotificacao, getAllInstances, getSingleInstance
 
 
 class CreateSolicitacaoAPIView(APIView):
@@ -60,6 +61,14 @@ class CreateProgramacaoAdicionalAPIView(APIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
+class CreateNotificacaoAPIView(APIView):
+    def post(self, request):
+        notificacaolData = request.data
+        notificacao = createNotificacao(notificacaolData)
+        serializer = serializers.Notificacao_Serializar(notificacao)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
 class UpdateSolicitacaoAPIView(APIView):
 
     def post(self, request, pk):
@@ -106,6 +115,17 @@ class UpdateProgramacaoAdicionalAPIView(APIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
+class UpdateNotificacaoAPIView(APIView):
+
+    def post(self, request, pk):
+        if not Notificacoes.objects.filter(id=pk).exists():
+            return Response(data={"error": f"Notificação de id {pk} inexistente"}, status=status.HTTP_404_NOT_FOUND)
+        notificacaoData = request.data
+        notificacao = updateNotificacao(notificacaoData, pk)
+        serializer = serializers.Notificacao_Serializar(notificacao)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
 class ListSolicitacaoAPIView(APIView):
 
     def get(self, request):
@@ -135,6 +155,14 @@ class ListProgramacaoAdicionalAPIView(APIView):
     def get(self, request):
         data = getAllInstances(
             model=Programacao_Adicional, serializerClass=serializers.Programacao_Adicional_Serializar)
+        return Response(data=data)
+
+
+class ListNotificacaoAPIView(APIView):
+
+    def get(self, request):
+        data = getAllInstances(
+            model=Notificacoes, serializerClass=serializers.Notificacao_Serializar)
         return Response(data=data)
 
 
@@ -175,4 +203,14 @@ class DetailProgramacaoAdicionalAPIView(APIView):
             return Response(data={"error": f"Programação adicional de id {pk} inexistente"}, status=status.HTTP_404_NOT_FOUND)
         data = getSingleInstance(model=Programacao_Adicional,
                                  serializerClass=serializers.Programacao_Adicional_Serializar, pk=pk)
+        return Response(data)
+
+
+class DetailNotificacaoAPIView(APIView):
+
+    def get(self, request, pk):
+        if not Notificacoes.objects.filter(id=pk).exists():
+            return Response(data={"error": f"Notificação de id {pk} inexistente"}, status=status.HTTP_404_NOT_FOUND)
+        data = getSingleInstance(model=Notificacoes,
+                                 serializerClass=serializers.Notificacao_Serializar, pk=pk)
         return Response(data)

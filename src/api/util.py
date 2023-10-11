@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from solicitacoes.models import Entregaveis, Solicitacoes, Tarefas, Programacao_Adicional
+from menu.models import Notificacoes
 from datetime import datetime
 from django.core.files.storage import FileSystemStorage, default_storage
 from setup.settings import MEDIA_ROOT
@@ -136,10 +137,24 @@ def createProgramacao(programacaoData, solicitacao):
     return programacao
 
 
+def createNotificacao(notificacaoData):
+    data = datetime.strptime(notificacaoData['data'], '%Y-%m-%dT%H:%M:%S')
+    user = User.objects.get(id=int(notificacaoData['user_id']))
+    descricao = notificacaoData['descricao']
+    origem = User.objects.get(id=int(notificacaoData['origem_id']))
+    readonly = int(notificacaoData['readonly'])
+
+    notificacao = Notificacoes(
+        data=data, user=user, descricao=descricao, origem=origem, readonly=readonly)
+    notificacao.save()
+
+    return notificacao
+
+
 def updateSolicitacao(solicitacaoData, pk):
     solicitacao = Solicitacoes.objects.get(id=pk)
 
-    if 'criado_por' in solicitacaoData:
+    if 'criado_por_id' in solicitacaoData:
         criado_por = User.objects.get(id=int(solicitacaoData['criado_por_id']))
         solicitacao.criado_por = criado_por
     if 'evento_json' in solicitacaoData:
@@ -157,6 +172,7 @@ def updateSolicitacao(solicitacaoData, pk):
     if 'data_solicitacao' in solicitacaoData:
         data_solicitacao = datetime.strptime(
             solicitacaoData['data_solicitacao'], '%Y-%m-%d')
+        solicitacao.data_solicitacao = data_solicitacao
     if 'status' in solicitacaoData:
         status = solicitacaoData['status']
         solicitacao.status = status
@@ -168,7 +184,7 @@ def updateSolicitacao(solicitacaoData, pk):
 def updateEntregavel(entregavelData, pk):
     entregavel = Entregaveis.objects.get(id=pk)
 
-    if 'criado_por' in entregavelData:
+    if 'criado_por_id' in entregavelData:
         criado_por = User.objects.get(id=int(entregavelData['criado_por_id']))
         entregavel.criado_por = criado_por
     if 'prazo' in entregavelData:
@@ -222,7 +238,7 @@ def updateEntregavel(entregavelData, pk):
 def updateTarefa(tarefaData, pk):
     tarefa = Tarefas.objects.get(id=pk)
 
-    if 'usuario' in tarefaData:
+    if 'usuario_id' in tarefaData:
         usuario = User.objects.get(id=int(tarefaData['usuario_id']))
         tarefa.usuario = usuario
     if 'titulo_tarefa' in tarefaData:
@@ -290,6 +306,28 @@ def updateProgramacao(programacaoData, pk):
 
     programacao.save()
     return programacao
+
+
+def updateNotificacao(notificacaoData, pk):
+    notificacao = Notificacoes.objects.get(id=pk)
+    if 'data' in notificacaoData:
+        data = datetime.strptime(notificacaoData['data'], '%Y-%m-%dT%H:%M:%S')
+        notificacao.data = data
+    if 'user_id' in notificacaoData:
+        user = User.objects.get(id=int(notificacaoData['user_id']))
+        notificacao.user = user
+    if 'descricao' in notificacaoData:
+        descricao = notificacaoData['descricao']
+        notificacao.descricao = descricao
+    if 'origem' in notificacaoData:
+        origem = User.objects.get(id=int(notificacaoData['origem']))
+        notificacao.origem = origem
+    if 'readonly' in notificacaoData:
+        readonly = int(notificacaoData['readonly'])
+        notificacao.readonly = readonly
+
+    notificacao.save()
+    return notificacao
 
 
 def getAllInstances(model, serializerClass):
