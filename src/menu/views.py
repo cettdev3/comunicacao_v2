@@ -12,7 +12,6 @@ def Permissoes_Menu(request):
 
     permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first()
 
-
     return {'permissoes':permissoes}
 
 @login_required(login_url='/')
@@ -23,8 +22,8 @@ def Notifications(request):
 
 @login_required(login_url='/')
 def Notificacoes_User(request):
-    notificacoes = Notificacoes.objects.filter(user_id = request.user.id).all()
-    notificacoes_enviadas = Notificacoes.objects.filter(origem_id = request.user.id).all()
+    notificacoes = Notificacoes.objects.filter(user_id = request.user.id).all().order_by('-data')
+    notificacoes_enviadas = Notificacoes.objects.filter(origem_id = request.user.id).all().order_by('-data')
     permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first()
     usuarios = User.objects.all()
     return render(request, 'notificacoes.html',{'notificacoes':notificacoes,'permissoes':permissoes,'usuarios':usuarios,'notificacoes_enviadas':notificacoes_enviadas})
