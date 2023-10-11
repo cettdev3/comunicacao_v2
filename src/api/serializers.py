@@ -116,6 +116,7 @@ class Solicitacao_Serializar(serializers.ModelSerializer):
             "get_status_display",
             "entregaveis",
             "programacao_adicional",
+            "briefing",
         ]
 
 
@@ -164,6 +165,7 @@ class Simple_Solicitacao_Serializar(serializers.ModelSerializer):
             'status',
             "status_solicitacao",
             "get_status_display",
+            "briefing",
         ]
 
 

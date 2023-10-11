@@ -24,10 +24,11 @@ def createSolicitacao(solicitacaoData):
     publico_evento = solicitacaoData['publico_evento']
     data_solicitacao = solicitacaoData['data_solicitacao']
     statusSolicitacao = solicitacaoData['status']
+    briefing = solicitacaoData['briefing']
 
     solicitacao = Solicitacoes(criado_por=criado_por, evento_json=evento_json, motivo_alteracao=motivo_alteracao,
                                tipo_projeto=tipo_projeto, publico_evento=publico_evento, data_solicitacao=data_solicitacao,
-                               status=statusSolicitacao)
+                               status=statusSolicitacao, briefing=briefing)
     solicitacao.save()
 
     return solicitacao
@@ -176,6 +177,9 @@ def updateSolicitacao(solicitacaoData, pk):
     if 'status' in solicitacaoData:
         status = solicitacaoData['status']
         solicitacao.status = status
+    if 'briefing' in solicitacaoData:
+        briefing = solicitacaoData['briefing']
+        solicitacao.briefing = briefing
 
     solicitacao.save()
     return solicitacao
