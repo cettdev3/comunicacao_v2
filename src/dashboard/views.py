@@ -48,7 +48,7 @@ def Dashboard(request):
             solicitacao['prazo_entrega'] = datetime.datetime.strptime(solicitacao['prazo_entrega'], '%Y-%m-%d').date()
         except:
              solicitacao['prazo_entrega'] = ''
-        
+
     return render(request,'dashboard.html',{'solicitacoes':solicitacoes,'permissoes':permissoes, 'usuarios':usuarios})
 
 @login_required(login_url='/')
