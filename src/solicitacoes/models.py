@@ -11,14 +11,14 @@ class Solicitacoes(models.Model):
     choices_status = [('1','Solicitação Criada'),('2','Aguardando Entregas'),('3','Concluída'),('4','Devolvida')]
 
     id = models.AutoField(primary_key=True)
-    evento_json = models.JSONField(null=True,blank=True)
-    motivo_alteracao = models.TextField(null=True,blank=True)
+    evento_json = models.JSONField(null=True, blank=True)
+    motivo_alteracao = models.TextField(null=True, blank=True)
     tipo_projeto = models.IntegerField(choices=choices_projeto, blank=False, null=False)
-    publico_evento = models.TextField(null=True,blank=True)
-    criado_por = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
-    data_solicitacao = models.DateField(default=timezone.now,null=True,blank=True)
-    prazo_entrega =  models.DateField(null=True,blank=True)
-    status = models.IntegerField(choices=choices_status, blank=False, null=False,default=1)
+    publico_evento = models.TextField(null=True, blank=True)
+    criado_por = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    data_solicitacao = models.DateField(default=timezone.now, null=True, blank=True)
+    prazo_entrega = models.DateField(null=True, blank=True)
+    status = models.IntegerField(choices=choices_status, blank=False, null=False, default=1)
 
 
     
