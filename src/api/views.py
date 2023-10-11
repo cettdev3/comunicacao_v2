@@ -17,7 +17,7 @@ class CreateSolicitacaoAPIView(APIView):
     def post(self, request):
         solicitacaoData = request.data
 
-        if 'entregaveis' not in solicitacaoData or len(solicitacaoData['entregaveis']) is 0:
+        if 'entregaveis' not in solicitacaoData or len(solicitacaoData['entregaveis']) == 0:
             return Response(data={"error": "solicitação sem nenhum entregavel"}, status=status.HTTP_400_BAD_REQUEST)
 
         solicitacao = createSolicitacao(solicitacaoData)
