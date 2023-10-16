@@ -208,7 +208,7 @@
                       <div class="row">
 
                         <div class="col-12 col-sm-12 col-md-12">
-                          <table style="margin-top: 10px;">
+                          <table style="margin-top: 10px;" id="todas_tarefas">
                             <thead>
                               <tr>
                                 <th>#</th>
@@ -546,4 +546,14 @@
       window.location.href = "/solicitacoes/visualizar/"+solicitacaoId;
     }
   </script>
+
+<script>
+  $(document).ready(function() {
+      $('#todas_tarefas').DataTable({
+        "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json"
+            }
+      });
+  });
+</script>
   {% endblock %}

@@ -9,7 +9,7 @@ def nova_notificacao(request,solicitacao_id):
         if '12' in usuario.permissao:
             descricao = f'''<b>Nova Solicitação!</b></br>
                             <b>{request.user.first_name}</b> criou uma nova solicitação!</br></br>
-                            Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank'>AQUI</a>
+                            Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank' onclick="readNotifications('{{notificacao.id}}'">AQUI</a>
                             </br>
                         '''
             notificacao = Notificacoes.objects.create(user_id = usuario.id,descricao = descricao,origem_id = request.user.id,readonly = 1)
@@ -20,7 +20,7 @@ def nova_tarefa(request,solicitacao_id,usuario_designado,tarefa_id,entregavel_id
 
     descricao = f'''<b>Nova Tarefa!</b></br>
                     <b>{request.user.first_name}</b> te designou para cumprir uma tarefa!</br></br>
-                    Acesse a solicitação clicando <a href='/minhas-tarefas' target='_blank'>AQUI</a>.
+                    Acesse a solicitação clicando <a href='/minhas-tarefas' target='_blank' onclick="readNotifications('{{notificacao.id}}'>AQUI</a>.
                     </br><br>
                     Há e não se esqueça, o id da tarefa é <b>#{tarefa_id}</b> e do entregável é <b>#{entregavel_id}</b> ! :D      
 
@@ -33,7 +33,7 @@ def tarefa_concluida(request,destinatario,autor,solicitacao_id,entregavel_id,tar
 
     descricao = f'''<b>Tarefa Concluída!</b></br>
                     <b>{request.user.first_name}</b> acabou de concluir uma tarefa!</br></br>
-                    Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank'>AQUI</a>.
+                    Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank' onclick="readNotifications('{{notificacao.id}}'>AQUI</a>.
                     </br><br>
                     Há e não se esqueça, o id da tarefa é <b>#{tarefa_id}</b> e do entregável é <b>#{entregavel_id}</b>! :D
                     
@@ -47,7 +47,7 @@ def tarefa_em_revisao(request,solicitacao_id,usuario_designado,tarefa_id,entrega
 
     descricao = f'''<b>Revisão de Tarefa!</b></br>
                     <b>{request.user.first_name}</b> te designou corrigir uma tarefa entregue!</br></br>
-                    Acesse a solicitação clicando <a href='/minhas-tarefas' target='_blank'>AQUI</a>.
+                    Acesse a solicitação clicando <a href='/minhas-tarefas' target='_blank' onclick="readNotifications('{{notificacao.id}}'>AQUI</a>.
                     </br><br>
                     Há e não se esqueça, o id da tarefa é <b>#{tarefa_id}</b> e do entregável é <b>#{entregavel_id}</b> ! :D      
 
@@ -60,7 +60,7 @@ def enviar_solicitante(request,solicitacao_id,criado_por,origem,entregavel_id):
 
     descricao = f'''<b>Você recebeu uma nova entrega!</b></br>
                     <b>{request.user.first_name}</b> acabou de te enviar os dados da solicitação!</br></br>
-                    Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank'>AQUI</a>.
+                    Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank' onclick="readNotifications('{{notificacao.id}}')">AQUI</a>.
                     </br><br>
                     Há e não se esqueça, o id do entregável é <b>#{entregavel_id}</b> ! :D      
 
@@ -75,7 +75,7 @@ def confirmar_recebimento(request,solicitacao_id):
         if '12' in usuario.permissao:
             descricao = f'''<b>Demanda Concluída!</b></br>
                             <b>{request.user.first_name}</b> acabou de informar que está tudo certo com a solicitação, e a mesma ja foi recebida!</br></br>
-                            Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank'>AQUI</a>.
+                            Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank' onclick="readNotifications('{{notificacao.id}}'>AQUI</a>.
                         '''
             notificacao = Notificacoes.objects.create(user_id = usuario.id,descricao = descricao,origem_id = request.user.id,readonly = 1)
     return True
@@ -85,7 +85,7 @@ def devolver_correcao_tarefa(request,solicitacao_id,criado_por,origem,entregavel
 
     descricao = f'''<b>Correção da Solicitação!</b></br>
                     <b>{request.user.first_name}</b> solicitou a correção da solicitação!</br></br>
-                    Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank'>AQUI</a>.
+                    Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank' onclick="readNotifications('{{notificacao.id}}'>AQUI</a>.
                     </br><br>
                     Há e não se esqueça, o id do entregável é <b>#{entregavel_id}</b> ! :D      
 
@@ -100,7 +100,7 @@ def devolver_correcao_entrega(request,solicitacao_id,criado_por,entregavel_id):
         if '12' in usuario.permissao:
             descricao = f'''<b>Entregável Corrigido e Reenviado!</b></br>
                     <b>{request.user.first_name}</b> informou que alterou o entregável e está reenviando novamente!</br></br>
-                    Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank'>AQUI</a>.
+                    Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank' onclick="readNotifications('{{notificacao.id}}'>AQUI</a>.
                     </br><br>
                     Há e não se esqueça, o id do entregável é <b>#{entregavel_id}</b>! :D      
                     '''
@@ -111,7 +111,7 @@ def devolver_correcao_entrega(request,solicitacao_id,criado_por,entregavel_id):
 def devolver_entregavel_solicitante(request,destinatario,autor,solicitacao_id,entregavel_id):
     descricao = f'''<b>Corrija o Entregável!</b></br>
                 <b>{request.user.first_name}</b> solicitou a correção do entregável!</br></br>
-                Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank'>AQUI</a>.
+                Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank' onclick="readNotifications('{{notificacao.id}}'>AQUI</a>.
                 </br><br>
                 Há e não se esqueça, o id do entregável é <b>#{entregavel_id}</b> ! :D      
                 '''
@@ -125,7 +125,7 @@ def devolver_entregavel_comunicacao(request,solicitacao_id,criado_por,entregavel
         if '12' in usuario.permissao:
             descricao = f'''<b>Entrega Incompleta!</b></br>
                     <b>{request.user.first_name}</b> informou que o entregável entregue pela comunicação não está correto e precisa de correções!</br></br>
-                    Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank'>AQUI</a>.
+                    Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank' onclick="readNotifications('{{notificacao.id}}'>AQUI</a>.
                     </br><br>
                     Há e não se esqueça, o id do entregável é <b>#{entregavel_id}</b>! :D      
                     '''
@@ -136,7 +136,7 @@ def devolver_entregavel_comunicacao(request,solicitacao_id,criado_por,entregavel
 def negar_entregavel_solicitante(request,destinatario,autor,solicitacao_id,entregavel_id):
     descricao = f'''<b>Entregável Negado!</b></br>
                 <b>{request.user.first_name}</b> informou que o entregável da solicitação foi negado!</br></br>
-                Acesse a solicitação para saber mais clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank'>AQUI</a>.
+                Acesse a solicitação para saber mais clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank' onclick="readNotifications('{{notificacao.id}}'>AQUI</a>.
                 </br><br>
                 Há e não se esqueça, o id do entregável é <b>#{entregavel_id}</b> ! :D      
                 '''
