@@ -164,7 +164,6 @@
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
-    <!-- /.content-header -->
 <section class="content">
     <div class="container-fluid">
     
@@ -398,6 +397,23 @@
 <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
 
 <script>
+
+function readNotifications(notificacao_id){
+  var XCSRFToken = '{{ csrf_token }}';
+  const url = "/read-notifications";
+
+  $.ajax({
+    url: url,
+    type: "get",
+    data: { 'notificacao_id': notificacao_id },
+    headers: { "X-CSRFToken": XCSRFToken },
+    success: function (data) {
+      console.log('Notificação marcada como lida!')
+
+    }
+
+  });
+}
 
 function ModalNotifications(notificationsId) {
   var XCSRFToken = '{{ csrf_token }}';
