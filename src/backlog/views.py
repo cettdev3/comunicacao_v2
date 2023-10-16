@@ -81,7 +81,7 @@ def Ajax_Move_Task(request):
         solicitacao = entr.evento_id
 
         if step == '3':
-            tarefa_concluida(request,solicitacao,tarefa.usuario_id,tarefa.id,entregavel)
+            tarefa_concluida(request,tarefa.usuario_designou,request.user.id,solicitacao,entr.id,tarefa.id)
 
         tarefas = Tarefas.objects.filter(usuario_id=request.user.id).all().order_by('prazo_entrega')
 

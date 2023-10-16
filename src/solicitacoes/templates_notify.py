@@ -29,19 +29,17 @@ def nova_tarefa(request,solicitacao_id,usuario_designado,tarefa_id,entregavel_id
     return True
 
 #Notifica quando o usuário conclui a tarefa
-def tarefa_concluida(request,solicitacao_id,usuario_designado,tarefa_id,entregavel_id):
-    usuarios_notify = Permissoes.objects.all()
-    for usuario in usuarios_notify:
-        if '12' in usuario.permissao:
-            descricao = f'''<b>Tarefa Concluída!</b></br>
-                            <b>{request.user.first_name}</b> acabou de concluir uma tarefa!</br></br>
-                            Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank'>AQUI</a>.
-                            </br><br>
-                            Há e não se esqueça, o id da tarefa é <b>#{tarefa_id}</b> e do entregável é <b>#{entregavel_id}</b>! :D
-                            
+def tarefa_concluida(request,destinatario,autor,solicitacao_id,entregavel_id,tarefa_id):
 
-                        '''
-            notificacao = Notificacoes.objects.create(user_id = usuario.id,descricao = descricao,origem_id = request.user.id,readonly = 1)
+    descricao = f'''<b>Tarefa Concluída!</b></br>
+                    <b>{request.user.first_name}</b> acabou de concluir uma tarefa!</br></br>
+                    Acesse a solicitação clicando <a href='/solicitacoes/visualizar/{solicitacao_id}' target='_blank'>AQUI</a>.
+                    </br><br>
+                    Há e não se esqueça, o id da tarefa é <b>#{tarefa_id}</b> e do entregável é <b>#{entregavel_id}</b>! :D
+                    
+
+                '''
+    notificacao = Notificacoes.objects.create(user_id = destinatario.id,descricao = descricao,origem_id = autor,readonly = 1)
     return True
 
 #Notifica designação de nova tarefa
