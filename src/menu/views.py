@@ -58,3 +58,9 @@ def Read_Notification(request):
     print(notificacao_id)
    
     return JsonResponse({"success_message": "Solicitação Realizada!"}) 
+
+@login_required(login_url='/')
+def Read_All_Notifications(request):
+    Notificacoes.objects.filter(user_id=request.user.id).update(readonly=2)
+   
+    return JsonResponse({"success_message": "Solicitação Realizada!"}) 
