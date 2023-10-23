@@ -22,6 +22,7 @@ class  Solicitacao_Serializar(serializers.ModelSerializer):
                 "status_solicitacao",
                 "get_status_display",
                 "briefing",
+                "arquivos"
                 ]
         depth = 2
 

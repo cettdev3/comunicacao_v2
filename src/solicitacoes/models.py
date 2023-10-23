@@ -24,6 +24,7 @@ class Solicitacoes(models.Model):
         default=timezone.now, null=True, blank=True)
     prazo_entrega = models.DateField(null=True, blank=True)
     briefing = models.TextField(null=True, blank=True)
+    arquivos = models.TextField(null=True, blank=True)
     status = models.IntegerField(
         choices=choices_status, blank=False, null=False, default=1)
     

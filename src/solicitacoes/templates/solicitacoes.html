@@ -154,6 +154,17 @@ z-index: 9999;
 
 
 }
+
+.file-icon {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.remove-button {
+    cursor: pointer;
+    color: red;
+}
+
   </style>
    <div id="spinner-background" style="display:none;">
     <div id="spinner-container">
@@ -484,11 +495,35 @@ z-index: 9999;
                                                           
                                                           <!-- /.card-body -->
                                                       
-                                                        </div>
+                                              </div>
                                               </div>
 
                                         </div>
-                            
+                                        <div class="card" style="width: 100%;">
+                                          <div class="card-header" style="background-color: #fafafa;">
+                                              <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i> Adicionar Arquivos</h3>
+                                              
+                                          </div>
+                                   
+                                              <div class="card-body">
+                                                <div class="row d-flex align-items-center justify-content-center">
+                                                  <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                                      <iconify-icon icon="pepicons-pop:file" width="60" style="color: #001b91;"></iconify-icon>
+                                                  </div>
+                                                  <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                                      <label for="fileInput" class="btn btn-primary">
+                                                        <iconify-icon icon="pepicons-pop:file"></iconify-icon> ESCOLHER ARQUIVOS
+                                                      </label>
+                                                  </div>
+                                                      <input style="width: 100%;" type="file" id="fileInput" class="d-none" multiple onchange="showSelectedFiles()">
+                                                      <div class="row" id="fileDisplay"></div>
+                                            
+                                              </div>
+                                              
+                                              </div>
+                                        </div>
+                                      
+                                  
                                     </div>
                                     <!-- /.card-body -->
                         
@@ -2430,6 +2465,15 @@ function realizaSolicitacao(user_id, solicitacao_id) {
     var XCSRFToken = '{{ csrf_token }}';
     var formIsValid = true;
 
+    var fileInput = document.getElementById('fileInput');
+    
+    if (fileInput){
+      for (var i = 0; i < fileInput.files.length; i++) {
+        console.log(fileInput.files[i])
+        formData.append('files[]', fileInput.files[i]);
+    }
+    }
+
 
 
     // Percorra todos os elementos obrigatórios do formulário
@@ -2485,6 +2529,50 @@ function realizaSolicitacao(user_id, solicitacao_id) {
     }
 }
 
+function showSelectedFiles() {
+            const fileInput = document.getElementById('fileInput');
+            const fileDisplay = document.getElementById('fileDisplay');
+
+            // Limpa a exibição de arquivos anteriores
+            fileDisplay.innerHTML = "";
+
+            const files = fileInput.files;
+            for (let i = 0; i < files.length; i++) {
+                const fileName = files[i].name;
+                const listItem = document.createElement('div');
+                listItem.className = "col-auto";
+                listItem.innerHTML = `
+                    <i class="file-icon far fa-file"></i>
+                    ${fileName}
+                    <i class="remove-button fas fa-times-circle" onclick="removeFile(${i})"></i>
+                `;
+                fileDisplay.appendChild(listItem);
+            }
+        }
+
+function removeFile(index) {
+    const fileInput = document.getElementById('fileInput');
+    const files = Array.from(fileInput.files);
+    files.splice(index, 1);
+
+    // Cria um novo input de arquivo e copia os arquivos restantes
+    const newFileInput = document.createElement('input');
+    newFileInput.type = 'file';
+    newFileInput.id = 'fileInput';
+    newFileInput.multiple = true;
+    newFileInput.style.display = 'none';
+    newFileInput.addEventListener('change', showSelectedFiles);
+
+    const dataTransfer = new DataTransfer();
+    files.forEach(file => dataTransfer.items.add(file));
+    newFileInput.files = dataTransfer.files;
+
+    // Substitui o input de arquivo anterior
+    fileInput.parentNode.replaceChild(newFileInput, fileInput);
+
+    // Atualize a lista de arquivos selecionados
+    showSelectedFiles();
+}
 </script>
         
         

@@ -487,6 +487,26 @@
                             </div>
                           </div>
                           {% endif %}
+
+                          {% if solicitacao.arquivos %}
+                          <div class="col-12 col-sm-12 col-md-12">
+                            <div class="card" style="width: 100%;">
+                                <div class="card-header" style="background-color: #fafafa;">
+                                  <label for="">Arquivos</label>
+                                </div>
+                                  
+                                <div class="card-body">
+                                 <div class="row">
+                                  {% for arquivo in arquivos %}
+                                  <a href="{{arquivo}}" class="btn btn-app">
+                                    <i class="fas fa-file"></i> {{ arquivo|cut:"/media/" }}
+                                  </a>
+                                  {% endfor %}
+                                 </div>
+                                </div>
+                            </div>
+                          </div>
+                          {% endif %}
                           
                           
                    
