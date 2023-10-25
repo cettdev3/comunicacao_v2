@@ -104,6 +104,7 @@ class Entregaveis(models.Model):
     criado_por = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='criado_por', null=True, blank=True)
     motivo_revisao = models.TextField(default='', null=True, blank=True)
+    arquivos =  models.TextField(null=True, blank=True)
     status = models.IntegerField(
         choices=choices_status, blank=True, null=True, default=0)
 

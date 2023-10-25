@@ -283,6 +283,19 @@ def Ajax_Realiza_Solicitacao(request):
                             else:
                                 exemploarte_save_the_date_url = ''
 
+                            #PEGO OS ARQUIVOS DO ENTREGÁVEL PRINCIPAL
+                            try:
+                                arquivos_entregaveis_save_the_date = []
+                                arquivos_save_the_date = request.FILES.getlist('file_save_the_date')
+                                for arquivo in arquivos_save_the_date:
+                                    fs1 = FileSystemStorage()
+                                    filename1 = fs1.save(arquivo.name, arquivo)
+                                    arquivo_url = fs1.url(filename1)
+                                    arquivos_entregaveis_save_the_date.append(arquivo_url)
+                            except:
+                                arquivo_url = ''
+
+                          
                             
                             eventos_entregaveis = Entregaveis.objects.create(
                                 evento_id = solicitacao.id,
@@ -293,14 +306,15 @@ def Ajax_Realiza_Solicitacao(request):
                                 categoria_produto = categoriaproduto_save_the_date,
                                 descricao_audio_visual = descricao_save_the_date,
                                 observacao = obs_save_the_date,
-                                criado_por_id = userid
+                                criado_por_id = userid,
+                                arquivos = arquivos_entregaveis_save_the_date
 
                                 )
      
                             
                         else:
                             index = dado[-1]
-                            prazo_save_the_date = request.POST.get(dado,None)
+                            prazo_save_the_date = prazo_entrega
                             exemploarte_save_the_date = request.FILES.get('exemploarte_save_the_date'+str(index),None)
                             tipoproduto_save_the_date = request.POST.get('tipoproduto_save_the_date'+str(index),None)
                             categoriaproduto_save_the_date = request.POST.get('categoriaproduto_save_the_date'+str(index),'')
@@ -308,7 +322,17 @@ def Ajax_Realiza_Solicitacao(request):
                             obs_save_the_date = request.POST.get('obs_save_the_date'+str(index),None)
 
                           
-
+                             #PEGO OS ARQUIVOS DO ENTREGÁVEIS DINAMICOS
+                            try:
+                                arquivos_entregaveis_save_the_date = []
+                                arquivos_save_the_date = request.FILES.getlist('file_save_the_date'+str(index))
+                                for arquivo in arquivos_save_the_date:
+                                    fs1 = FileSystemStorage()
+                                    filename1 = fs1.save(arquivo.name, arquivo)
+                                    arquivo_url = fs1.url(filename1)
+                                    arquivos_entregaveis_save_the_date.append(arquivo_url)
+                            except:
+                                arquivo_url = ''
 
                             #CODIFICA PARA OBTER A URL E ADICIONAR IMAGEM NO SISTEMA
                             if exemploarte_save_the_date:
@@ -328,7 +352,8 @@ def Ajax_Realiza_Solicitacao(request):
                                 categoria_produto = categoriaproduto_save_the_date,
                                 descricao_audio_visual = descricao_save_the_date,
                                 observacao = obs_save_the_date,
-                                criado_por_id = userid
+                                criado_por_id = userid,
+                                arquivos = arquivos_entregaveis_save_the_date
                                 )
                             
 
