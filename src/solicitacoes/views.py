@@ -754,20 +754,7 @@ def Ajax_Altera_Solicitacao(request):
         evento_json = {"escola": unidade, "endereco": endereco, "data_inicio": data_inicio_convertida, "data_fim": data_fim_convertida, "titulo_evento": titulo_evento}
         solicitacao = Solicitacoes.objects.get(id=solicitacaoID)
 
-        try:
-            arquivos_solicitacao = []
-            arquivos = request.FILES.getlist('files[]')
-            for arquivo in arquivos:
-                fs1 = FileSystemStorage()
-                filename1 = fs1.save(arquivo.name, arquivo)
-                arquivo_url = fs1.url(filename1)
-                arquivos_solicitacao.append(arquivo_url)
-        except:
-            arquivo_url = ''
-
-
-
-
+  
         solicitacao.evento_json = evento_json
         solicitacao.tipo_projeto = projeto
         solicitacao.publico_evento = publico_evento
@@ -779,16 +766,6 @@ def Ajax_Altera_Solicitacao(request):
             else:
                 solicitacao.briefing = briefing
         
-        todos_arquivos = []
-        arquivos = ast.literal_eval(solicitacao.arquivos)
-        arquivos_antigos = arquivos
-        for arquivo in arquivos_antigos:
-            todos_arquivos.append(arquivo)
-
-        for arquivo in arquivos_solicitacao:
-            todos_arquivos.append(arquivo)
-
-        solicitacao.arquivos = todos_arquivos
         solicitacao.save()
 
         return render(request, 'ajax/ajax_load_files.html', {'arquivos': solicitacao.arquivos,'solicitacao':solicitacao})
@@ -876,3 +853,35 @@ def Ajax_Delete_Files(request):
         print(novos_arquivos)
 
         return render(request, 'ajax/ajax_load_files.html', {'arquivos': solicitacao.arquivos,'solicitacao':solicitacao})
+
+@login_required(login_url='/')
+def Ajax_Altera_Arquivos(request):
+    solicitacaoID = request.POST.get('solicitacao',None)
+    with transaction.atomic():
+        solicitacao = Solicitacoes.objects.get(id=solicitacaoID)
+
+        try:
+            arquivos_solicitacao = []
+            arquivos = request.FILES.getlist('files[]')
+            for arquivo in arquivos:
+                fs1 = FileSystemStorage()
+                filename1 = fs1.save(arquivo.name, arquivo)
+                arquivo_url = fs1.url(filename1)
+                arquivos_solicitacao.append(arquivo_url)
+        except:
+            arquivo_url = ''
+
+        todos_arquivos = []
+        arquivos = ast.literal_eval(solicitacao.arquivos)
+        arquivos_antigos = arquivos
+        for arquivo in arquivos_antigos:
+            todos_arquivos.append(arquivo)
+
+        for arquivo in arquivos_solicitacao:
+            todos_arquivos.append(arquivo)
+
+        solicitacao.arquivos = todos_arquivos
+        solicitacao.save()
+
+
+    return render(request, 'ajax/ajax_load_files.html', {'arquivos': solicitacao.arquivos,'solicitacao':solicitacao})
