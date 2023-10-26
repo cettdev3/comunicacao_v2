@@ -489,10 +489,10 @@
                           {% endif %}
 
                           {% if solicitacao.arquivos %}
-                          <div class="col-12 col-sm-12 col-md-12">
+                          <div class="col-12 col-sm-12 col-md-12" >
                             <div class="card" style="width: 100%;">
                                 <div class="card-header" style="background-color: #fafafa;">
-                                  <label for="">Arquivos</label>
+                                  <label for="">Arquivos da Solicitação</label>
                                   <small>
                                     <button type="button" data-toggle="modal" data-target="#editarArquivos"  style="float: right; font-size: 10px;" class="btn bg-danger">
       
@@ -502,7 +502,7 @@
                                   </small>
                                 </div>
                                   
-                                <div class="card-body">
+                                <div class="card-body gerenciador_de_arquivos_solicitacao " >
                                  <div class="row">
                                   {% for arquivo in arquivos %}
                                   <a href="{{arquivo}}" class="btn btn-app">
@@ -770,7 +770,28 @@
                     
                                                        
                                                         {% endif %}
-                    
+                                                        
+                                                        {% if entregavel.arquivos %}
+                                                        <div class="col-12 col-sm-12 col-md-12" >
+                                                          <div class="card" style="width: 100%;">
+                                                              <div class="card-header" style="background-color: #fafafa;">
+                                                                <label for="">Arquivos</label>
+                                                             
+                                                              </div>
+                                                                
+                                                              <div class="card-body" id="gerenciador_de_arquivos_entregaveis_{{entregavel.id}}">
+                                                               <div class="row">
+                                                                {% for arquivo in entregavel.arquivos %}
+                                                                <a href="{{arquivo}}" class="btn btn-app">
+                                                                  <i class="fas fa-file"></i> {{ arquivo|cut:"/media/" }}
+                                                                </a>
+                                                                {% endfor %}
+                                                               </div>
+                                                              </div>
+                                                          </div>
+                                                        </div>
+                                                        {% endif %}
+                                                       
                                                         {% if entregavel.exemplo_arte %}
                                                         <div class="col-12 col-sm-12 col-md-12">
                                                           <div class="card" style="width: 100%;">
@@ -1460,13 +1481,13 @@
 
 
               {% if solicitacao.arquivos %}
-              <div class="col-12 col-sm-12 col-md-12" id="gerenciador_de_arquivos">
+              <div class="col-12 col-sm-12 col-md-12">
                 <div class="card" style="width: 100%;">
                     <div class="card-header" style="background-color: #fafafa;">
                       <label for="">Arquivos</label>
                                          </div>
                       
-                    <div class="card-body">
+                    <div class="card-body gerenciador_de_arquivos_solicitacao">
                      <div class="row">
                       
                       {% for arquivo in arquivos %}
@@ -1475,7 +1496,7 @@
                             
                             <i class="fas fa-file"></i><br>{{ arquivo|cut:"/media/" }}
                         </a>
-                        <a style="width: 100%; font-size: 10px; margin-bottom: 10px;"  class="btn btn-block bg-gradient-danger btn-xs" onclick="removeFiles('{{solicitacao.id}}','{{ arquivo|cut:"/media/" }}')"> <i class="fas fa-trash"></i> Remover</a>
+                        <a style="width: 100%; font-size: 10px; margin-bottom: 10px;"  class="btn btn-block bg-gradient-danger btn-xs btnRemover" onclick="removeFiles('{{solicitacao.id}}','{{ arquivo|cut:"/media/" }}','solicitacao','gerenciador_de_arquivos_solicitacao')"> <i class="fas fa-trash"></i> Remover</a>
                     </div>
                    
                       {% endfor %}
@@ -1524,7 +1545,7 @@
 </form>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-        <button type="button"n onclick="AlteraFiles('{{solicitacao.id}}')" class="btn btn-primary">Alterar Arquivos</button>
+        <button type="button"n onclick="AlteraFiles('{{solicitacao.id}}','','solicitacao','gerenciador_de_arquivos_solicitacao')" class="btn btn-primary">Alterar Arquivos</button>
       </div>
  
     </div>
@@ -1538,8 +1559,33 @@
 <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+
+function hideRemove(tipo){
+  if (tipo == 'open'){
+    console.log('entrou no open')
+    $(".btnRemover").css("display", "block");
+  }else{
+    $(".btnRemover").css("display", "none");
+  }
+
   
-function AlteraFiles(solicitacao){
+}
+
+$('#editarArquivos').on('shown.bs.modal', function () {
+  // Função a ser executada quando a modal é fechada
+  hideRemove('open');
+});
+
+$('#editarArquivos').on('hidden.bs.modal', function () {
+  // Função a ser executada quando a modal é fechada
+  hideRemove('close');
+});
+
+function AlteraFiles(solicitacao,file,tipo,subs){
+  var solicitacaoID = solicitacao
+  var arquivo = file
+  var tipo_dados = tipo
+
   const url = "/ajax/altera-arquivos";
   var formData = new FormData(formEditFiles);
 
@@ -1552,6 +1598,9 @@ function AlteraFiles(solicitacao){
   }
 
   formData.append('solicitacao',solicitacao);
+  formData.append('arquivo',arquivo);
+  formData.append('tipo',tipo_dados);
+  console.log(subs)
 
   Swal.fire({
     title: 'Tem certeza?',
@@ -1574,7 +1623,7 @@ function AlteraFiles(solicitacao){
         processData: false, // Evitar que o jQuery processe o FormData
         contentType: false, // Evitar que o jQuery defina o Content-Type
         success: function (data) {
-          $("#gerenciador_de_arquivos").html(data);
+          $("."+subs).html(data);
           document.getElementById('fileDisplay').innerHTML = '';
           document.getElementById('fileInput').value = '';
           Swal.fire({
@@ -1603,9 +1652,11 @@ function AlteraFiles(solicitacao){
 
 
 
-function removeFiles(solicitacao,file){
+function removeFiles(solicitacao,file,tipo,subs){
   var solicitacaoID = solicitacao
   var arquivo = file
+  var tipo_dados = tipo
+  console.log(solicitacao,arquivo,tipo_dados,subs)
   Swal.fire({
         title: 'Tem certeza?',
         text: 'Deseja realmente excluir este arquivo? Ao excluir ele será deletado definitivamente do sistema, não podendo ser recuperado',
@@ -1624,11 +1675,12 @@ function removeFiles(solicitacao,file){
             $.ajax({
                 url: url,
                 type: "POST",
-                data: {'solicitacao':solicitacaoID,'arquivo':arquivo},
+                data: {'solicitacao':solicitacaoID,'arquivo':arquivo,'tipo':tipo_dados},
                 headers: { "X-CSRFToken": XCSRFToken },
                 
                 success: function (data) {
-                  $("#gerenciador_de_arquivos").html(data);
+                  console.log(subs)
+                  $("."+subs).html(data);
                     Swal.fire({
                         icon: 'success',
                         title: 'Arquivo Deletado!',

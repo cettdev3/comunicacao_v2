@@ -71,6 +71,7 @@ class Entregaveis_Serializar(serializers.ModelSerializer):
                     "status",
                     "get_tipoproduto_display",
                     "get_tipoentregavel_display",
-                    "get_status_display"
+                    "get_status_display",
+                    "arquivos"
         ]
         depth = 2

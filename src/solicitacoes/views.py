@@ -91,10 +91,16 @@ def Visualizar_Solicitacao(request,codigo):
 
         entregaveis = Entregaveis.objects.filter(evento_id=codigo).all()
         entregaveis = Entregaveis_Serializar(entregaveis,many=True).data
+
+       
+
         tarefas_por_entregavel = {}
 
         for entregavel in entregaveis:
             try:
+                arquivos_entregaveis = entregavel['arquivos']
+                arquivos_list_entregavel = ast.literal_eval(arquivos_entregaveis)
+                entregavel['arquivos'] = arquivos_list_entregavel
                 entregavel['prazo'] = datetime.datetime.strptime(entregavel['prazo'], '%Y-%m-%d').date()
                 entregavel['data_solicitacao'] = datetime.datetime.strptime(entregavel['data_solicitacao'], '%Y-%m-%d').date()
             
@@ -102,6 +108,7 @@ def Visualizar_Solicitacao(request,codigo):
                 
             except:
                 tarefas_relacionadas = {}
+                arquivos_list_entregavel = None
             try:
                 ultima_tarefa_id = Tarefas.objects.filter(entregavel_id=entregavel['id']).latest('id')
             except:
@@ -721,7 +728,9 @@ def Ajax_Negar_Entregavel(request):
 def Ajax_Altera_Entregavel(request):
     entregavelID = request.GET['entregavelId']
     entregavel = Entregaveis.objects.filter(id=entregavelID).first()
-    
+    arquivos_entregaveis = entregavel.arquivos
+    arquivos_list_entregavel = ast.literal_eval(arquivos_entregaveis)
+    entregavel.arquivos = arquivos_list_entregavel
     return render(request, 'ajax/ajax_editar_entregaveis.html', {'entregavel': entregavel})
 
 @login_required(login_url='/')
@@ -810,7 +819,7 @@ def Ajax_Change_Entregavel(request):
         tipo_entregavel = request.POST.get('tipo_entregavel','')
         audiovisual =  request.POST.get('audio_visual','')
         observacoes =  request.POST.get('obs_save_the_date','')
-
+    
         entregavel = Entregaveis.objects.get(id=entregavelId)
         entregavel.prazo = prazo
         entregavel.tipo_produto = tipo_produto
@@ -818,12 +827,36 @@ def Ajax_Change_Entregavel(request):
         entregavel.tipo_entregavel = tipo_entregavel
         entregavel.descricao_audio_visual = audiovisual
         entregavel.observacao = observacoes
+
+        #PEGO OS ARQUIVOS DO ENTREGÁVEL PRINCIPAL
+        try:
+            arquivos_entregaveis = []
+            arquivos = request.FILES.getlist('fileInput')
+            for arquivo in arquivos:
+                fs1 = FileSystemStorage()
+                filename1 = fs1.save(arquivo.name, arquivo)
+                arquivo_url = fs1.url(filename1)
+                arquivos_entregaveis.append(arquivo_url)
+        except:
+            arquivo_url = ''
+        
+        todos_arquivos = []
+        arquivos = ast.literal_eval(entregavel.arquivos)
+        arquivos_antigos = arquivos
+        for arquivo in arquivos_antigos:
+            todos_arquivos.append(arquivo)
+
+        for arquivo in arquivos_entregaveis:
+            todos_arquivos.append(arquivo)
+        
+        entregavel.arquivos = todos_arquivos
+
         entregavel.save()
 
+    block = f'gerenciador_de_arquivos_entregavel_{entregavel.id}'
+    tipo = 'entregavel'
 
-
-
-    return JsonResponse({"success_message": "Tarefa Devolvida!"})
+    return render(request, 'ajax/ajax_load_files.html', {'arquivos': entregavel.arquivos,'solicitacao':entregavel,'block':block,'tipo':tipo})
 
 @login_required(login_url='/')
 def Ajax_Add_Entregavel(request):
@@ -860,53 +893,114 @@ def Ajax_Delete_Files(request):
         print(request.POST)
         solicitacaoId = request.POST.get('solicitacao',None)
         arquivo_removido = request.POST.get('arquivo',None)
-        solicitacao = Solicitacoes.objects.filter(id=solicitacaoId).first()
-        arquivos = ast.literal_eval(solicitacao.arquivos)
-        novos_arquivos = [] 
-        for arquivo in arquivos:
-            tag = '/media/'+arquivo_removido
-            if tag not in arquivo:
-                novos_arquivos.append(arquivo)
-            else:
-                url = settings.MEDIA_ROOT + '\\' + arquivo_removido
-                if default_storage.exists(arquivo_removido):
-                    default_storage.delete(url)
-               
-        solicitacao.arquivos = novos_arquivos
-        solicitacao.save()
-       
-        print(novos_arquivos)
+        tipo = request.POST.get('tipo',None)
+        
+        if tipo == 'solicitacao':
+            solicitacao = Solicitacoes.objects.filter(id=solicitacaoId).first()
+            arquivos = ast.literal_eval(solicitacao.arquivos)
+            novos_arquivos = [] 
+            for arquivo in arquivos:
+                tag = '/media/'+arquivo_removido
+                if tag not in arquivo:
+                    novos_arquivos.append(arquivo)
+                else:
+                    url = settings.MEDIA_ROOT + '\\' + arquivo_removido
+                    if default_storage.exists(arquivo_removido):
+                        default_storage.delete(url)
+                
+            solicitacao.arquivos = novos_arquivos
+            solicitacao.save()
+        
+            print(novos_arquivos)
+            block = f'gerenciador_de_arquivos_solicitacao'
+            tipo = 'solicitacao'
+            return render(request, 'ajax/ajax_load_files.html', {'arquivos': solicitacao.arquivos,'solicitacao':solicitacao,'block':block,'tipo':tipo})
+        
+        elif tipo == 'entregavel':
+            entregavel = Entregaveis.objects.filter(id=solicitacaoId).first()
+            arquivos = ast.literal_eval(entregavel.arquivos)
+            novos_arquivos = [] 
+            for arquivo in arquivos:
+                tag = '/media/'+arquivo_removido
+                if tag not in arquivo:
+                    novos_arquivos.append(arquivo)
+                else:
+                    url = settings.MEDIA_ROOT + '\\' + arquivo_removido
+                    if default_storage.exists(arquivo_removido):
+                        default_storage.delete(url)
+                
+            entregavel.arquivos = novos_arquivos
+            entregavel.save()
+            block = f'gerenciador_de_arquivos_entregavel_{entregavel.id}'
+            tipo = 'entregavel'
 
-        return render(request, 'ajax/ajax_load_files.html', {'arquivos': solicitacao.arquivos,'solicitacao':solicitacao})
+            return render(request, 'ajax/ajax_load_files.html', {'arquivos': entregavel.arquivos,'solicitacao':entregavel,'block':block,'tipo':tipo })
 
 @login_required(login_url='/')
 def Ajax_Altera_Arquivos(request):
     solicitacaoID = request.POST.get('solicitacao',None)
+    arquivo_removido = request.POST.get('arquivo',None)
+    tipo = request.POST.get('tipo',None)
+
     with transaction.atomic():
-        solicitacao = Solicitacoes.objects.get(id=solicitacaoID)
+        if tipo == 'solicitacao':
+            solicitacao = Solicitacoes.objects.get(id=solicitacaoID)
 
-        try:
-            arquivos_solicitacao = []
-            arquivos = request.FILES.getlist('files[]')
-            for arquivo in arquivos:
-                fs1 = FileSystemStorage()
-                filename1 = fs1.save(arquivo.name, arquivo)
-                arquivo_url = fs1.url(filename1)
-                arquivos_solicitacao.append(arquivo_url)
-        except:
-            arquivo_url = ''
+            try:
+                arquivos_solicitacao = []
+                arquivos = request.FILES.getlist('files[]')
+                for arquivo in arquivos:
+                    fs1 = FileSystemStorage()
+                    filename1 = fs1.save(arquivo.name, arquivo)
+                    arquivo_url = fs1.url(filename1)
+                    arquivos_solicitacao.append(arquivo_url)
+            except:
+                arquivo_url = ''
 
-        todos_arquivos = []
-        arquivos = ast.literal_eval(solicitacao.arquivos)
-        arquivos_antigos = arquivos
-        for arquivo in arquivos_antigos:
-            todos_arquivos.append(arquivo)
+            todos_arquivos = []
+            arquivos = ast.literal_eval(solicitacao.arquivos)
+            arquivos_antigos = arquivos
+            for arquivo in arquivos_antigos:
+                todos_arquivos.append(arquivo)
 
-        for arquivo in arquivos_solicitacao:
-            todos_arquivos.append(arquivo)
+            for arquivo in arquivos_solicitacao:
+                todos_arquivos.append(arquivo)
 
-        solicitacao.arquivos = todos_arquivos
-        solicitacao.save()
+            solicitacao.arquivos = todos_arquivos
+            solicitacao.save()
 
+            block = f'gerenciador_de_arquivos_solicitacao'
+            tipo = 'solicitacao'
 
-    return render(request, 'ajax/ajax_load_files.html', {'arquivos': solicitacao.arquivos,'solicitacao':solicitacao})
+            return render(request, 'ajax/ajax_load_files.html', {'arquivos': solicitacao.arquivos,'solicitacao':solicitacao,'block':block,'tipo':tipo})
+        
+        elif tipo == 'entregavel':
+            entregavel = Entregaveis.objects.get(id=solicitacaoID)
+
+            try:
+                arquivos_entregaveis = []
+                arquivos = request.FILES.getlist('files[]')
+                for arquivo in arquivos:
+                    fs1 = FileSystemStorage()
+                    filename1 = fs1.save(arquivo.name, arquivo)
+                    arquivo_url = fs1.url(filename1)
+                    arquivos_entregaveis.append(arquivo_url)
+            except:
+                arquivo_url = ''
+
+            todos_arquivos = []
+            arquivos = ast.literal_eval(entregavel.arquivos)
+            arquivos_antigos = arquivos
+            for arquivo in arquivos_antigos:
+                todos_arquivos.append(arquivo)
+
+            for arquivo in arquivos_entregaveis:
+                todos_arquivos.append(arquivo)
+
+            entregavel.arquivos = todos_arquivos
+            entregavel.save()
+
+            block = f'gerenciador_de_arquivos_entregavel_{entregavel.id}'
+            tipo = 'entregavel'
+
+            return render(request, 'ajax/ajax_load_files.html', {'arquivos': entregavel.arquivos,'solicitacao':entregavel,'block':block,'tipo':tipo})

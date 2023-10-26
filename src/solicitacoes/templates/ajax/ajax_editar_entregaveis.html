@@ -163,6 +163,55 @@
                       </div>
                     </div>
 
+                    {% if entregavel.arquivos %}
+                    <div class="col-12 col-sm-12 col-md-12" >
+                      <div class="card" style="width: 100%;">
+                          <div class="card-header" style="background-color: #fafafa;">
+                            <label for="">Arquivos</label>
+                         
+                          </div>
+                            
+                          <div class="card-body gerenciador_de_arquivos_entregaveis_{{entregavel.id}}">
+                           <div class="row">
+                            {% for arquivo in entregavel.arquivos %}
+                            <div class="col-6 col-sm-6 col-md-6">
+                            <a style="width: 100%;" href="{{arquivo}}" class="btn btn-block btn-outline-secondary">
+                              <i class="fas fa-file"></i> {{ arquivo|cut:"/media/" }}
+                            </a>
+                            <a style="width: 100%; font-size: 10px;"  class="btn btn-block bg-gradient-danger btn-xs btnRemover" onclick="removeFiles('{{entregavel.id}}','{{ arquivo|cut:"/media/" }}','entregavel','gerenciador_de_arquivos_entregaveis_{{entregavel.id}}')"> <i class="fas fa-trash"></i> Remover</a>
+                            </div>
+                            {% endfor %}
+                           </div>
+                          </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="col-12 col-sm-12 col-md-12" >
+                      <div class="card" style="width: 100%;">
+                        <div class="card-header" style="background-color: #fafafa;">
+                            <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i> Adicionar Arquivos</h3>
+                            
+                        </div>
+                 
+                            <div class="card-body">
+                              <div class="row d-flex align-items-center justify-content-center">
+                                <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                    <iconify-icon icon="pepicons-pop:file" width="60" style="color: #001b91;"></iconify-icon>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                    <label for="fileInput" class="btn btn-primary">
+                                      <iconify-icon icon="pepicons-pop:file"></iconify-icon> ESCOLHER ARQUIVOS
+                                    </label>
+                                </div>
+                                    <input style="width: 100%;" type="file" id="fileInput"  name="fileInput" class="d-none" multiple onchange="showSelectedFiles()">
+                                    <div class="row" id="fileDisplay"></div>
+                          
+                            </div>
+                            
+                            </div>
+                      </div>
+                      </div>
                                 </div>
 
                     </div>
