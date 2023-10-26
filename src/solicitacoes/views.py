@@ -728,7 +728,7 @@ def Ajax_Negar_Entregavel(request):
 def Ajax_Altera_Entregavel(request):
     entregavelID = request.GET['entregavelId']
     entregavel = Entregaveis.objects.filter(id=entregavelID).first()
-    arquivos_entregaveis = entregavel.arquivos
+    arquivos_entregaveis = entregavel.arquivos if entregavel.arquivos else '[]'
     arquivos_list_entregavel = ast.literal_eval(arquivos_entregaveis)
     entregavel.arquivos = arquivos_list_entregavel
     return render(request, 'ajax/ajax_editar_entregaveis.html', {'entregavel': entregavel})
