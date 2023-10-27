@@ -9,6 +9,19 @@ from django.core.files.base import ContentFile
 import base64
 
 
+def salvarArquivosERetornarArrayContendoAsUrlsDosArquivosSalvos(arquivos):
+    fs = FileSystemStorage()
+    urlArquivosSalvos = []
+    for arquivo in arquivos:
+        file_name = os.path.basename(arquivo)
+        decoded_file = convert(arquivo)
+        file = ContentFile(decoded_file, name=file_name)
+        saved_file_name = fs.save(file.name, file)
+        urlArquivo = fs.url(saved_file_name)
+        urlArquivosSalvos.append(urlArquivo)
+    return urlArquivosSalvos
+
+
 def convert(src):
     with open(src, 'rb') as image_file:
         encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
@@ -26,9 +39,14 @@ def createSolicitacao(solicitacaoData):
     statusSolicitacao = solicitacaoData['status']
     briefing = solicitacaoData['briefing']
 
+    arquivos = solicitacaoData['arquivos']
+    urlArquivosSalvos = salvarArquivosERetornarArrayContendoAsUrlsDosArquivosSalvos(
+        arquivos)
+
     solicitacao = Solicitacoes(criado_por=criado_por, evento_json=evento_json, motivo_alteracao=motivo_alteracao,
                                tipo_projeto=tipo_projeto, publico_evento=publico_evento, data_solicitacao=data_solicitacao,
                                status=statusSolicitacao, briefing=briefing)
+    solicitacao.arquivos = arquivos
     solicitacao.save()
 
     return solicitacao
@@ -64,12 +82,17 @@ def createEntregavel(entregavelData, solicitacao):
     saved_file_name = fs.save(file.name, file)
     urEntregavel = fs.url(saved_file_name)
 
+    arquivos = entregavelData['arquivos']
+    urlArquivosSalvos = salvarArquivosERetornarArrayContendoAsUrlsDosArquivosSalvos(
+        arquivos)
+
     entregavel = Entregaveis(prazo=prazo, data_solicitacao=data_solicitacao, exemplo_arte=urEntregavel,
                              tipo_entregavel=tipo_entregavel, tipo_produto=tipo_produto,
                              categoria_produto=categoria_produto, descricao_audio_visual=descricao_audio_visual, observacao=observacao,
                              motivo_revisao=motivo_revisao, status=statusEntregavel)
     entregavel.evento = solicitacao
     entregavel.criado_por = criado_por
+    entregavel.arquivos = str(urlArquivosSalvos)
     entregavel.save()
 
     return entregavel
@@ -96,20 +119,13 @@ def createTarefa(tarefaData, entregavel):
     tipo = int(tarefaData['tipo'])
     statusTarefa = int(tarefaData['status'])
 
-    fs = FileSystemStorage()
-    urlArquivosSalvos = []
     arquivos = tarefaData['arquivos']
-    for arquivo in arquivos:
-        file_name = os.path.basename(arquivo)
-        decoded_file = convert(arquivo)
-        file = ContentFile(decoded_file, name=file_name)
-        saved_file_name = fs.save(file.name, file)
-        urlArquivo = fs.url(saved_file_name)
-        urlArquivosSalvos.append(urlArquivo)
+    urlArquivosSalvos = salvarArquivosERetornarArrayContendoAsUrlsDosArquivosSalvos(
+        arquivos)
 
     tarefa = Tarefas(titulo_tarefa=titulo_tarefa, data_tarefa=data_tarefa, prazo_entrega=prazo_entrega,
                      data_entrega=data_entrega, descricao_tarefa=descricao_tarefa, descricao_entrega=descricao_entrega,
-                     prioridade=prioridade, tipo=tipo, status=statusTarefa, arquivos=arquivos)
+                     prioridade=prioridade, tipo=tipo, status=statusTarefa)
     tarefa.entregavel = entregavel
     tarefa.usuario = usuario
     tarefa.usuario_designou = usuario_designou
@@ -181,6 +197,12 @@ def updateSolicitacao(solicitacaoData, pk):
         briefing = solicitacaoData['briefing']
         solicitacao.briefing = briefing
 
+    if 'arquivos' in solicitacaoData and solicitacaoData['arquivos'] is not []:
+        arquivos = solicitacaoData['arquivos']
+        urlArquivosSalvos = salvarArquivosERetornarArrayContendoAsUrlsDosArquivosSalvos(
+            arquivos)
+        solicitacao.arquivos = str(urlArquivosSalvos)
+
     solicitacao.save()
     return solicitacao
 
@@ -234,6 +256,12 @@ def updateEntregavel(entregavelData, pk):
         urEntregavel = fs.url(saved_file_name)
         entregavel.exemplo_arte = urEntregavel
 
+    if 'arquivos' in entregavelData and entregavelData['arquivos'] is not []:
+        arquivos = entregavelData['arquivos']
+        urlArquivosSalvos = salvarArquivosERetornarArrayContendoAsUrlsDosArquivosSalvos(
+            arquivos)
+        entregavel.arquivos = str(urlArquivosSalvos)
+
     entregavel.save()
 
     return entregavel
@@ -277,17 +305,20 @@ def updateTarefa(tarefaData, pk):
         tarefa.status = status
 
     if 'arquivos' in tarefaData and tarefaData['arquivos'] is not []:
-        fs = FileSystemStorage()
-        urlArquivosSalvos = []
         arquivos = tarefaData['arquivos']
-        for arquivo in arquivos:
-            file_name = os.path.basename(arquivo)
-            decoded_file = convert(arquivo)
-            file = ContentFile(decoded_file, name=file_name)
-            saved_file_name = fs.save(file.name, file)
-            urlArquivo = fs.url(saved_file_name)
-            urlArquivosSalvos.append(urlArquivo)
+        urlArquivosSalvos = salvarArquivosERetornarArrayContendoAsUrlsDosArquivosSalvos(
+            arquivos)
         tarefa.arquivos = str(urlArquivosSalvos)
+        # fs = FileSystemStorage()
+        # urlArquivosSalvos = []
+        # arquivos = tarefaData['arquivos']
+        # for arquivo in arquivos:
+        #     file_name = os.path.basename(arquivo)
+        #     decoded_file = convert(arquivo)
+        #     file = ContentFile(decoded_file, name=file_name)
+        #     saved_file_name = fs.save(file.name, file)
+        #     urlArquivo = fs.url(saved_file_name)
+        #     urlArquivosSalvos.append(urlArquivo)
 
     tarefa.save()
     return tarefa
