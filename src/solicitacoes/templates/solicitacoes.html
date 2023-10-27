@@ -154,6 +154,17 @@ z-index: 9999;
 
 
 }
+
+.file-icon {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.remove-button {
+    cursor: pointer;
+    color: red;
+}
+
   </style>
    <div id="spinner-background" style="display:none;">
     <div id="spinner-container">
@@ -484,11 +495,35 @@ z-index: 9999;
                                                           
                                                           <!-- /.card-body -->
                                                       
-                                                        </div>
+                                              </div>
                                               </div>
 
                                         </div>
-                            
+                                        <div class="card" style="width: 100%;">
+                                          <div class="card-header" style="background-color: #fafafa;">
+                                              <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i> Adicionar Arquivos</h3>
+                                              
+                                          </div>
+                                   
+                                              <div class="card-body">
+                                                <div class="row d-flex align-items-center justify-content-center">
+                                                  <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                                      <iconify-icon icon="pepicons-pop:file" width="60" style="color: #001b91;"></iconify-icon>
+                                                  </div>
+                                                  <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                                      <label for="fileInput" class="btn btn-primary">
+                                                        <iconify-icon icon="pepicons-pop:file"></iconify-icon> ESCOLHER ARQUIVOS
+                                                      </label>
+                                                  </div>
+                                                      <input style="width: 100%;" type="file" id="fileInput" class="d-none" multiple onchange="showSelectedFiles()">
+                                                      <div class="row" id="fileDisplay"></div>
+                                            
+                                              </div>
+                                              
+                                              </div>
+                                        </div>
+                                      
+                                  
                                     </div>
                                     <!-- /.card-body -->
                         
@@ -510,30 +545,30 @@ z-index: 9999;
                                         <!---------------------------------------------------------------------------------------------------------------->
                                         <div class="col-12 col-sm-12 col-md-12">
                                           <div class="card" style="width: 100%;">
-                                              <div class="card-header" style="background-color: #fafafa;">
+                                            <div class="card-header" style="background-color: #fafafa;">
                                                   <div class="custom-control custom-checkbox">
                                                       <input class="custom-control-input" type="checkbox" id="save_the_date" name="save_the_date" >
                                                       <label for="save_the_date" class="custom-control-label">Save The Date</label>
                                                       
                                                     </div>
                                                 
-                                              </div>
+                                            </div>
                                                 
-                                              <div class="card-body">
-                                                <div class="form-group" id="save_the_date_container" >
-                                                    <div class="row">
+                                            <div class="card-body">
+                                              <div class="form-group" id="save_the_date_container" >
+                                                <div class="row">
                                                               
-                                                    <div class="card" style="width: 100%;">
-                                                      <div class="card-header" style="background-color: #fafafa;">
-                                                          <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i>  Novo Entregável - Save The Date</h3>
-                                                          <div class="col-12 col-sm-12 col-md-1" style="float: right;">
-                                                            <small>
-                                                              <a  id="add_savethedate"  style="float: right; font-size: 10px;" class="btn bg-warning">
+                                                  <div class="card" style="width: 100%;">
+                                                    <div class="card-header" style="background-color: #fafafa;">
+                                                      <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i>  Novo Entregável - Save The Date</h3>
+                                                        <div class="col-12 col-sm-12 col-md-1" style="float: right;">
+                                                          <small>
+                                                            <a  id="add_savethedate"  style="float: right; font-size: 10px;" class="btn bg-warning">
                                 
-                                                                <i class="fas fa-plus"></i> <B>ADD</B>
-                                                              </a>
+                                                              <i class="fas fa-plus"></i> <B>ADD</B>
+                                                            </a>
                                    
-                                                            </small>
+                                                          </small>
                                                         </div>
                                                       </div>
                                               
@@ -542,7 +577,7 @@ z-index: 9999;
                                                           <div class="col-12 col-sm-12 col-md-6">
                                                             <div class="form-group">
                                                               
-                                                            <label>Estilo de Criação</label>
+                                                              <label>Estilo de Criação</label>
                                             
                                                               <div class="input-group">
                                                                 <div class="input-group-prepend">
@@ -554,8 +589,8 @@ z-index: 9999;
                                                                 </select>
                                                               </div>
                                                               <!-- /.input group -->
-                                                              </div>
                                                             </div>
+                                                          </div>
 
                                                       <!-- <div class="col-12 col-sm-12 col-md-6">
                                                         <div class="form-group">
@@ -631,7 +666,7 @@ z-index: 9999;
                                                     </div>
 
                                                     <div class="col-12 col-sm-12 col-md-12" id="descricao_field_save_the_date" style="display: none;">
-                                                  <div class="col-md-12">
+                                       
                                                     <div class="card card-dark card-outline">
                                                       <div class="card-header">
                                                         <h3 class="card-title">Descrição Produção (Orçamentos e Execuções)</h3>
@@ -647,12 +682,11 @@ z-index: 9999;
                                                       <!-- /.card-body -->
                                                     
                                                     </div>
-                                                    <!-- /.card -->
-                                                  </div>
+ 
                                                     </div>
 
                                                     <div class="col-12 col-sm-12 col-md-12" id="observacao_field_save_the_date">
-                                                      <div class="col-md-12">
+                                                
                                                         <div class="card card-dark card-outline">
                                                           <div class="card-header">
                                                             <h3 class="card-title">Observações</h3>
@@ -669,18 +703,45 @@ z-index: 9999;
                                                         
                                                         </div>
                                                         <!-- /.card -->
+                                               
+                                                    </div>
+                                                    <div class="col-12 col-sm-12 col-md-12">
+                                                      <div class="card" style="width: 100%;">
+                                                        <div class="card-header" style="background-color: #fafafa;">
+                                                            <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i> Adicionar Arquivos</h3>
+                                                            
+                                                        </div>
+                                                
+                                                            <div class="card-body">
+                                                              <div class="row d-flex align-items-center justify-content-center">
+                                                                <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                                                    <iconify-icon icon="pepicons-pop:file" width="60" style="color: #001b91;"></iconify-icon>
+                                                                </div>
+                                                                <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                                                    <label for="file_save_the_date" class="btn btn-primary">
+                                                                      <iconify-icon icon="pepicons-pop:file"></iconify-icon> ESCOLHER ARQUIVOS
+                                                                    </label>
+                                                                </div>
+                                                                    <input style="width: 100%;" type="file" id="file_save_the_date" name="file_save_the_date" class="d-none" multiple onchange="showSelectedFilesSaveTheDate()">
+                                                                    <div class="row" id="fileDisplay_save_the_date"></div>
+                                                          
+                                                            </div>
+                                                            
+                                                            </div>
                                                       </div>
                                                     </div>
+
+                                                    
 
                                                                 </div>
                                                       </div>
-                                                      </div>
-                                                    </div>
+                                                  </div>
+                                                </div>
 
                                               </div>
                                                 
-                                              </div>
-                                        </div>
+                                            </div>
+                                          </div>
                                         </div>
                                         
                                         <!---------------------------------------------------------------------------------------------------------------->
@@ -800,7 +861,7 @@ z-index: 9999;
                                                       </div>
                                                     </div>
                                                     <div class="col-12 col-sm-12 col-md-12" id="descricao_field_divulgacao" style="display: none;">
-                                                      <div class="col-md-12">
+                                  
                                                           <div class="card card-dark card-outline">
                                                             <div class="card-header">
                                                                 <h3 class="card-title">Descrição Produção (Orçamentos e Execuções) </h3>
@@ -816,11 +877,11 @@ z-index: 9999;
                                                             <!-- /.card-footer -->
                                                           </div>
                                                           <!-- /.card -->
-                                                      </div>
+                                         
                                                     </div>
 
                                                     <div class="col-12 col-sm-12 col-md-12" id="observacao_divulgacao">
-                                                      <div class="col-md-12">
+                                                   
                                                         <div class="card card-dark card-outline">
                                                           <div class="card-header">
                                                             <h3 class="card-title">Observações</h3>
@@ -839,7 +900,33 @@ z-index: 9999;
                                                         
                                                         </div>
                                                         <!-- /.card -->
+                                             
+                                                  </div>
+
+                                                  <div class="col-12 col-sm-12 col-md-12">
+                                                    <div class="card" style="width: 100%;">
+                                                      <div class="card-header" style="background-color: #fafafa;">
+                                                          <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i> Adicionar Arquivoss</h3>
+                                                          
                                                       </div>
+                                              
+                                                          <div class="card-body">
+                                                            <div class="row d-flex align-items-center justify-content-center">
+                                                              <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                                                  <iconify-icon icon="pepicons-pop:file" width="60" style="color: #001b91;"></iconify-icon>
+                                                              </div>
+                                                              <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                                                  <label for="file_divulgacao" class="btn btn-primary">
+                                                                    <iconify-icon icon="pepicons-pop:file"></iconify-icon> ESCOLHER ARQUIVOS
+                                                                  </label>
+                                                              </div>
+                                                                  <input style="width: 100%;" type="file" id="file_divulgacao" name="file_divulgacao" class="d-none" multiple onchange="showSelectedFilesDivulgacao()">
+                                                                  <div class="row" id="fileDisplay_divulgacao"></div>
+                                                        
+                                                          </div>
+                                                          
+                                                          </div>
+                                                    </div>
                                                   </div>
                                                 </div>
                                                   </div>
@@ -969,7 +1056,7 @@ z-index: 9999;
                                                             </div>
                                                           </div>
                                                           <div class="col-12 col-sm-12 col-md-12" id="descricao_field_programacao" style="display: none;">
-                                                            <div class="col-md-12">
+                                                  
                                                                 <div class="card card-dark card-outline">
                                                                   <div class="card-header">
                                                                       <h3 class="card-title">Produção (Orçamentos e Execuções) </h3>
@@ -985,11 +1072,11 @@ z-index: 9999;
                                                                   <!-- /.card-footer -->
                                                                 </div>
                                                                 <!-- /.card -->
-                                                            </div>
+                                            
                                                           </div>
       
                                                           <div class="col-12 col-sm-12 col-md-12" id="observacao_programacao">
-                                                            <div class="col-md-12">
+                                                          
                                                               <div class="card card-dark card-outline">
                                                                 <div class="card-header">
                                                                   <h3 class="card-title">Observações</h3>
@@ -1006,8 +1093,35 @@ z-index: 9999;
                                                               
                                                               </div>
                                                               <!-- /.card -->
-                                                            </div>
+                                                      
                                                         </div>
+
+                                                        <div class="col-12 col-sm-12 col-md-12">
+                                                          <div class="card" style="width: 100%;">
+                                                            <div class="card-header" style="background-color: #fafafa;">
+                                                                <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i> Adicionar Arquivos</h3>
+                                                                
+                                                            </div>
+                                                    
+                                                                <div class="card-body">
+                                                                  <div class="row d-flex align-items-center justify-content-center">
+                                                                    <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                                                        <iconify-icon icon="pepicons-pop:file" width="60" style="color: #001b91;"></iconify-icon>
+                                                                    </div>
+                                                                    <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                                                        <label for="file_programacao" class="btn btn-primary">
+                                                                          <iconify-icon icon="pepicons-pop:file"></iconify-icon> ESCOLHER ARQUIVOS
+                                                                        </label>
+                                                                    </div>
+                                                                        <input style="width: 100%;" type="file" id="file_programacao" name="file_programacao" class="d-none" multiple onchange="showSelectedFilesProgramacao()">
+                                                                        <div class="row" id="fileDisplay_programacao"></div>
+                                                              
+                                                                </div>
+                                                                
+                                                                </div>
+                                                          </div>
+                                                        </div>
+
                                                       </div>
                                                         </div>
       
@@ -1175,6 +1289,36 @@ z-index: 9999;
                                                               <!-- /.card -->
                                                             </div>
                                                         </div>
+                                                      
+                                                        <div class="col-12 col-sm-12 col-md-12">
+                                                          <div class="card" style="width: 100%;">
+                                                            <div class="card-header" style="background-color: #fafafa;">
+                                                                <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i> Adicionar Arquivos</h3>
+                                                                
+                                                            </div>
+                                                    
+                                                                <div class="card-body">
+                                                                  <div class="row d-flex align-items-center justify-content-center">
+                                                                    <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                                                        <iconify-icon icon="pepicons-pop:file" width="60" style="color: #001b91;"></iconify-icon>
+                                                                    </div>
+                                                                    <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                                                        <label for="file_stand" class="btn btn-primary">
+                                                                          <iconify-icon icon="pepicons-pop:file"></iconify-icon> ESCOLHER ARQUIVOS
+                                                                        </label>
+                                                                    </div>
+                                                                        <input style="width: 100%;" type="file" id="file_stand" name="file_stand" class="d-none" multiple onchange="showSelectedFilesStand()">
+                                                                        <div class="row" id="fileDisplay_stand"></div>
+                                                              
+                                                                </div>
+                                                                
+                                                                </div>
+                                                          </div>
+                                                        </div>
+                                                  
+                                                  </div>
+                                                </div>
+                                                        
                                                         </div>
                                                       </div>
                                                     </div>
@@ -1445,7 +1589,7 @@ $('#add_savethedate').click(function() {
                         </div>
                       </div>
                       <div class="col-12 col-sm-12 col-md-12" id="descricao_field_save_the_date`+ count_savethedate +`" style="display: none;">
-                        <div class="col-md-12">
+                            
                             <div class="card card-dark card-outline">
                               <div class="card-header">
                                   <h3 class="card-title">Descrição Produção (Orçamentos e Execuções)</h3>
@@ -1459,10 +1603,10 @@ $('#add_savethedate').click(function() {
                               <!-- /.card-body -->
                             </div>
                             <!-- /.card -->
-                        </div>
+
                       </div>
                       <div class="col-12 col-sm-12 col-md-12" id="observacao_field_save_the_date`+ count_savethedate +`">
-                        <div class="col-md-12">
+                      
                             <div class="card card-dark card-outline">
                               <div class="card-header">
                                   <h3 class="card-title">Observações</h3>
@@ -1476,8 +1620,34 @@ $('#add_savethedate').click(function() {
                               <!-- /.card-body -->
                             </div>
                             <!-- /.card -->
+                    
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-12">
+                        <div class="card" style="width: 100%;">
+                          <div class="card-header" style="background-color: #fafafa;">
+                              <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i> Adicionar Arquivos</h3>
+                              
+                          </div>
+                  
+                              <div class="card-body">
+                                <div class="row d-flex align-items-center justify-content-center">
+                                  <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                      <iconify-icon icon="pepicons-pop:file" width="60" style="color: #001b91;"></iconify-icon>
+                                  </div>
+                                  <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                      <label for="file_save_the_date`+ count_savethedate +`" class="btn btn-primary">
+                                        <iconify-icon icon="pepicons-pop:file"></iconify-icon> ESCOLHER ARQUIVOS
+                                      </label>
+                                  </div>
+                                      <input style="width: 100%;" type="file" id="file_save_the_date`+ count_savethedate +`" name="file_save_the_date`+ count_savethedate +`" class="d-none" multiple onchange="showSelectedFilesSaveTheDateDinamic(`+ count_savethedate +`)">
+                                      <div class="row" id="fileDisplay_save_the_date`+ count_savethedate +`"></div>
+                            
+                              </div>
+                              
+                              </div>
                         </div>
                       </div>
+                      <!----->
                   </div>
                 </div>
             </div>
@@ -1650,7 +1820,7 @@ $('#add_divulgacao').click(function() {
                         </div>
                       </div>
                       <div class="col-12 col-sm-12 col-md-12" id="descricao_field_divulgacao`+ count_divulgacao +`" style="display: none;">
-                        <div class="col-md-12">
+                 
                             <div class="card card-dark card-outline">
                               <div class="card-header">
                                   <h3 class="card-title">Descrição Produção (Orçamentos e Execuções)</h3>
@@ -1664,10 +1834,10 @@ $('#add_divulgacao').click(function() {
                               <!-- /.card-body -->
                             </div>
                             <!-- /.card -->
-                        </div>
+                     
                       </div>
                       <div class="col-12 col-sm-12 col-md-12" id="observacao_field_divulgacao`+ count_divulgacao +`">
-                        <div class="col-md-12">
+              
                             <div class="card card-dark card-outline">
                               <div class="card-header">
                                   <h3 class="card-title">Observações</h3>
@@ -1681,8 +1851,35 @@ $('#add_divulgacao').click(function() {
                               <!-- /.card-body -->
                             </div>
                             <!-- /.card -->
+                   
+                      </div>
+
+                      <div class="col-12 col-sm-12 col-md-12">
+                        <div class="card" style="width: 100%;">
+                          <div class="card-header" style="background-color: #fafafa;">
+                              <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i> Adicionar Arquivos</h3>
+                              
+                          </div>
+                  
+                              <div class="card-body">
+                                <div class="row d-flex align-items-center justify-content-center">
+                                  <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                      <iconify-icon icon="pepicons-pop:file" width="60" style="color: #001b91;"></iconify-icon>
+                                  </div>
+                                  <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                      <label for="file_divulgacao`+ count_divulgacao +`" class="btn btn-primary">
+                                        <iconify-icon icon="pepicons-pop:file"></iconify-icon> ESCOLHER ARQUIVOS
+                                      </label>
+                                  </div>
+                                      <input style="width: 100%;" type="file" id="file_divulgacao`+ count_divulgacao +`" name="file_divulgacao`+ count_divulgacao +`" class="d-none" multiple onchange="showSelectedFilesDivulgacaoDinamic(`+ count_divulgacao +`)">
+                                      <div class="row" id="fileDisplay_divulgacao`+ count_divulgacao +`"></div>
+                            
+                              </div>
+                              
+                              </div>
                         </div>
                       </div>
+                      <!----->
                   </div>
                 </div>
             </div>
@@ -1874,7 +2071,7 @@ $('#add_programacao_entregavel').click(function() {
                         </div>
                       </div>
                       <div class="col-12 col-sm-12 col-md-12" id="observacao_field_programacao`+ count_programacao +`">
-                        <div class="col-md-12">
+
                             <div class="card card-dark card-outline">
                               <div class="card-header">
                                   <h3 class="card-title">Observações</h3>
@@ -1888,6 +2085,32 @@ $('#add_programacao_entregavel').click(function() {
                               <!-- /.card-body -->
                             </div>
                             <!-- /.card -->
+     
+                      </div>
+
+                      <div class="col-12 col-sm-12 col-md-12">
+                        <div class="card" style="width: 100%;">
+                          <div class="card-header" style="background-color: #fafafa;">
+                              <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i> Adicionar Arquivos</h3>
+                              
+                          </div>
+                  
+                              <div class="card-body">
+                                <div class="row d-flex align-items-center justify-content-center">
+                                  <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                      <iconify-icon icon="pepicons-pop:file" width="60" style="color: #001b91;"></iconify-icon>
+                                  </div>
+                                  <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                      <label for="file_programacao`+ count_programacao +`" class="btn btn-primary">
+                                        <iconify-icon icon="pepicons-pop:file"></iconify-icon> ESCOLHER ARQUIVOS
+                                      </label>
+                                  </div>
+                                      <input style="width: 100%;" type="file" id="file_programacao`+ count_programacao +`" name="file_programacao`+ count_programacao +`" class="d-none" multiple onchange="showSelectedFilesProgramacaoDinamic(`+ count_programacao +`)">
+                                      <div class="row" id="fileDisplay_programacao`+ count_programacao +`"></div>
+                            
+                              </div>
+                              
+                              </div>
                         </div>
                       </div>
                   </div>
@@ -2079,7 +2302,7 @@ $('#add_stand').click(function() {
                         </div>
                       </div>
                       <div class="col-12 col-sm-12 col-md-12" id="observacao_field_stand`+ count_stand +`">
-                        <div class="col-md-12">
+
                             <div class="card card-dark card-outline">
                               <div class="card-header">
                                   <h3 class="card-title">Observações</h3>
@@ -2093,8 +2316,35 @@ $('#add_stand').click(function() {
                               <!-- /.card-body -->
                             </div>
                             <!-- /.card -->
+
+                      </div>
+
+                      <div class="col-12 col-sm-12 col-md-12">
+                        <div class="card" style="width: 100%;">
+                          <div class="card-header" style="background-color: #fafafa;">
+                              <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i> Adicionar Arquivos</h3>
+                              
+                          </div>
+                  
+                              <div class="card-body">
+                                <div class="row d-flex align-items-center justify-content-center">
+                                  <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                      <iconify-icon icon="pepicons-pop:file" width="60" style="color: #001b91;"></iconify-icon>
+                                  </div>
+                                  <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                      <label for="file_divulgacao`+ count_stand +`" class="btn btn-primary">
+                                        <iconify-icon icon="pepicons-pop:file"></iconify-icon> ESCOLHER ARQUIVOS
+                                      </label>
+                                  </div>
+                                      <input style="width: 100%;" type="file" id="file_divulgacao`+ count_stand +`" name="file_divulgacao`+ count_stand +`" class="d-none" multiple onchange="showSelectedFilesDivulgacaoDinamic(`+ count_stand +`)">
+                                      <div class="row" id="fileDisplay_divulgacao`+ count_stand +`"></div>
+                            
+                              </div>
+                              
+                              </div>
                         </div>
                       </div>
+                      <!----->
                   </div>
                 </div>
             </div>
@@ -2108,6 +2358,7 @@ $('#add_stand').click(function() {
       handlePecasChange_Stand(count_stand);
     
 });
+
 $(document).on('click', '.remove-input', function() {
   $(this).closest('.row').remove();
 });
@@ -2430,6 +2681,15 @@ function realizaSolicitacao(user_id, solicitacao_id) {
     var XCSRFToken = '{{ csrf_token }}';
     var formIsValid = true;
 
+    var fileInput = document.getElementById('fileInput');
+    
+    if (fileInput){
+      for (var i = 0; i < fileInput.files.length; i++) {
+        console.log(fileInput.files[i])
+        formData.append('files[]', fileInput.files[i]);
+    }
+    }
+
 
 
     // Percorra todos os elementos obrigatórios do formulário
@@ -2483,6 +2743,432 @@ function realizaSolicitacao(user_id, solicitacao_id) {
         });
         btnDesignar.disabled = false;
     }
+}
+
+// ARQUIVOS DA SOLICITAÇÃO
+function showSelectedFiles() {
+            const fileInput = document.getElementById('fileInput');
+            const fileDisplay = document.getElementById('fileDisplay');
+
+            // Limpa a exibição de arquivos anteriores
+            fileDisplay.innerHTML = "";
+
+            const files = fileInput.files;
+            for (let i = 0; i < files.length; i++) {
+                const fileName = files[i].name;
+                const listItem = document.createElement('div');
+                listItem.className = "col-auto";
+                listItem.innerHTML = `
+                    <i class="file-icon far fa-file"></i>
+                    ${fileName}
+                    <i class="remove-button fas fa-times-circle" onclick="removeFile(${i})"></i>
+                `;
+                fileDisplay.appendChild(listItem);
+            }
+        }
+
+function removeFile(index) {
+    const fileInput = document.getElementById('fileInput');
+    const files = Array.from(fileInput.files);
+    files.splice(index, 1);
+
+    // Cria um novo input de arquivo e copia os arquivos restantes
+    const newFileInput = document.createElement('input');
+    newFileInput.type = 'file';
+    newFileInput.id = 'fileInput';
+    newFileInput.multiple = true;
+    newFileInput.style.display = 'none';
+    newFileInput.addEventListener('change', showSelectedFiles);
+
+    const dataTransfer = new DataTransfer();
+    files.forEach(file => dataTransfer.items.add(file));
+    newFileInput.files = dataTransfer.files;
+
+    // Substitui o input de arquivo anterior
+    fileInput.parentNode.replaceChild(newFileInput, fileInput);
+
+    // Atualize a lista de arquivos selecionados
+    showSelectedFiles();
+}
+
+//ARQUIVOS ENTREGAVEL SAVE THE DATE
+function showSelectedFilesSaveTheDate() {
+            const fileInput = document.getElementById('file_save_the_date');
+            const fileDisplay = document.getElementById('fileDisplay_save_the_date');
+
+            // Limpa a exibição de arquivos anteriores
+            fileDisplay.innerHTML = "";
+
+            const files = fileInput.files;
+            for (let i = 0; i < files.length; i++) {
+                const fileName = files[i].name;
+                const listItem = document.createElement('div');
+                listItem.className = "col-auto";
+                listItem.innerHTML = `
+                    <i class="file-icon far fa-file"></i>
+                    ${fileName}
+                    <i class="remove-button fas fa-times-circle" onclick="removeFileSaveTheDate(${i})"></i>
+                `;
+                fileDisplay.appendChild(listItem);
+            }
+        }
+
+function showSelectedFilesSaveTheDateDinamic(index) {
+    const fileInput = document.getElementById('file_save_the_date'+index);
+    const fileDisplay = document.getElementById('fileDisplay_save_the_date'+index);
+
+    // Limpa a exibição de arquivos anteriores
+    fileDisplay.innerHTML = "";
+
+    const files = fileInput.files;
+    for (let i = 0; i < files.length; i++) {
+        const fileName = files[i].name;
+        const listItem = document.createElement('div');
+        listItem.className = "col-auto";
+        listItem.innerHTML = `
+            <i class="file-icon far fa-file"></i>
+            ${fileName}
+            <i class="remove-button fas fa-times-circle" onclick="removeFileSaveTheDateDinamic(${i},${index})"></i>
+        `;
+        fileDisplay.appendChild(listItem);
+    }
+}
+
+function removeFileSaveTheDateDinamic(index,n) {
+  console.log('entrou para remover')
+    const fileInput = document.getElementById('file_save_the_date'+n);
+    const files = Array.from(fileInput.files);
+    console.log(files)
+    files.splice(index, 1);
+
+    // Cria um novo input de arquivo e copia os arquivos restantes
+    const newFileInput = document.createElement('input');
+    newFileInput.type = 'file';
+    newFileInput.id = 'file_save_the_date'+n;
+    newFileInput.multiple = true;
+    newFileInput.style.display = 'none';
+    newFileInput.addEventListener('change', showSelectedFilesSaveTheDateDinamic(n));
+
+    const dataTransfer = new DataTransfer();
+    files.forEach(file => dataTransfer.items.add(file));
+    newFileInput.files = dataTransfer.files;
+
+    // Substitui o input de arquivo anterior
+    fileInput.parentNode.replaceChild(newFileInput, fileInput);
+
+    // Atualize a lista de arquivos selecionados
+    showSelectedFilesSaveTheDateDinamic(n);
+}
+
+function removeFileSaveTheDate(index) {
+  console.log('entrou para remover')
+    const fileInput = document.getElementById('file_save_the_date');
+    const files = Array.from(fileInput.files);
+    console.log(files)
+    files.splice(index, 1);
+
+    // Cria um novo input de arquivo e copia os arquivos restantes
+    const newFileInput = document.createElement('input');
+    newFileInput.type = 'file';
+    newFileInput.id = 'file_save_the_date';
+    newFileInput.multiple = true;
+    newFileInput.style.display = 'none';
+    newFileInput.addEventListener('change', showSelectedFilesSaveTheDate);
+
+    const dataTransfer = new DataTransfer();
+    files.forEach(file => dataTransfer.items.add(file));
+    newFileInput.files = dataTransfer.files;
+
+    // Substitui o input de arquivo anterior
+    fileInput.parentNode.replaceChild(newFileInput, fileInput);
+
+    // Atualize a lista de arquivos selecionados
+    showSelectedFilesSaveTheDate();
+}
+
+//ARQUIVOS ENTREGAVEL DIVULGAÇÃO
+function showSelectedFilesDivulgacao() {
+            const fileInput = document.getElementById('file_divulgacao');
+            const fileDisplay = document.getElementById('fileDisplay_divulgacao');
+
+            // Limpa a exibição de arquivos anteriores
+            fileDisplay.innerHTML = "";
+
+            const files = fileInput.files;
+            for (let i = 0; i < files.length; i++) {
+                const fileName = files[i].name;
+                const listItem = document.createElement('div');
+                listItem.className = "col-auto";
+                listItem.innerHTML = `
+                    <i class="file-icon far fa-file"></i>
+                    ${fileName}
+                    <i class="remove-button fas fa-times-circle" onclick="removeFileDivulgacao(${i})"></i>
+                `;
+                fileDisplay.appendChild(listItem);
+            }
+        }
+
+function showSelectedFilesDivulgacaoDinamic(index) {
+    const fileInput = document.getElementById('file_divulgacao'+index);
+    const fileDisplay = document.getElementById('fileDisplay_divulgacao'+index);
+
+    // Limpa a exibição de arquivos anteriores
+    fileDisplay.innerHTML = "";
+
+    const files = fileInput.files;
+    for (let i = 0; i < files.length; i++) {
+        const fileName = files[i].name;
+        const listItem = document.createElement('div');
+        listItem.className = "col-auto";
+        listItem.innerHTML = `
+            <i class="file-icon far fa-file"></i>
+            ${fileName}
+            <i class="remove-button fas fa-times-circle" onclick="removeFileDivulgacaoDinamic(${i},${index})"></i>
+        `;
+        fileDisplay.appendChild(listItem);
+    }
+}
+
+function removeFileDivulgacaoDinamic(index,n) {
+  console.log('entrou para remover')
+    const fileInput = document.getElementById('file_divulgacao'+n);
+    const files = Array.from(fileInput.files);
+    console.log(files)
+    files.splice(index, 1);
+
+    // Cria um novo input de arquivo e copia os arquivos restantes
+    const newFileInput = document.createElement('input');
+    newFileInput.type = 'file';
+    newFileInput.id = 'file_divulgacao'+n;
+    newFileInput.multiple = true;
+    newFileInput.style.display = 'none';
+    newFileInput.addEventListener('change', showSelectedFilesDivulgacaoDinamic(n));
+
+    const dataTransfer = new DataTransfer();
+    files.forEach(file => dataTransfer.items.add(file));
+    newFileInput.files = dataTransfer.files;
+
+    // Substitui o input de arquivo anterior
+    fileInput.parentNode.replaceChild(newFileInput, fileInput);
+
+    // Atualize a lista de arquivos selecionados
+    showSelectedFilesDivulgacaoDinamic(n);
+}
+
+function removeFileDivulgacao(index) {
+  console.log('entrou para remover')
+    const fileInput = document.getElementById('file_divulgacao');
+    const files = Array.from(fileInput.files);
+    console.log(files)
+    files.splice(index, 1);
+
+    // Cria um novo input de arquivo e copia os arquivos restantes
+    const newFileInput = document.createElement('input');
+    newFileInput.type = 'file';
+    newFileInput.id = 'file_divulgacao';
+    newFileInput.multiple = true;
+    newFileInput.style.display = 'none';
+    newFileInput.addEventListener('change', showSelectedFilesDivulgacao);
+
+    const dataTransfer = new DataTransfer();
+    files.forEach(file => dataTransfer.items.add(file));
+    newFileInput.files = dataTransfer.files;
+
+    // Substitui o input de arquivo anterior
+    fileInput.parentNode.replaceChild(newFileInput, fileInput);
+
+    // Atualize a lista de arquivos selecionados
+    showSelectedFilesDivulgacao();
+}
+
+//ARQUIVOS ENTREGAVEL PROGRAMAÇÃO
+function showSelectedFilesProgramacao() {
+            const fileInput = document.getElementById('file_programacao');
+            const fileDisplay = document.getElementById('fileDisplay_programacao');
+
+            // Limpa a exibição de arquivos anteriores
+            fileDisplay.innerHTML = "";
+
+            const files = fileInput.files;
+            for (let i = 0; i < files.length; i++) {
+                const fileName = files[i].name;
+                const listItem = document.createElement('div');
+                listItem.className = "col-auto";
+                listItem.innerHTML = `
+                    <i class="file-icon far fa-file"></i>
+                    ${fileName}
+                    <i class="remove-button fas fa-times-circle" onclick="removeFileProgramacao(${i})"></i>
+                `;
+                fileDisplay.appendChild(listItem);
+            }
+        }
+
+function showSelectedFilesProgramacaoDinamic(index) {
+    const fileInput = document.getElementById('file_programacao'+index);
+    const fileDisplay = document.getElementById('fileDisplay_programacao'+index);
+
+    // Limpa a exibição de arquivos anteriores
+    fileDisplay.innerHTML = "";
+
+    const files = fileInput.files;
+    for (let i = 0; i < files.length; i++) {
+        const fileName = files[i].name;
+        const listItem = document.createElement('div');
+        listItem.className = "col-auto";
+        listItem.innerHTML = `
+            <i class="file-icon far fa-file"></i>
+            ${fileName}
+            <i class="remove-button fas fa-times-circle" onclick="removeFileProgramacaoDinamic(${i},${index})"></i>
+        `;
+        fileDisplay.appendChild(listItem);
+    }
+}
+
+function removeFileProgramacaoDinamic(index,n) {
+  console.log('entrou para remover')
+    const fileInput = document.getElementById('file_programacao'+n);
+    const files = Array.from(fileInput.files);
+    console.log(files)
+    files.splice(index, 1);
+
+    // Cria um novo input de arquivo e copia os arquivos restantes
+    const newFileInput = document.createElement('input');
+    newFileInput.type = 'file';
+    newFileInput.id = 'file_programacao'+n;
+    newFileInput.multiple = true;
+    newFileInput.style.display = 'none';
+    newFileInput.addEventListener('change', showSelectedFilesProgramacaoDinamic(n));
+
+    const dataTransfer = new DataTransfer();
+    files.forEach(file => dataTransfer.items.add(file));
+    newFileInput.files = dataTransfer.files;
+
+    // Substitui o input de arquivo anterior
+    fileInput.parentNode.replaceChild(newFileInput, fileInput);
+
+    // Atualize a lista de arquivos selecionados
+    showSelectedFilesProgramacaoDinamic(n);
+}
+
+function removeFileProgramacao(index) {
+  console.log('entrou para remover')
+    const fileInput = document.getElementById('file_programacao');
+    const files = Array.from(fileInput.files);
+    console.log(files)
+    files.splice(index, 1);
+
+    // Cria um novo input de arquivo e copia os arquivos restantes
+    const newFileInput = document.createElement('input');
+    newFileInput.type = 'file';
+    newFileInput.id = 'file_programacao';
+    newFileInput.multiple = true;
+    newFileInput.style.display = 'none';
+    newFileInput.addEventListener('change', showSelectedFilesProgramacao);
+
+    const dataTransfer = new DataTransfer();
+    files.forEach(file => dataTransfer.items.add(file));
+    newFileInput.files = dataTransfer.files;
+
+    // Substitui o input de arquivo anterior
+    fileInput.parentNode.replaceChild(newFileInput, fileInput);
+
+    // Atualize a lista de arquivos selecionados
+    showSelectedFilesProgramacao();
+}
+
+//ARQUIVOS ENTREGAVEL STAND
+function showSelectedFilesStand() {
+            const fileInput = document.getElementById('file_stand');
+            const fileDisplay = document.getElementById('fileDisplay_stand');
+
+            // Limpa a exibição de arquivos anteriores
+            fileDisplay.innerHTML = "";
+
+            const files = fileInput.files;
+            for (let i = 0; i < files.length; i++) {
+                const fileName = files[i].name;
+                const listItem = document.createElement('div');
+                listItem.className = "col-auto";
+                listItem.innerHTML = `
+                    <i class="file-icon far fa-file"></i>
+                    ${fileName}
+                    <i class="remove-button fas fa-times-circle" onclick="removeFileStand(${i})"></i>
+                `;
+                fileDisplay.appendChild(listItem);
+            }
+        }
+
+function showSelectedFilesStandDinamic(index) {
+    const fileInput = document.getElementById('file_stand'+index);
+    const fileDisplay = document.getElementById('fileDisplay_stand'+index);
+
+    // Limpa a exibição de arquivos anteriores
+    fileDisplay.innerHTML = "";
+
+    const files = fileInput.files;
+    for (let i = 0; i < files.length; i++) {
+        const fileName = files[i].name;
+        const listItem = document.createElement('div');
+        listItem.className = "col-auto";
+        listItem.innerHTML = `
+            <i class="file-icon far fa-file"></i>
+            ${fileName}
+            <i class="remove-button fas fa-times-circle" onclick="removeFileStandDinamic(${i},${index})"></i>
+        `;
+        fileDisplay.appendChild(listItem);
+    }
+}
+
+function removeFileStandDinamic(index,n) {
+  console.log('entrou para remover')
+    const fileInput = document.getElementById('file_stand'+n);
+    const files = Array.from(fileInput.files);
+    console.log(files)
+    files.splice(index, 1);
+
+    // Cria um novo input de arquivo e copia os arquivos restantes
+    const newFileInput = document.createElement('input');
+    newFileInput.type = 'file';
+    newFileInput.id = 'file_stand'+n;
+    newFileInput.multiple = true;
+    newFileInput.style.display = 'none';
+    newFileInput.addEventListener('change', showSelectedFilesStandDinamic(n));
+
+    const dataTransfer = new DataTransfer();
+    files.forEach(file => dataTransfer.items.add(file));
+    newFileInput.files = dataTransfer.files;
+
+    // Substitui o input de arquivo anterior
+    fileInput.parentNode.replaceChild(newFileInput, fileInput);
+
+    // Atualize a lista de arquivos selecionados
+    showSelectedFilesStandDinamic(n);
+}
+
+function removeFileStand(index) {
+  console.log('entrou para remover')
+    const fileInput = document.getElementById('file_stand');
+    const files = Array.from(fileInput.files);
+    console.log(files)
+    files.splice(index, 1);
+
+    // Cria um novo input de arquivo e copia os arquivos restantes
+    const newFileInput = document.createElement('input');
+    newFileInput.type = 'file';
+    newFileInput.id = 'file_stand';
+    newFileInput.multiple = true;
+    newFileInput.style.display = 'none';
+    newFileInput.addEventListener('change', showSelectedFilesStand);
+
+    const dataTransfer = new DataTransfer();
+    files.forEach(file => dataTransfer.items.add(file));
+    newFileInput.files = dataTransfer.files;
+
+    // Substitui o input de arquivo anterior
+    fileInput.parentNode.replaceChild(newFileInput, fileInput);
+
+    // Atualize a lista de arquivos selecionados
+    showSelectedFilesStand();
 }
 
 </script>

@@ -164,7 +164,6 @@
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
-    <!-- /.content-header -->
 <section class="content">
     <div class="container-fluid">
     
@@ -209,11 +208,12 @@
                 </div>
                 <div class="card-body">
                   <div class="tab-content" id="custom-tabs-two-tabContent">
-
+                    
                     <div class="tab-pane fade active show" id="notify-receiver" role="tabpanel" aria-labelledby="notify-receiver-tab">
                       <div class="row">
 
                         <div class="col-12 col-sm-12 col-md-12">
+                          <button style="float: right; margin-bottom: 5px;" type="button" class="btn btn-dark" onclick="realAllNotifications()"><i class="fa fa-check-circle"></i> Marcar Todas como Lida</button>
                           <table style="margin-top: 10px;">
                             <thead>
                               <tr>
@@ -398,6 +398,73 @@
 <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
 
 <script>
+
+function realAllNotifications(){
+  Swal.fire({
+        title: 'Tem certeza?',
+        text: 'Realmente deseja marcar todas as notificações como lida?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sim',
+        cancelButtonText: 'Não'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var XCSRFToken = '{{ csrf_token }}';
+            const url = "/ajax/read-all-notifications";
+            
+            // Use a função $.ajax do jQuery para fazer a solicitação AJAX
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {},
+                headers: { "X-CSRFToken": XCSRFToken },
+                processData: false,  // Evita que o jQuery transforme os dados em uma string
+                contentType: false,  // Evita que o jQuery defina o cabeçalho Content-Type
+                success: function (data) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Notificações Marcadas',
+                        text: "Todas as notificações foram marcadas como lida!"
+                    }).then((result) => {
+                        // Ação a ser realizada após o botão "OK" ser clicado
+                        if (result.isConfirmed) {
+                            // Redirecionar ou atualizar a página aqui
+                            location.reload(); // Isso atualizará a página
+                        }
+                    });
+                },
+                error: function (data) {
+                    if (data.responseJSON && data.responseJSON.error_message) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Ops!',
+                            text: data.responseJSON.error_message
+                        });
+                    }
+                }
+            });
+        }
+    });
+}
+
+function readNotifications(notificacao_id){
+  var XCSRFToken = '{{ csrf_token }}';
+  const url = "/read-notifications";
+
+  $.ajax({
+    url: url,
+    type: "get",
+    data: { 'notificacao_id': notificacao_id },
+    headers: { "X-CSRFToken": XCSRFToken },
+    success: function (data) {
+      console.log('Notificação marcada como lida!')
+
+    }
+
+  });
+}
 
 function ModalNotifications(notificationsId) {
   var XCSRFToken = '{{ csrf_token }}';

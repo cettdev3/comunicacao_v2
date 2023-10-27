@@ -1,3 +1,14 @@
+<style>
+  .file-icon {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.remove-button {
+    cursor: pointer;
+    color: red;
+}
+</style>
 <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -135,8 +146,21 @@
                 </div>
               </div>
 
+              <div class="col-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                <label>Briefing:</label>
+              
+      
 
+                    <textarea required name="briefing_solicitacao" id="briefing_solicitacao" class="form-control summernote" style="width: 100%;"></textarea>
+  
+                </div>
+              </div>
+
+
+              
                         </div>
+
               </div>
               </div>
             </div>
@@ -156,6 +180,11 @@
     </div>
   </div>
 <script>
+
+  var briefing = '{{solicitacao.briefing|escapejs}}'
+  console.log(briefing)
+
+
     $("#escola").on("change", function() {
       console.log('entrou')
       var idEscola = $(this).val();
@@ -188,103 +217,111 @@
 
  });
 
-    function AlteraSolicitacao(){
-      var solicitacaoID = document.getElementById('solicitacaoID')
-      var projeto = document.getElementById('projeto_altera')
-      var solicitante = document.getElementById('solicitante_altera')
-      var titulo_evento = document.getElementById('titulo_evento_altera')
-      var data_inicio = document.getElementById('data_inicio_altera')
-      var data_fim = document.getElementById('data_final_altera')
-      var publico_evento = document.getElementById('publico_evento_altera')
-      var unidade = document.getElementById('escola_altera')
-      var endereco = document.getElementById('endereco_escola_altera')
+ function AlteraSolicitacao() {
+  const url = "/ajax/altera-entregavel";
+  var formData = new FormData(formEditSol);
 
-    var jsonData = {}
+  var solicitacaoID = document.getElementById('solicitacaoID').value;
+  var projeto = document.getElementById('projeto_altera').value;
+  var solicitante = document.getElementById('solicitante_altera').value;
+  var titulo_evento = document.getElementById('titulo_evento_altera').value;
+  var data_inicio = document.getElementById('data_inicio_altera').value;
+  var data_fim = document.getElementById('data_final_altera').value;
+  var publico_evento = document.getElementById('publico_evento_altera').value;
+  var unidade = document.getElementById('escola_altera').value;
+  var endereco = document.getElementById('endereco_escola_altera').value;
+  var briefing = document.getElementById('briefing_solicitacao').value;
 
-      if (solicitacaoID){
-        jsonData.solicitacaoID = solicitacaoID.value
 
-      }
+  if (solicitacaoID) {
+    formData.append('solicitacaoID', solicitacaoID);
+  }
 
-      if (projeto){
-        jsonData.projeto = projeto.value
-      }
+  if (projeto) {
+    formData.append('projeto', projeto);
+  }
 
-      if (solicitante){
-        jsonData.solicitante = solicitante.value
-      }
+  if (solicitante) {
+    formData.append('solicitante', solicitante);
+  }
 
-      if (titulo_evento){
-        jsonData.titulo_evento = titulo_evento.value
-      }
+  if (titulo_evento) {
+    formData.append('titulo_evento', titulo_evento);
+  }
 
-      if (data_inicio){
-        jsonData.data_inicio = data_inicio.value
-      }
+  if (data_inicio) {
+    formData.append('data_inicio', data_inicio);
+  }
 
-      if (data_fim){
-        jsonData.data_fim = data_fim.value
-      }
+  if (data_fim) {
+    formData.append('data_fim', data_fim);
+  }
 
-      if (publico_evento){
-        jsonData.publico_evento = publico_evento.value
-      }
+  if (publico_evento) {
+    formData.append('publico_evento', publico_evento);
+  }
 
-      if (unidade){
-        jsonData.unidade = unidade.value
-      }
+  if (unidade) {
+    formData.append('unidade', unidade);
+  }
 
-      if (endereco){
-        jsonData.endereco = endereco.value
-      }
-      
-      console.log(jsonData)
-      Swal.fire({
-      title: 'Tem certeza?',
-      text: 'Deseja realmente alterar esta solicitação?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Sim',
-      cancelButtonText: 'Não'
-    }).then((result) => {
-      if (result.isConfirmed) {
+  if (endereco) {
+    formData.append('endereco', endereco);
+  }
 
-        var XCSRFToken = '{{ csrf_token }}'
-        const url = "/ajax/altera-entregavel";
-        $.ajax({
-            
-            url: url,
-            type:"post",
-            data: jsonData,
-            headers: { "X-CSRFToken":  XCSRFToken },
-            success: function (data) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Solicitação Editada!',
-                    text: "Solicitação editada com sucesso!"
-                }).then((result) => {
-                    // Ação a ser realizada após o botão "OK" ser clicado
-                    if (result.isConfirmed) {
-                        // Redirecionar ou atualizar a página aqui
-                        location.reload(); // Isso atualizará a página
-                    }
-                });
-            },
-            error: function (data) {
-                if (data.responseJSON && data.responseJSON.error_message) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Ops!',
-                        text: data.responseJSON.error_message
-                    });
-                }
+  if (briefing) {
+    formData.append('briefing', briefing);
+  }
+
+
+  console.log(formData);
+  Swal.fire({
+    title: 'Tem certeza?',
+    text: 'Deseja realmente alterar esta solicitação?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Sim',
+    cancelButtonText: 'Não'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      var XCSRFToken = '{{ csrf_token }}';
+
+      $.ajax({
+        url: url,
+        type: "post",
+        data: formData,
+        headers: { "X-CSRFToken":  XCSRFToken },
+        processData: false, // Evitar que o jQuery processe o FormData
+        contentType: false, // Evitar que o jQuery defina o Content-Type
+        success: function (data) {
+          $("#gerenciador_de_arquivos").html(data);
+          document.getElementById('fileDisplay').innerHTML = '';
+          Swal.fire({
+            icon: 'success',
+            title: 'Solicitação Editada!',
+            text: 'Solicitação editada com sucesso!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              location.reload(); // Isso atualizará a página
             }
-        });
-      }
-    });
+          });
+        },
+        error: function (data) {
+          if (data.responseJSON && data.responseJSON.error_message) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Ops!',
+              text: data.responseJSON.error_message
+            });
+          }
+        }
+      });
     }
+  });
+}
+
     
   $(function () {
   //Initialize Select2 Elements

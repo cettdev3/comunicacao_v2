@@ -1,0 +1,19 @@
+      
+
+     <div class="row">
+
+      {% for arquivo in arquivos %}
+      <div class="col-3 col-sm-3 col-md-3">
+        <a href="{{ arquivo }}" class="btn btn-block btn-outline-secondary" style="width: 100%; font-size: 15px;">
+            
+            <i class="fas fa-file"></i><br>{{ arquivo|cut:"/media/" }}
+        </a>
+        <a style="width: 100%; font-size: 10px;"  class="btn btn-block bg-gradient-danger btn-xs btnRemover" onclick="removeFiles('{{solicitacao.id}}','{{ arquivo|cut:"/media/" }}','{{tipo}}','{{block}}')"> <i class="fas fa-trash"></i> Remover</a>
+    </div>
+    
+   
+      {% endfor %}
+     </div>
+     
+
+  

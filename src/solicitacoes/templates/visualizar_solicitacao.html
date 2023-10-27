@@ -481,7 +481,34 @@
                                   
                                 <div class="card-body">
                                  <div class="row">
-                                  {{solicitacao.briefing|safe}}
+                                  <span>{{solicitacao.briefing|safe}}</span>
+                                 </div>
+                                </div>
+                            </div>
+                          </div>
+                          {% endif %}
+
+                          {% if solicitacao.arquivos %}
+                          <div class="col-12 col-sm-12 col-md-12" >
+                            <div class="card" style="width: 100%;">
+                                <div class="card-header" style="background-color: #fafafa;">
+                                  <label for="">Arquivos da Solicitação</label>
+                                  <small>
+                                    <button type="button" data-toggle="modal" data-target="#editarArquivos"  style="float: right; font-size: 10px;" class="btn bg-danger">
+      
+                                      <i class="fas fa-file"></i> <B> ALTERAR ARQUIVOS</B>
+                                    </button>
+         
+                                  </small>
+                                </div>
+                                  
+                                <div class="card-body gerenciador_de_arquivos_solicitacao " >
+                                 <div class="row">
+                                  {% for arquivo in arquivos %}
+                                  <a href="{{arquivo}}" class="btn btn-app">
+                                    <i class="fas fa-file"></i> {{ arquivo|cut:"/media/" }}
+                                  </a>
+                                  {% endfor %}
                                  </div>
                                 </div>
                             </div>
@@ -743,7 +770,28 @@
                     
                                                        
                                                         {% endif %}
-                    
+                                                        
+                                                        {% if entregavel.arquivos %}
+                                                        <div class="col-12 col-sm-12 col-md-12" >
+                                                          <div class="card" style="width: 100%;">
+                                                              <div class="card-header" style="background-color: #fafafa;">
+                                                                <label for="">Arquivos</label>
+                                                             
+                                                              </div>
+                                                                
+                                                              <div class="card-body" id="gerenciador_de_arquivos_entregaveis_{{entregavel.id}}">
+                                                               <div class="row">
+                                                                {% for arquivo in entregavel.arquivos %}
+                                                                <a href="{{arquivo}}" class="btn btn-app">
+                                                                  <i class="fas fa-file"></i> {{ arquivo|cut:"/media/" }}
+                                                                </a>
+                                                                {% endfor %}
+                                                               </div>
+                                                              </div>
+                                                          </div>
+                                                        </div>
+                                                        {% endif %}
+                                                       
                                                         {% if entregavel.exemplo_arte %}
                                                         <div class="col-12 col-sm-12 col-md-12">
                                                           <div class="card" style="width: 100%;">
@@ -1401,6 +1449,109 @@
 
 </div>
 
+<div class="modal fade" id="editarArquivos"  role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="title_negative">Editar Arquivos</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+     <form id="formEditFiles">
+      <div class="modal-body">
+        <div class="row">
+        
+      <input style="display: none;" type="text" value="{{solicitacao.id}}" id="solicitacaoID"  class="form-control" name="solicitacaoID">
+
+
+      <div class="card-body">
+        <div class="form-group" id="save_the_date_container" >
+            <div class="row">
+                      
+            <div class="card" style="width: 100%;">
+              <div class="card-header" style="background-color: #fafafa;">
+                  <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i> {{solicitacao.evento_json.titulo_evento}}</h3>
+                  
+              </div>
+      
+              <div class="card-body">
+                <div class="row">
+
+
+              {% if solicitacao.arquivos %}
+              <div class="col-12 col-sm-12 col-md-12">
+                <div class="card" style="width: 100%;">
+                    <div class="card-header" style="background-color: #fafafa;">
+                      <label for="">Arquivos</label>
+                                         </div>
+                      
+                    <div class="card-body gerenciador_de_arquivos_solicitacao">
+                     <div class="row">
+                      
+                      {% for arquivo in arquivos %}
+                      <div class="col-3 col-sm-3 col-md-3">
+                        <a href="{{ arquivo }}" class="btn btn-block btn-outline-secondary" style="width: 100%; font-size: 15px;">
+                            
+                            <i class="fas fa-file"></i><br>{{ arquivo|cut:"/media/" }}
+                        </a>
+                        <a style="width: 100%; font-size: 10px; margin-bottom: 10px;"  class="btn btn-block bg-gradient-danger btn-xs btnRemover" onclick="removeFiles('{{solicitacao.id}}','{{ arquivo|cut:"/media/" }}','solicitacao','gerenciador_de_arquivos_solicitacao')"> <i class="fas fa-trash"></i> Remover</a>
+                    </div>
+                   
+                      {% endfor %}
+                     </div>
+                     
+                    </div>
+                    
+                </div>
+              </div>
+              {% endif %}
+              
+                        </div>
+                        <div class="card" style="width: 100%;">
+                          <div class="card-header" style="background-color: #fafafa;">
+                              <h3 class="card-title" style="color:#000000; font-weight: bold;"><i class="nav-icon fa fa-file"></i> Adicionar Arquivos</h3>
+                              
+                          </div>
+                   
+                              <div class="card-body">
+                                <div class="row d-flex align-items-center justify-content-center">
+                                  <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                      <iconify-icon icon="pepicons-pop:file" width="60" style="color: #001b91;"></iconify-icon>
+                                  </div>
+                                  <div class="col-12 col-sm-12 col-md-12" style="text-align: center;">
+                                      <label for="fileInput" class="btn btn-primary">
+                                        <iconify-icon icon="pepicons-pop:file"></iconify-icon> ESCOLHER ARQUIVOS
+                                      </label>
+                                  </div>
+                                      <input style="width: 100%;" type="file" id="fileInput"  name="fileInput" class="d-none" multiple onchange="showSelectedFiles()">
+                                      <div class="row" id="fileDisplay"></div>
+                            
+                              </div>
+                              
+                              </div>
+                        </div>
+              </div>
+              </div>
+            </div>
+
+      </div>
+        
+      </div>
+
+      </div>
+    </div>
+</form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        <button type="button"n onclick="AlteraFiles('{{solicitacao.id}}','','solicitacao','gerenciador_de_arquivos_solicitacao')" class="btn btn-primary">Alterar Arquivos</button>
+      </div>
+ 
+    </div>
+  </div>
+</div>
+
 
 <div class="modal fade" id="editarSolicitacao"  role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   
@@ -1408,6 +1559,198 @@
 <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+
+function hideRemove(tipo){
+  if (tipo == 'open'){
+    console.log('entrou no open')
+    $(".btnRemover").css("display", "block");
+  }else{
+    $(".btnRemover").css("display", "none");
+  }
+
+  
+}
+
+$('#editarArquivos').on('shown.bs.modal', function () {
+  // Função a ser executada quando a modal é fechada
+  hideRemove('open');
+});
+
+$('#editarArquivos').on('hidden.bs.modal', function () {
+  // Função a ser executada quando a modal é fechada
+  hideRemove('close');
+});
+
+function AlteraFiles(solicitacao,file,tipo,subs){
+  var solicitacaoID = solicitacao
+  var arquivo = file
+  var tipo_dados = tipo
+
+  const url = "/ajax/altera-arquivos";
+  var formData = new FormData(formEditFiles);
+
+  var arquivos = document.getElementById('fileInput');
+
+  if (arquivos) {
+    for (var i = 0; i < arquivos.files.length; i++) {
+      formData.append('files[]', arquivos.files[i]);
+    }
+  }
+
+  formData.append('solicitacao',solicitacao);
+  formData.append('arquivo',arquivo);
+  formData.append('tipo',tipo_dados);
+  console.log(subs)
+
+  Swal.fire({
+    title: 'Tem certeza?',
+    text: 'Deseja realmente alterar os arquivos?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Sim',
+    cancelButtonText: 'Não'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      var XCSRFToken = '{{ csrf_token }}';
+
+      $.ajax({
+        url: url,
+        type: "post",
+        data: formData,
+        headers: { "X-CSRFToken":  XCSRFToken },
+        processData: false, // Evitar que o jQuery processe o FormData
+        contentType: false, // Evitar que o jQuery defina o Content-Type
+        success: function (data) {
+          $("."+subs).html(data);
+          document.getElementById('fileDisplay').innerHTML = '';
+          document.getElementById('fileInput').value = '';
+          Swal.fire({
+            icon: 'success',
+            title: 'Arquivos Editados!',
+            text: 'Os arquivos foram editados com sucesso!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+             
+            }
+          });
+        },
+        error: function (data) {
+          if (data.responseJSON && data.responseJSON.error_message) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Ops!',
+              text: data.responseJSON.error_message
+            });
+          }
+        }
+      });
+    }
+  });
+}
+
+
+
+function removeFiles(solicitacao,file,tipo,subs){
+  var solicitacaoID = solicitacao
+  var arquivo = file
+  var tipo_dados = tipo
+  console.log(solicitacao,arquivo,tipo_dados,subs)
+  Swal.fire({
+        title: 'Tem certeza?',
+        text: 'Deseja realmente excluir este arquivo? Ao excluir ele será deletado definitivamente do sistema, não podendo ser recuperado',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sim',
+        cancelButtonText: 'Não'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var XCSRFToken = '{{ csrf_token }}';
+            const url = "/ajax/delete-file";
+            
+            // Use a função $.ajax do jQuery para fazer a solicitação AJAX
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {'solicitacao':solicitacaoID,'arquivo':arquivo,'tipo':tipo_dados},
+                headers: { "X-CSRFToken": XCSRFToken },
+                
+                success: function (data) {
+                  console.log(subs)
+                  $("."+subs).html(data);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Arquivo Deletado!',
+                        text: "Arquivo foi deletado com sucesso!"
+                    }).then((result) => {
+                        // Ação a ser realizada após o botão "OK" ser clicado
+                        if (result.isConfirmed) {
+                           
+                           
+                        }
+                    });
+                },
+                error: function (data) {
+                    if (data.responseJSON && data.responseJSON.error_message) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Ops!',
+                            text: data.responseJSON.error_message
+                        });
+                    }
+                }
+            });
+        }
+    });
+}
+
+function showSelectedFiles() {
+            const fileInput = document.getElementById('fileInput');
+            const fileDisplay = document.getElementById('fileDisplay');
+
+            // Limpa a exibição de arquivos anteriores
+            fileDisplay.innerHTML = "";
+
+            const files = fileInput.files;
+            for (let i = 0; i < files.length; i++) {
+                const fileName = files[i].name;
+                const listItem = document.createElement('div');
+                listItem.className = "col-auto";
+                listItem.innerHTML = `
+                    <i class="file-icon far fa-file"></i>
+                    ${fileName}
+                    <i class="remove-button fas fa-times-circle" onclick="removeFile(${i})"></i>
+                `;
+                fileDisplay.appendChild(listItem);
+            }
+        }
+
+function removeFile(index) {
+    const fileInput = document.getElementById('fileInput');
+    const files = Array.from(fileInput.files);
+    files.splice(index, 1);
+
+    // Cria um novo input de arquivo e copia os arquivos restantes
+    const newFileInput = document.createElement('input');
+    newFileInput.type = 'file';
+    newFileInput.id = 'fileInput';
+    newFileInput.multiple = true;
+    newFileInput.style.display = 'none';
+    newFileInput.addEventListener('change', showSelectedFiles);
+
+    const dataTransfer = new DataTransfer();
+    files.forEach(file => dataTransfer.items.add(file));
+    newFileInput.files = dataTransfer.files;
+
+    // Substitui o input de arquivo anterior
+    fileInput.parentNode.replaceChild(newFileInput, fileInput);
+
+    // Atualize a lista de arquivos selecionados
+    showSelectedFiles();
+}
 
 function modalTarefa(tarefaId){
 

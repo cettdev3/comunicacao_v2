@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 import json
+import os
 from django.utils.html import linebreaks
 from datetime import datetime
 from .utils import get_token_api_eventos,get_all_eventos,get_evento
@@ -15,6 +16,9 @@ from .serializers import Solicitacao_Serializar,Tarefas_Serializar,Entregaveis_S
 from django.contrib.auth.models import User
 from gerir_time.models import Permissoes
 from .templates_notify import *
+import ast
+from django.core.files.storage import default_storage
+from django.conf import settings
 
 def convert_data_formatada(data):
 
@@ -40,22 +44,26 @@ def Permissoes_usuario(request):
 
 @login_required(login_url='/')
 def Form_Solicitacoes(request):
-    
-    permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first
-    token = get_token_api_eventos()
-    eventos = get_all_eventos(token)
+    try:
+        permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first()
+        token = get_token_api_eventos()
+        eventos = get_all_eventos(token)
 
-  
-    if eventos:
-        for evento in eventos:
-            try:
-                evento['data_fim'] = datetime.datetime.strptime(evento['data_fim'], '%Y-%m-%d').date()
-                evento['data_inicio'] = datetime.datetime.strptime(evento['data_inicio'], '%Y-%m-%d').date()
-            except:
-                pass
+        eventos_no_prazo = []
+        if eventos:
+            for evento in eventos:
+                try:
+                    evento['data_fim'] = datetime.datetime.strptime(evento['data_fim'], '%Y-%m-%d').date()
+                    evento['data_inicio'] = datetime.datetime.strptime(evento['data_inicio'], '%Y-%m-%d').date()
+                    if evento['data_fim'] >= datetime.date.today():
+                        eventos_no_prazo.append(evento)
+
+                except:
+                    pass
+    except:eventos_no_prazo = {}
 
 
-    return render(request, 'solicitacoes.html',{'eventos':eventos,'permissoes':permissoes})
+    return render(request, 'solicitacoes.html',{'eventos':eventos_no_prazo,'permissoes':permissoes})
 
 @login_required(login_url='/')
 def Visualizar_Solicitacao(request,codigo):
@@ -63,6 +71,11 @@ def Visualizar_Solicitacao(request,codigo):
 
     solicitacao = Solicitacoes.objects.filter(id=codigo).first()
     evento_json = solicitacao.evento_json
+    try:
+        arquivos = solicitacao.arquivos
+        arquivos_list = ast.literal_eval(arquivos)
+    except:
+        arquivos_list = None
 
     escola = Escolas.objects.filter(id=evento_json['escola']).first()
     if solicitacao.criado_por_id == request.user.id or permissoes.departamento_id == 1 or '9' in permissoes.permissao:
@@ -78,10 +91,16 @@ def Visualizar_Solicitacao(request,codigo):
 
         entregaveis = Entregaveis.objects.filter(evento_id=codigo).all()
         entregaveis = Entregaveis_Serializar(entregaveis,many=True).data
+
+       
+
         tarefas_por_entregavel = {}
 
         for entregavel in entregaveis:
             try:
+                arquivos_entregaveis = entregavel['arquivos']
+                arquivos_list_entregavel = ast.literal_eval(arquivos_entregaveis)
+                entregavel['arquivos'] = arquivos_list_entregavel
                 entregavel['prazo'] = datetime.datetime.strptime(entregavel['prazo'], '%Y-%m-%d').date()
                 entregavel['data_solicitacao'] = datetime.datetime.strptime(entregavel['data_solicitacao'], '%Y-%m-%d').date()
             
@@ -89,6 +108,7 @@ def Visualizar_Solicitacao(request,codigo):
                 
             except:
                 tarefas_relacionadas = {}
+                arquivos_list_entregavel = None
             try:
                 ultima_tarefa_id = Tarefas.objects.filter(entregavel_id=entregavel['id']).latest('id')
             except:
@@ -97,7 +117,7 @@ def Visualizar_Solicitacao(request,codigo):
             entregavel['ultima_tarefa_id'] = ultima_tarefa_id
 
         usuarios = User.objects.all().order_by('first_name')
-        context = {'solicitacao':solicitacao,'entregaveis':entregaveis,'programacao_adicional':programacao_adicional,'usuarios':usuarios,'tarefas_por_entregavel': tarefas_por_entregavel,'permissoes':permissoes,'escola':escola}
+        context = {'solicitacao':solicitacao,'entregaveis':entregaveis,'programacao_adicional':programacao_adicional,'usuarios':usuarios,'tarefas_por_entregavel': tarefas_por_entregavel,'permissoes':permissoes,'escola':escola,'arquivos':arquivos_list}
         return render(request,'visualizar_solicitacao.html',context)
     else:
         messages.error(request, 'Você não tem permissões para acessar!')
@@ -137,6 +157,16 @@ def Ajax_Realiza_Solicitacao(request):
             prazo_entrega = request.POST.get('prazo_entrega',None)
             briefing = request.POST.get('briefing_solicitacao',None)
             userid = request.user.id
+            try:
+                arquivos_solicitacao = []
+                arquivos = request.FILES.getlist('files[]')
+                for arquivo in arquivos:
+                    fs1 = FileSystemStorage()
+                    filename1 = fs1.save(arquivo.name, arquivo)
+                    arquivo_url = fs1.url(filename1)
+                    arquivos_solicitacao.append(arquivo_url)
+            except:
+                arquivo_url = ''
 
             if idEvento != 'und':
                 tipoUnidade = request.POST.get('tipo_und',None)
@@ -158,6 +188,7 @@ def Ajax_Realiza_Solicitacao(request):
                         evento_json = json_evento,
                         prazo_entrega = prazo_entrega,
                         briefing = briefing,
+                        arquivos = arquivos_solicitacao
                         
                     )
         
@@ -193,6 +224,7 @@ def Ajax_Realiza_Solicitacao(request):
                     evento_json = json_evento,
                     prazo_entrega = prazo_entrega,
                     briefing = briefing,
+                    arquivos = arquivos_solicitacao
                 )
 
 
@@ -258,6 +290,19 @@ def Ajax_Realiza_Solicitacao(request):
                             else:
                                 exemploarte_save_the_date_url = ''
 
+                            #PEGO OS ARQUIVOS DO ENTREGÁVEL PRINCIPAL
+                            try:
+                                arquivos_entregaveis_save_the_date = []
+                                arquivos_save_the_date = request.FILES.getlist('file_save_the_date')
+                                for arquivo in arquivos_save_the_date:
+                                    fs1 = FileSystemStorage()
+                                    filename1 = fs1.save(arquivo.name, arquivo)
+                                    arquivo_url = fs1.url(filename1)
+                                    arquivos_entregaveis_save_the_date.append(arquivo_url)
+                            except:
+                                arquivo_url = ''
+
+                          
                             
                             eventos_entregaveis = Entregaveis.objects.create(
                                 evento_id = solicitacao.id,
@@ -268,14 +313,15 @@ def Ajax_Realiza_Solicitacao(request):
                                 categoria_produto = categoriaproduto_save_the_date,
                                 descricao_audio_visual = descricao_save_the_date,
                                 observacao = obs_save_the_date,
-                                criado_por_id = userid
+                                criado_por_id = userid,
+                                arquivos = arquivos_entregaveis_save_the_date
 
                                 )
      
                             
                         else:
                             index = dado[-1]
-                            prazo_save_the_date = request.POST.get(dado,None)
+                            prazo_save_the_date = prazo_entrega
                             exemploarte_save_the_date = request.FILES.get('exemploarte_save_the_date'+str(index),None)
                             tipoproduto_save_the_date = request.POST.get('tipoproduto_save_the_date'+str(index),None)
                             categoriaproduto_save_the_date = request.POST.get('categoriaproduto_save_the_date'+str(index),'')
@@ -283,7 +329,17 @@ def Ajax_Realiza_Solicitacao(request):
                             obs_save_the_date = request.POST.get('obs_save_the_date'+str(index),None)
 
                           
-
+                             #PEGO OS ARQUIVOS DO ENTREGÁVEIS DINAMICOS
+                            try:
+                                arquivos_entregaveis_save_the_date = []
+                                arquivos_save_the_date = request.FILES.getlist('file_save_the_date'+str(index))
+                                for arquivo in arquivos_save_the_date:
+                                    fs1 = FileSystemStorage()
+                                    filename1 = fs1.save(arquivo.name, arquivo)
+                                    arquivo_url = fs1.url(filename1)
+                                    arquivos_entregaveis_save_the_date.append(arquivo_url)
+                            except:
+                                arquivo_url = ''
 
                             #CODIFICA PARA OBTER A URL E ADICIONAR IMAGEM NO SISTEMA
                             if exemploarte_save_the_date:
@@ -303,7 +359,8 @@ def Ajax_Realiza_Solicitacao(request):
                                 categoria_produto = categoriaproduto_save_the_date,
                                 descricao_audio_visual = descricao_save_the_date,
                                 observacao = obs_save_the_date,
-                                criado_por_id = userid
+                                criado_por_id = userid,
+                                arquivos = arquivos_entregaveis_save_the_date
                                 )
                             
 
@@ -671,7 +728,9 @@ def Ajax_Negar_Entregavel(request):
 def Ajax_Altera_Entregavel(request):
     entregavelID = request.GET['entregavelId']
     entregavel = Entregaveis.objects.filter(id=entregavelID).first()
-    
+    arquivos_entregaveis = entregavel.arquivos if entregavel.arquivos else '[]'
+    arquivos_list_entregavel = ast.literal_eval(arquivos_entregaveis)
+    entregavel.arquivos = arquivos_list_entregavel
     return render(request, 'ajax/ajax_editar_entregaveis.html', {'entregavel': entregavel})
 
 @login_required(login_url='/')
@@ -704,8 +763,12 @@ def Ajax_Alterar_Solicitacao(request):
     usuarios = User.objects.all().order_by('first_name')
     solicitacao.evento_json['data_inicio'] = datetime.datetime.strptime(solicitacao.evento_json['data_inicio'], '%d/%m/%Y').date()
     solicitacao.evento_json['data_fim'] = datetime.datetime.strptime(solicitacao.evento_json['data_fim'], '%d/%m/%Y').date()
-
-    return render(request, 'ajax/ajax_edit_solicitacao_modal.html', {'solicitacao': solicitacao,'unidades':unidades,'usuarios':usuarios})
+    try:
+        arquivos = solicitacao.arquivos
+        arquivos_list = ast.literal_eval(arquivos)
+    except:
+        arquivos_list = None
+    return render(request, 'ajax/ajax_edit_solicitacao_modal.html', {'solicitacao': solicitacao,'unidades':unidades,'usuarios':usuarios,'arquivos':arquivos_list})
 
 @login_required(login_url='/')
 def Ajax_Altera_Solicitacao(request):
@@ -720,16 +783,26 @@ def Ajax_Altera_Solicitacao(request):
         endereco = request.POST.get('endereco',None)
         data_inicio_convertida = convert_data_formatada(data_inicio)
         data_fim_convertida = convert_data_formatada(data_fim)
+        briefing = request.POST.get('briefing',None)
 
         evento_json = {"escola": unidade, "endereco": endereco, "data_inicio": data_inicio_convertida, "data_fim": data_fim_convertida, "titulo_evento": titulo_evento}
         solicitacao = Solicitacoes.objects.get(id=solicitacaoID)
+
+  
         solicitacao.evento_json = evento_json
         solicitacao.tipo_projeto = projeto
         solicitacao.publico_evento = publico_evento
         solicitacao.criado_por_id = request.POST.get('solicitante',None)
+        briefing_antigo = solicitacao.briefing
+        if briefing != None:
+            if briefing_antigo:
+                solicitacao.briefing = briefing + '<hr><b>Briefing Retificado</b>: ' + briefing_antigo
+            else:
+                solicitacao.briefing = briefing
+        
         solicitacao.save()
 
-        return JsonResponse({"success_message": "Tarefa Devolvida!"})
+        return render(request, 'ajax/ajax_load_files.html', {'arquivos': solicitacao.arquivos,'solicitacao':solicitacao})
 
     except Exception as e:
         return JsonResponse({"error_message": "Não foi possível realizar a solicitação: " + str(e)}, status=400)
@@ -746,7 +819,7 @@ def Ajax_Change_Entregavel(request):
         tipo_entregavel = request.POST.get('tipo_entregavel','')
         audiovisual =  request.POST.get('audio_visual','')
         observacoes =  request.POST.get('obs_save_the_date','')
-
+    
         entregavel = Entregaveis.objects.get(id=entregavelId)
         entregavel.prazo = prazo
         entregavel.tipo_produto = tipo_produto
@@ -754,12 +827,36 @@ def Ajax_Change_Entregavel(request):
         entregavel.tipo_entregavel = tipo_entregavel
         entregavel.descricao_audio_visual = audiovisual
         entregavel.observacao = observacoes
+
+        #PEGO OS ARQUIVOS DO ENTREGÁVEL PRINCIPAL
+        try:
+            arquivos_entregaveis = []
+            arquivos = request.FILES.getlist('fileInput')
+            for arquivo in arquivos:
+                fs1 = FileSystemStorage()
+                filename1 = fs1.save(arquivo.name, arquivo)
+                arquivo_url = fs1.url(filename1)
+                arquivos_entregaveis.append(arquivo_url)
+        except:
+            arquivo_url = ''
+        
+        todos_arquivos = []
+        arquivos = ast.literal_eval(entregavel.arquivos)
+        arquivos_antigos = arquivos
+        for arquivo in arquivos_antigos:
+            todos_arquivos.append(arquivo)
+
+        for arquivo in arquivos_entregaveis:
+            todos_arquivos.append(arquivo)
+        
+        entregavel.arquivos = todos_arquivos
+
         entregavel.save()
 
+    block = f'gerenciador_de_arquivos_entregavel_{entregavel.id}'
+    tipo = 'entregavel'
 
-
-
-    return JsonResponse({"success_message": "Tarefa Devolvida!"})
+    return render(request, 'ajax/ajax_load_files.html', {'arquivos': entregavel.arquivos,'solicitacao':entregavel,'block':block,'tipo':tipo})
 
 @login_required(login_url='/')
 def Ajax_Add_Entregavel(request):
@@ -789,3 +886,121 @@ def Ajax_Reenvia_Entregavel(request):
 
         devolver_correcao_entrega(request,entregavel.evento_id,request.user.id,entregavel.id)
         return JsonResponse({"success_message": "Tarefa Devolvida!"})
+    
+@login_required(login_url='/')
+def Ajax_Delete_Files(request):
+    with transaction.atomic():
+        print(request.POST)
+        solicitacaoId = request.POST.get('solicitacao',None)
+        arquivo_removido = request.POST.get('arquivo',None)
+        tipo = request.POST.get('tipo',None)
+        
+        if tipo == 'solicitacao':
+            solicitacao = Solicitacoes.objects.filter(id=solicitacaoId).first()
+            arquivos = ast.literal_eval(solicitacao.arquivos)
+            novos_arquivos = [] 
+            for arquivo in arquivos:
+                tag = '/media/'+arquivo_removido
+                if tag not in arquivo:
+                    novos_arquivos.append(arquivo)
+                else:
+                    url = settings.MEDIA_ROOT + '\\' + arquivo_removido
+                    if default_storage.exists(arquivo_removido):
+                        default_storage.delete(url)
+                
+            solicitacao.arquivos = novos_arquivos
+            solicitacao.save()
+        
+            print(novos_arquivos)
+            block = f'gerenciador_de_arquivos_solicitacao'
+            tipo = 'solicitacao'
+            return render(request, 'ajax/ajax_load_files.html', {'arquivos': solicitacao.arquivos,'solicitacao':solicitacao,'block':block,'tipo':tipo})
+        
+        elif tipo == 'entregavel':
+            entregavel = Entregaveis.objects.filter(id=solicitacaoId).first()
+            arquivos = ast.literal_eval(entregavel.arquivos)
+            novos_arquivos = [] 
+            for arquivo in arquivos:
+                tag = '/media/'+arquivo_removido
+                if tag not in arquivo:
+                    novos_arquivos.append(arquivo)
+                else:
+                    url = settings.MEDIA_ROOT + '\\' + arquivo_removido
+                    if default_storage.exists(arquivo_removido):
+                        default_storage.delete(url)
+                
+            entregavel.arquivos = novos_arquivos
+            entregavel.save()
+            block = f'gerenciador_de_arquivos_entregavel_{entregavel.id}'
+            tipo = 'entregavel'
+
+            return render(request, 'ajax/ajax_load_files.html', {'arquivos': entregavel.arquivos,'solicitacao':entregavel,'block':block,'tipo':tipo })
+
+@login_required(login_url='/')
+def Ajax_Altera_Arquivos(request):
+    solicitacaoID = request.POST.get('solicitacao',None)
+    arquivo_removido = request.POST.get('arquivo',None)
+    tipo = request.POST.get('tipo',None)
+
+    with transaction.atomic():
+        if tipo == 'solicitacao':
+            solicitacao = Solicitacoes.objects.get(id=solicitacaoID)
+
+            try:
+                arquivos_solicitacao = []
+                arquivos = request.FILES.getlist('files[]')
+                for arquivo in arquivos:
+                    fs1 = FileSystemStorage()
+                    filename1 = fs1.save(arquivo.name, arquivo)
+                    arquivo_url = fs1.url(filename1)
+                    arquivos_solicitacao.append(arquivo_url)
+            except:
+                arquivo_url = ''
+
+            todos_arquivos = []
+            arquivos = ast.literal_eval(solicitacao.arquivos)
+            arquivos_antigos = arquivos
+            for arquivo in arquivos_antigos:
+                todos_arquivos.append(arquivo)
+
+            for arquivo in arquivos_solicitacao:
+                todos_arquivos.append(arquivo)
+
+            solicitacao.arquivos = todos_arquivos
+            solicitacao.save()
+
+            block = f'gerenciador_de_arquivos_solicitacao'
+            tipo = 'solicitacao'
+
+            return render(request, 'ajax/ajax_load_files.html', {'arquivos': solicitacao.arquivos,'solicitacao':solicitacao,'block':block,'tipo':tipo})
+        
+        elif tipo == 'entregavel':
+            entregavel = Entregaveis.objects.get(id=solicitacaoID)
+
+            try:
+                arquivos_entregaveis = []
+                arquivos = request.FILES.getlist('files[]')
+                for arquivo in arquivos:
+                    fs1 = FileSystemStorage()
+                    filename1 = fs1.save(arquivo.name, arquivo)
+                    arquivo_url = fs1.url(filename1)
+                    arquivos_entregaveis.append(arquivo_url)
+            except:
+                arquivo_url = ''
+
+            todos_arquivos = []
+            arquivos = ast.literal_eval(entregavel.arquivos)
+            arquivos_antigos = arquivos
+            for arquivo in arquivos_antigos:
+                todos_arquivos.append(arquivo)
+
+            for arquivo in arquivos_entregaveis:
+                todos_arquivos.append(arquivo)
+
+            entregavel.arquivos = todos_arquivos
+            entregavel.save()
+
+            block = f'gerenciador_de_arquivos_entregavel_{entregavel.id}'
+            tipo = 'entregavel'
+
+            return render(request, 'ajax/ajax_load_files.html', {'arquivos': entregavel.arquivos,'solicitacao':entregavel,'block':block,'tipo':tipo})
