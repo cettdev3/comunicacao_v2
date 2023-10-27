@@ -56,9 +56,7 @@ class Solicitacoes(models.Model):
 
     @property
     def entregaveis_concluidos(self):
-        print(self.entregaveis)
         entregaveis_concluidos = self.entregaveis.filter(status=4).count()
-        print(entregaveis_concluidos)
         return entregaveis_concluidos
 
     @property

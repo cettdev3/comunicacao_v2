@@ -55,7 +55,7 @@ def Send_Notify(request):
 @login_required(login_url='/')
 def Read_Notification(request):
     notificacao_id = request.GET['notificacao_id']
-    print(notificacao_id)
+
    
     return JsonResponse({"success_message": "Solicitação Realizada!"}) 
 
