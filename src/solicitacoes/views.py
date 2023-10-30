@@ -75,7 +75,7 @@ def Visualizar_Solicitacao(request,codigo):
         arquivos = solicitacao.arquivos
         arquivos_list = ast.literal_eval(arquivos)
     except:
-        arquivos_list = None
+        arquivos_list = []
 
     escola = Escolas.objects.filter(id=evento_json['escola']).first()
     if solicitacao.criado_por_id == request.user.id or permissoes.departamento_id == 1 or '9' in permissoes.permissao:
@@ -108,7 +108,7 @@ def Visualizar_Solicitacao(request,codigo):
                 
             except:
                 tarefas_relacionadas = {}
-                arquivos_list_entregavel = None
+                arquivos_list_entregavel = []
             try:
                 ultima_tarefa_id = Tarefas.objects.filter(entregavel_id=entregavel['id']).latest('id')
             except:
