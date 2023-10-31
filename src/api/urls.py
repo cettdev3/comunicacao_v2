@@ -28,7 +28,7 @@ urlpatterns = [
          views.DetailNotificacaoAPIView.as_view()),
 
     path('solicitacoes/create', views.CreateSolicitacaoAPIView.as_view()),
-    path('entregaveis/create', views.CreatEntregavelAPIView.as_view()),
+    path('entregaveis/create', views.CreateEntregavelAPIView.as_view()),
     path('tarefas/create', views.CreateTarefaAPIView.as_view()),
     path('programacao-adicional/create',
          views.CreateProgramacaoAdicionalAPIView.as_view()),
@@ -43,8 +43,14 @@ urlpatterns = [
          views.UpdateTarefaAPIView.as_view()),
     path('programacao-adicional/update/<int:pk>',
          views.UpdateProgramacaoAdicionalAPIView.as_view()),
-    path('notificacao/update/<int:pk>',
-         views.UpdateNotificacaoAPIView.as_view()),
+    path('notificacao/update/<int:pk>', views.UpdateNotificacaoAPIView.as_view()),
+
+    path('solicitacoes/adicionar-arquivos/<int:pk>',
+         views.AdicionarArquivosSolicitacaoAPIView.as_view()),
+    path('entregaveis/adicionar-arquivos/<int:pk>',
+         views.AdicionarArquivosEntregavelAPIView.as_view()),
+    path('tarefas/adicionar-arquivos/<int:pk>',
+         views.AdicionarArquivosTarefaAPIView.as_view()),
 
     path('token', TokenObtainPairView.as_view()),
     path('token/refresh', TokenRefreshView.as_view()),

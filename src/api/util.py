@@ -7,6 +7,7 @@ from setup.settings import MEDIA_ROOT
 import os
 from django.core.files.base import ContentFile
 import base64
+import json
 
 
 def salvarArquivosERetornarArrayContendoAsUrlsDosArquivosSalvos(arquivos):
@@ -46,7 +47,7 @@ def createSolicitacao(solicitacaoData):
     solicitacao = Solicitacoes(criado_por=criado_por, evento_json=evento_json, motivo_alteracao=motivo_alteracao,
                                tipo_projeto=tipo_projeto, publico_evento=publico_evento, data_solicitacao=data_solicitacao,
                                status=statusSolicitacao, briefing=briefing)
-    solicitacao.arquivos = arquivos
+    solicitacao.arquivos = str(urlArquivosSalvos)
     solicitacao.save()
 
     return solicitacao
@@ -376,3 +377,18 @@ def getSingleInstance(model, serializerClass, pk):
     instance = model.objects.get(id=pk)
     myData = serializerClass(instance).data
     return myData
+
+
+def adicionarArquivos(modelClass, data, pk):
+    instance = modelClass.objects.get(id=pk)
+    arquivosNovos = data['arquivos']
+
+    arquivosSalvosAtuais = json.loads(instance.arquivos.replace("'", '"'))
+    urlArquivosSalvos = salvarArquivosERetornarArrayContendoAsUrlsDosArquivosSalvos(
+        arquivosNovos)
+    arquivosSalvosAtuais += urlArquivosSalvos
+
+    instance.arquivos = str(arquivosSalvosAtuais)
+    instance.save
+
+    return instance

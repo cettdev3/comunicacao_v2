@@ -10,7 +10,10 @@ from datetime import datetime
 import json
 from django.core.files.storage import FileSystemStorage
 from django.forms.models import model_to_dict
-from .util import createEntregavel, createTarefa, createSolicitacao, createProgramacao, createNotificacao, updateEntregavel, updateSolicitacao, updateTarefa, updateProgramacao, updateNotificacao, getAllInstances, getSingleInstance
+from .util import (createEntregavel, createTarefa, createSolicitacao, createProgramacao,
+                   createNotificacao, updateEntregavel, updateSolicitacao, updateTarefa,
+                   updateProgramacao, updateNotificacao, getAllInstances, getSingleInstance,
+                   adicionarArquivos)
 
 
 class CreateSolicitacaoAPIView(APIView):
@@ -37,7 +40,7 @@ class CreateSolicitacaoAPIView(APIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
-class CreatEntregavelAPIView(APIView):
+class CreateEntregavelAPIView(APIView):
     def post(self, request):
         entregavelData = request.data
         entregavel = createEntregavel(entregavelData, None)
@@ -86,7 +89,6 @@ class UpdateEntregavelAPIView(APIView):
         if not Entregaveis.objects.filter(id=pk).exists():
             return Response(data={"error": f"Entregavel de id {pk} inexistente"}, status=status.HTTP_404_NOT_FOUND)
         entregavelData = request.data
-        # new_exemplo_arte_file = request.data['new_exemplo_arte']
         entregavel = updateEntregavel(
             entregavelData, pk)
         serializer = serializers.Simple_Entregaveis_Serializar(entregavel)
@@ -214,3 +216,39 @@ class DetailNotificacaoAPIView(APIView):
         data = getSingleInstance(model=Notificacoes,
                                  serializerClass=serializers.Notificacao_Serializar, pk=pk)
         return Response(data)
+
+
+class AdicionarArquivosSolicitacaoAPIView(APIView):
+
+    def post(self, request, pk):
+        if not Solicitacoes.objects.filter(id=pk).exists():
+            return Response(data={"error": f"Solicitação de id {pk} inexistente"}, status=status.HTTP_404_NOT_FOUND)
+        solicitacaoData = request.data
+        solicitacao = adicionarArquivos(
+            modelClass=Solicitacoes, data=solicitacaoData, pk=pk)
+        serializer = serializers.Simple_Solicitacao_Serializar(solicitacao)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class AdicionarArquivosEntregavelAPIView(APIView):
+
+    def post(self, request, pk):
+        if not Entregaveis.objects.filter(id=pk).exists():
+            return Response(data={"error": f"Entregável de id {pk} inexistente"}, status=status.HTTP_404_NOT_FOUND)
+        entregavelData = request.data
+        entregavel = adicionarArquivos(
+            modelClass=Entregaveis, data=entregavelData, pk=pk)
+        serializer = serializers.Simple_Entregaveis_Serializar(entregavel)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class AdicionarArquivosTarefaAPIView(APIView):
+
+    def post(self, request, pk):
+        if not Tarefas.objects.filter(id=pk).exists():
+            return Response(data={"error": f"Tarefa de id {pk} inexistente"}, status=status.HTTP_404_NOT_FOUND)
+        tarefaData = request.data
+        tarefa = adicionarArquivos(
+            modelClass=Tarefas, data=tarefaData, pk=pk)
+        serializer = serializers.Tarefas_Serializar(tarefa)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
