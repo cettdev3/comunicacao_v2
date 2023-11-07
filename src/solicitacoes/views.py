@@ -279,6 +279,7 @@ def Ajax_Realiza_Solicitacao(request):
                             categoriaproduto_save_the_date = request.POST.get('categoriaproduto_save_the_date',None)
                             descricao_save_the_date = request.POST.get('descricao_save_the_date',None)
                             obs_save_the_date = request.POST.get('obs_save_the_date',None)
+                            outros_entregavel = request.POST.get('outros_field_save_the_date','')
 
                          
 
@@ -300,7 +301,7 @@ def Ajax_Realiza_Solicitacao(request):
                                     arquivo_url = fs1.url(filename1)
                                     arquivos_entregaveis_save_the_date.append(arquivo_url)
                             except:
-                                arquivo_url = ''
+                                arquivos_entregaveis_save_the_date = []
 
                           
                             
@@ -314,8 +315,8 @@ def Ajax_Realiza_Solicitacao(request):
                                 descricao_audio_visual = descricao_save_the_date,
                                 observacao = obs_save_the_date,
                                 criado_por_id = userid,
-                                arquivos = arquivos_entregaveis_save_the_date
-
+                                arquivos = arquivos_entregaveis_save_the_date,
+                                outros = outros_entregavel
                                 )
      
                             
@@ -327,9 +328,10 @@ def Ajax_Realiza_Solicitacao(request):
                             categoriaproduto_save_the_date = request.POST.get('categoriaproduto_save_the_date'+str(index),'')
                             descricao_save_the_date = request.POST.get('descricao_save_the_date'+str(index),None)
                             obs_save_the_date = request.POST.get('obs_save_the_date'+str(index),None)
+                            outros_entregavel = request.POST.get('outros_field_save_the_date'+str(index),'')
 
                           
-                             #PEGO OS ARQUIVOS DO ENTREGÁVEIS DINAMICOS
+                            #PEGO OS ARQUIVOS DO ENTREGÁVEIS DINAMICOS
                             try:
                                 arquivos_entregaveis_save_the_date = []
                                 arquivos_save_the_date = request.FILES.getlist('file_save_the_date'+str(index))
@@ -339,7 +341,7 @@ def Ajax_Realiza_Solicitacao(request):
                                     arquivo_url = fs1.url(filename1)
                                     arquivos_entregaveis_save_the_date.append(arquivo_url)
                             except:
-                                arquivo_url = ''
+                                arquivos_entregaveis_save_the_date = []
 
                             #CODIFICA PARA OBTER A URL E ADICIONAR IMAGEM NO SISTEMA
                             if exemploarte_save_the_date:
@@ -360,7 +362,8 @@ def Ajax_Realiza_Solicitacao(request):
                                 descricao_audio_visual = descricao_save_the_date,
                                 observacao = obs_save_the_date,
                                 criado_por_id = userid,
-                                arquivos = arquivos_entregaveis_save_the_date
+                                arquivos = arquivos_entregaveis_save_the_date,
+                                outros = outros_entregavel
                                 )
                             
 
@@ -376,8 +379,19 @@ def Ajax_Realiza_Solicitacao(request):
                             categoriaproduto_divulgacao = request.POST.get('categoriaproduto_divulgacao',None)
                             descricao_divulgacao = request.POST.get('descricao_divulgacao',None)
                             obs_divulgacao = request.POST.get('obs_divulgacao',None)
+                            outros_entregavel = request.POST.get('outros_divulgacao','')
 
-                          
+                            #PEGO OS ARQUIVOS DO ENTREGÁVEIS DINAMICOS
+                            try:
+                                arquivos_entregaveis_divulgacao = []
+                                arquivos_divulgacao = request.FILES.getlist('file_divulgacao')
+                                for arquivo in arquivos_divulgacao:
+                                    fs1 = FileSystemStorage()
+                                    filename1 = fs1.save(arquivo.name, arquivo)
+                                    arquivo_url = fs1.url(filename1)
+                                    arquivos_entregaveis_divulgacao.append(arquivo_url)
+                            except:
+                                arquivos_entregaveis_divulgacao = []
 
                             #CODIFICA PARA OBTER A URL E ADICIONAR IMAGEM NO SISTEMA
                             if exemploarte_divulgacao:
@@ -397,20 +411,32 @@ def Ajax_Realiza_Solicitacao(request):
                                 categoria_produto = categoriaproduto_divulgacao,
                                 descricao_audio_visual = descricao_divulgacao,
                                 observacao = obs_divulgacao,
-                                criado_por_id = userid
+                                criado_por_id = userid,
+                                arquivos = arquivos_entregaveis_divulgacao,
+                                outros = outros_entregavel
                                 )
              
                         else:
                             index = dado[-1]
-                            prazo_divulgacao = request.POST.get('prazo_divulgacao'+str(index),None)
                             exemploarte_divulgacao = request.FILES.get('exemploarte_divulgacao'+str(index),None)
                             tipoproduto_divulgacao = request.POST.get('tipoproduto_divulgacao'+str(index),None)
                             categoriaproduto_divulgacao = request.POST.get('categoriaproduto_divulgacao'+str(index),None)
                             descricao_divulgacao = request.POST.get('descricao_divulgacao'+str(index),None)
                             obs_divulgacao = request.POST.get('obs_divulgacao'+str(index),None)
-
-                            #CONVERTE STRING PADRÃO 
-                          
+                            outros_entregavel = request.POST.get('outros_divulgacao'+str(index),'')
+                            prazo_divulgacao = prazo_entrega
+     
+                            #PEGO OS ARQUIVOS DO ENTREGÁVEIS DINAMICOS
+                            try:
+                                arquivos_entregaveis_divulgacao = []
+                                arquivos_divulgacao = request.FILES.getlist('file_divulgacao'+str(index))
+                                for arquivo in arquivos_divulgacao:
+                                    fs1 = FileSystemStorage()
+                                    filename1 = fs1.save(arquivo.name, arquivo)
+                                    arquivo_url = fs1.url(filename1)
+                                    arquivos_entregaveis_divulgacao.append(arquivo_url)
+                            except:
+                                arquivos_entregaveis_divulgacao = []
 
                             #CODIFICA PARA OBTER A URL E ADICIONAR IMAGEM NO SISTEMA
                             if exemploarte_divulgacao:
@@ -430,7 +456,9 @@ def Ajax_Realiza_Solicitacao(request):
                                 categoria_produto = categoriaproduto_divulgacao,
                                 descricao_audio_visual = descricao_divulgacao,
                                 observacao = obs_divulgacao,
-                                criado_por_id = userid
+                                criado_por_id = userid,
+                                arquivos = arquivos_entregaveis_divulgacao,
+                                outros = outros_entregavel
                                 )
 
            
@@ -446,8 +474,19 @@ def Ajax_Realiza_Solicitacao(request):
                             categoriaproduto_programacao = request.POST.get('categoriaproduto_programacao',None)
                             descricao_programacao = request.POST.get('descricao_programacao',None)
                             obs_programacao = request.POST.get('obs_programacao',None)
+                            outros_entregavel = request.POST.get('outros_programacao','')
 
-                         
+                            #PEGO OS ARQUIVOS DO ENTREGÁVEIS DINAMICOS
+                            try:
+                                arquivos_entregaveis_programacao = []
+                                arquivos_programacao = request.FILES.getlist('file_programacao')
+                                for arquivo in arquivos_programacao:
+                                    fs1 = FileSystemStorage()
+                                    filename1 = fs1.save(arquivo.name, arquivo)
+                                    arquivo_url = fs1.url(filename1)
+                                    arquivos_entregaveis_programacao.append(arquivo_url)
+                            except:
+                                arquivos_entregaveis_programacao = []
 
                             #CODIFICA PARA OBTER A URL E ADICIONAR IMAGEM NO SISTEMA
                             if exemploarte_programacao:
@@ -467,19 +506,32 @@ def Ajax_Realiza_Solicitacao(request):
                                 categoria_produto = categoriaproduto_programacao,
                                 descricao_audio_visual = descricao_programacao,
                                 observacao = obs_programacao,
-                                criado_por_id = userid
+                                arquivos = arquivos_entregaveis_programacao,
+                                criado_por_id = userid,
+                                outros = outros_entregavel
                                 )
                
                         else:
                             index = dado[-1]
-                            prazo_programacao = request.POST.get('prazo_programacao'+str(index),None)
+                            prazo_programacao = prazo_entrega
                             exemploarte_programacao = request.FILES.get('exemploarte_programacao'+str(index),None)
                             tipoproduto_programacao = request.POST.get('tipoproduto_programacao'+str(index),None)
                             categoriaproduto_programacao = request.POST.get('categoriaproduto_programacao'+str(index),None)
                             descricao_programacao = request.POST.get('descricao_programacao'+str(index),None)
                             obs_programacao = request.POST.get('obs_programacao'+str(index),None)
+                            outros_entregavel = request.POST.get('outros_programacao'+str(index),'')
 
-                           
+                            #PEGO OS ARQUIVOS DO ENTREGÁVEIS DINAMICOS
+                            try:
+                                arquivos_entregaveis_programacao = []
+                                arquivos_programacao = request.FILES.getlist('file_programacao'+str(index))
+                                for arquivo in arquivos_programacao:
+                                    fs1 = FileSystemStorage()
+                                    filename1 = fs1.save(arquivo.name, arquivo)
+                                    arquivo_url = fs1.url(filename1)
+                                    arquivos_entregaveis_programacao.append(arquivo_url)
+                            except:
+                                arquivos_entregaveis_programacao = []
 
                             #CODIFICA PARA OBTER A URL E ADICIONAR IMAGEM NO SISTEMA
                             if exemploarte_programacao:
@@ -499,7 +551,9 @@ def Ajax_Realiza_Solicitacao(request):
                                 categoria_produto = categoriaproduto_programacao,
                                 descricao_audio_visual = descricao_programacao,
                                 observacao = obs_programacao,
-                                criado_por_id = userid
+                                criado_por_id = userid,
+                                outros = outros_entregavel,
+                                arquivos = arquivos_entregaveis_programacao
                                 )
 
             
@@ -515,8 +569,20 @@ def Ajax_Realiza_Solicitacao(request):
                             categoriaproduto_stand = request.POST.get('categoriaproduto_stand',None)
                             descricao_stand = request.POST.get('descricao_stand',None)
                             obs_stand = request.POST.get('obs_stand',None)
+                            outros_entregavel = request.POST.get('outros_stand','')
                             userid = request.user.id
 
+                            #PEGO OS ARQUIVOS DO ENTREGÁVEIS DINAMICOS
+                            try:
+                                arquivos_entregaveis_stand = []
+                                arquivos_stand = request.FILES.getlist('file_programacao')
+                                for arquivo in arquivos_stand:
+                                    fs1 = FileSystemStorage()
+                                    filename1 = fs1.save(arquivo.name, arquivo)
+                                    arquivo_url = fs1.url(filename1)
+                                    arquivos_entregaveis_stand.append(arquivo_url)
+                            except:
+                                arquivos_entregaveis_stand = []
                           
 
                             #CODIFICA PARA OBTER A URL E ADICIONAR IMAGEM NO SISTEMA
@@ -537,19 +603,33 @@ def Ajax_Realiza_Solicitacao(request):
                                 categoria_produto = categoriaproduto_stand,
                                 descricao_audio_visual = descricao_stand,
                                 observacao = obs_stand,
-                                criado_por_id = userid 
+                                criado_por_id = userid,
+                                arquivos = arquivos_entregaveis_stand,
+                                outros = outros_entregavel
                                 )
                             
                    
                         else:
                             index = dado[-1]
-                            prazo_stand = request.POST.get('prazo_stand'+str(index),None)
+                            prazo_stand = prazo_entrega
                             exemploarte_stand = request.FILES.get('exemploarte_stand'+str(index),None)
                             tipoproduto_stand = request.POST.get('tipoproduto_stand'+str(index),None)
                             categoriaproduto_stand = request.POST.get('categoriaproduto_stand'+str(index),None)
                             descricao_stand = request.POST.get('descricao_stand'+str(index),None)
                             obs_stand = request.POST.get('obs_stand'+str(index),None)
+                            outros = request.POST.get('outros_stand'+str(index),'')
 
+                            #PEGO OS ARQUIVOS DO ENTREGÁVEIS DINAMICOS
+                            try:
+                                arquivos_entregaveis_stand = []
+                                arquivos_stand = request.FILES.getlist('file_programacao'+str(index))
+                                for arquivo in arquivos_stand:
+                                    fs1 = FileSystemStorage()
+                                    filename1 = fs1.save(arquivo.name, arquivo)
+                                    arquivo_url = fs1.url(filename1)
+                                    arquivos_entregaveis_stand.append(arquivo_url)
+                            except:
+                                arquivos_entregaveis_stand = []
                          
 
                             #CODIFICA PARA OBTER A URL E ADICIONAR IMAGEM NO SISTEMA
@@ -570,7 +650,9 @@ def Ajax_Realiza_Solicitacao(request):
                                 categoria_produto = categoriaproduto_stand,
                                 descricao_audio_visual = descricao_stand,
                                 observacao = obs_stand,
-                                criado_por_id = userid
+                                criado_por_id = userid,
+                                arquivos = arquivos_entregaveis_stand,
+                                outros = outros_entregavel
                                 )
                             
                     

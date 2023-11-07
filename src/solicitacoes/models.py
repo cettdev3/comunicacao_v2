@@ -103,6 +103,7 @@ class Entregaveis(models.Model):
         User, on_delete=models.CASCADE, related_name='criado_por', null=True, blank=True)
     motivo_revisao = models.TextField(default='', null=True, blank=True)
     arquivos =  models.TextField(null=True, blank=True)
+    outros = models.TextField(null=True,blank=True)
     status = models.IntegerField(
         choices=choices_status, blank=True, null=True, default=0)
 
@@ -120,7 +121,10 @@ class Entregaveis(models.Model):
             self.status = 1
             self.save()
 
+        limpa_audio_visual = Entregaveis.objects.filter(descricao_audio_visual = '<p><br></p>').update(descricao_audio_visual = '')
+        limpa_observacoes = Entregaveis.objects.filter(observacao = '<p><br></p>').update(observacao = '')
 
+    
  
 
     def get_status_display(self):

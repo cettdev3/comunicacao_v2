@@ -539,7 +539,7 @@
                                                 <div class="card-header">
                                                     <h4 class="card-title w-100">
                                                         <a style=" font-size: 20px;" class="d-block w-100" data-toggle="collapse" href="#collapse{{ forloop.counter }}" aria-expanded="true">
-                                                           #{{entregavel.id}} {{entregavel.get_tipoentregavel_display}} - <b>{{entregavel.categoria_produto}}</b> - PRAZO ATÉ (<b>{{entregavel.prazo|date:'d/m/Y'}}</b>) - {{entregavel.get_status_display}}
+                                                           #{{entregavel.id}} {{entregavel.get_tipoentregavel_display}} - <b>{% if entregavel.outros %} {{entregavel.outros}} {%  else %} {{entregavel.categoria_produto}} {% endif %} </b> - PRAZO ATÉ (<b>{{entregavel.prazo|date:'d/m/Y'}}</b>) - {{entregavel.get_status_display}}
                                                        {% if entregavel.status == '4' %}
                                                        <span style="float: right; font-size: 20px;" class="bi bi-check2-circle"></span>
                                                        {% elif entregavel.status == '3' %}

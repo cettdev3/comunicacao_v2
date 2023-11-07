@@ -655,7 +655,7 @@ z-index: 9999;
                                     
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                        <span class="input-group-text"><i style="color: #000000" class="fa fa-sticky-note"></i></span>
                                                         </div>
                                                         <select  class="form-control" id="categoriaproduto_save_the_date" name="categoriaproduto_save_the_date">
                                                           <option value=""></option>
@@ -664,6 +664,20 @@ z-index: 9999;
                                                     <!-- /.input group -->
                                                     </div>
                                                     </div>
+
+                                                    <div class="col-12 col-sm-12 col-md-6" id="outros_the_date" style="display: none;">
+                                                      <div class="form-group">
+                                                      <label>Título (Outros):</label>
+                                      
+                                                      <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                        </div>
+                                                        <input  type="text" value="" id="outros_field_save_the_date"  class="form-control" name="outros_field_save_the_date">
+                                                    </div>
+                                                      <!-- /.input group -->
+                                                      </div>
+                                                      </div>
 
                                                     <div class="col-12 col-sm-12 col-md-12" id="descricao_field_save_the_date" style="display: none;">
                                        
@@ -860,6 +874,21 @@ z-index: 9999;
                                                           <!-- /.input group -->
                                                       </div>
                                                     </div>
+
+                                                    <div class="col-12 col-sm-12 col-md-6" id="outros_divulgacao" style="display: none;">
+                                                      <div class="form-group">
+                                                      <label>Título (Outros):</label>
+                                      
+                                                      <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                        </div>
+                                                        <input type="text" value="" id="outros_divulgacao"  class="form-control" name="outros_divulgacao">
+                                                    </div>
+                                                      <!-- /.input group -->
+                                                      </div>
+                                                      </div>
+
                                                     <div class="col-12 col-sm-12 col-md-12" id="descricao_field_divulgacao" style="display: none;">
                                   
                                                           <div class="card card-dark card-outline">
@@ -1055,6 +1084,22 @@ z-index: 9999;
                                                                 <!-- /.input group -->
                                                             </div>
                                                           </div>
+
+                                                          <div class="col-12 col-sm-12 col-md-6" id="outros_field_programacao" style="display: none;">
+                                                            <div class="form-group">
+                                                            <label>Título (Outros):</label>
+                                            
+                                                            <div class="input-group">
+                                                              <div class="input-group-prepend">
+                                                              <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                              </div>
+                                                              <input type="text" value="" id="outros_programacao"  class="form-control" name="outros_programacao">
+                                                          </div>
+                                                 
+                                                            </div>
+                                                            </div>
+
+                                                            
                                                           <div class="col-12 col-sm-12 col-md-12" id="descricao_field_programacao" style="display: none;">
                                                   
                                                                 <div class="card card-dark card-outline">
@@ -1247,6 +1292,22 @@ z-index: 9999;
                                                                 <!-- /.input group -->
                                                             </div>
                                                           </div>
+                                                          
+                                                          
+                                                          <div class="col-12 col-sm-12 col-md-6" id="outros_field_stand" style="display: none;">
+                                                            <div class="form-group">
+                                                            <label>Título (Outros):</label>
+                                            
+                                                            <div class="input-group">
+                                                              <div class="input-group-prepend">
+                                                              <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                                                              </div>
+                                                              <input type="text" value="" id="outros_stand"  class="form-control" name="outros_stand">
+                                                            </div>
+                                                 
+                                                            </div>
+                                                          </div>
+
                                                           
                                                           <div class="col-12 col-sm-12 col-md-12" id="descricao_field_stand" style="display: none;">
                                                             <div class="col-md-12">
@@ -1443,6 +1504,7 @@ function handleTipoProdutoChange_SaveTheDate(count) {
         var categoria_field_save_the_date = $("#categoria_field_save_the_date" + count);
         var descricao_field_save_the_date = $("#descricao_field_save_the_date" + count);
         var descricao_save_the_date = $("#descricao_save_the_date" + count);
+        
 
         var selectedValue = $(this).val();
 
@@ -1467,6 +1529,21 @@ function handleTipoProdutoChange_SaveTheDate(count) {
             descricao_field_save_the_date.hide();
         }
     });
+
+    $('#categoriaproduto_save_the_date' + count).on("change", function() {
+      var outros_save_the_date = $("#outros_the_date" + count);
+
+      var selectedValue = $(this).find(":selected").text();
+
+      if(selectedValue == "Outros"){
+        outros_save_the_date.show()
+
+      }else{
+        outros_save_the_date.hide()
+      }
+    });
+
+    
 }
 
 function handlePecasChange_SaveTheDate(count) {
@@ -1574,6 +1651,7 @@ $('#add_savethedate').click(function() {
                             <!-- /.input group -->
                         </div>
                       </div>
+
                       <div class="col-12 col-sm-12 col-md-6" id="categoria_field_save_the_date`+ count_savethedate +`">
                         <div class="form-group">
                             <label>Tipo do Produto:</label>
@@ -1588,6 +1666,21 @@ $('#add_savethedate').click(function() {
                             <!-- /.input group -->
                         </div>
                       </div>
+
+                      <div class="col-12 col-sm-12 col-md-6" id="outros_the_date`+ count_savethedate +`" style="display: none;">
+                          <div class="form-group">
+                          <label>Título (Outros):</label>
+          
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                            <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                            </div>
+                            <input type="text" value="" id="outros_field_save_the_date`+ count_savethedate +`"  class="form-control" name="outros_field_save_the_date`+ count_savethedate +`">
+                        </div>
+                          <!-- /.input group -->
+                          </div>
+                      </div>
+
                       <div class="col-12 col-sm-12 col-md-12" id="descricao_field_save_the_date`+ count_savethedate +`" style="display: none;">
                             
                             <div class="card card-dark card-outline">
@@ -1698,6 +1791,19 @@ function handleTipoProdutoChange_Divulgacao(count) {
             descricao_field_divulgacao.hide();
         }
     });
+
+    $('#categoriaproduto_divulgacao' + count).on("change", function() {
+      var outros_divulgacao = $("#outros_divulgacao" + count);
+
+      var selectedValue = $(this).find(":selected").text();
+
+      if(selectedValue == "Outros"){
+        outros_divulgacao.show()
+
+      }else{
+        outros_divulgacao.hide()
+      }
+    });
 }
 
 function handlePecasChange_Divulgacao(count) {
@@ -1805,6 +1911,7 @@ $('#add_divulgacao').click(function() {
                             <!-- /.input group -->
                         </div>
                       </div>
+
                       <div class="col-12 col-sm-12 col-md-6" id="categoria_field_divulgacao`+ count_divulgacao +`">
                         <div class="form-group">
                             <label>Tipo do Produto:</label>
@@ -1819,6 +1926,21 @@ $('#add_divulgacao').click(function() {
                             <!-- /.input group -->
                         </div>
                       </div>
+
+                      <div class="col-12 col-sm-12 col-md-6" id="outros_divulgacao`+ count_divulgacao +`" style="display: none;">
+                          <div class="form-group">
+                          <label>Título (Outros):</label>
+          
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                            <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                            </div>
+                            <input type="text" value="" id="outros_divulgacao`+ count_divulgacao +`"  class="form-control" name="outros_divulgacao`+ count_divulgacao +`">
+                          </div>
+                          <!-- /.input group -->
+                          </div>
+                      </div>
+                      
                       <div class="col-12 col-sm-12 col-md-12" id="descricao_field_divulgacao`+ count_divulgacao +`" style="display: none;">
                  
                             <div class="card card-dark card-outline">
@@ -1903,6 +2025,7 @@ $(document).on('click', '.remove-input', function() {
 //------------------------------------------------------------------------------- ADICIONA PROGRAMAÇÃO
 var count_programacao = 1;
 function handleTipoProdutoChange_Programacao(count) {
+
     $('#tipoproduto_programacao' + count).change(function() {
         var categoriaproduto_programacao = $("#categoriaproduto_programacao" + count);
         var categoria_field_programacao = $("#categoria_field_programacao" + count);
@@ -1932,7 +2055,20 @@ function handleTipoProdutoChange_Programacao(count) {
             descricao_field_programacao.hide();
         }
     });
-}
+
+    $('#categoriaproduto_programacao' + count).on("change", function() {
+      var outros_programacao= $("#outros_field_programacao" + count);
+
+      var selectedValue = $(this).find(":selected").text();
+
+      if(selectedValue == "Outros"){
+        outros_programacao.show()
+
+      }else{
+        outros_programacao.hide()
+      }
+    });
+    }
 
 function handlePecasChange_Programacao(count) {
     $('#pecas_programacao' + count).change(function() {
@@ -2053,6 +2189,21 @@ $('#add_programacao_entregavel').click(function() {
                             <!-- /.input group -->
                         </div>
                       </div>
+
+                      <div class="col-12 col-sm-12 col-md-6" id="outros_field_programacao`+ count_programacao +`" style="display: none;">
+                        <div class="form-group">
+                        <label>Título (Outros):</label>
+        
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                          <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                          </div>
+                          <input type="text" value="" id="outros_programacao`+ count_programacao +`"  class="form-control" name="outros_programacao`+ count_programacao +`">
+                      </div>
+              
+                        </div>
+                        </div>
+
                       <div class="col-12 col-sm-12 col-md-12" id="descricao_field_programacao`+ count_programacao +`" style="display: none;">
                         <div class="col-md-12">
                             <div class="card card-dark card-outline">
@@ -2164,7 +2315,22 @@ function handleTipoProdutoChange_Stand(count) {
             descricao_field_stand.hide();
         }
     });
-}
+
+    $('#categoriaproduto_stand' + count).on("change", function() {
+      var outros_programacao= $("#outros_field_stand" + count);
+
+      var selectedValue = $(this).find(":selected").text();
+
+      if(selectedValue == "Outros"){
+        outros_programacao.show()
+
+      }else{
+        outros_programacao.hide()
+      }
+    });
+
+
+    }
 
 function handlePecasChange_Stand(count) {
     $('#pecas_stand' + count).change(function() {
@@ -2221,18 +2387,7 @@ $('#add_stand').click(function() {
                             <!-- /.input group -->
                         </div>
                       </div>
-                      <div class="col-12 col-sm-12 col-md-6">
-                        <div class="form-group">
-                            <label>Prazo:</label>
-                            <div class="input-group">
-                              <div class="input-group-prepend">
-                                  <span class="input-group-text"><i style="color: #000000" class="fa fa-calendar"></i></span>
-                              </div>
-                              <input required type="date" id="prazo_stand`+ count_stand +`"   class="form-control" name="prazo_stand`+ count_stand +`">
-                            </div>
-                            <!-- /.input group -->
-                        </div>
-                      </div>
+
                       <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_stand_space`+ count_stand +`" style="display: none;">
                       </div>
                       <div class="col-12 col-sm-12 col-md-6" id="show_exemple_arte_stand`+ count_stand +`" style="display: none;">
@@ -2270,6 +2425,7 @@ $('#add_stand').click(function() {
                             <!-- /.input group -->
                         </div>
                       </div>
+
                       <div class="col-12 col-sm-12 col-md-6" id="categoria_field_stand`+ count_stand +`">
                         <div class="form-group">
                             <label>Tipo do Produto:</label>
@@ -2284,6 +2440,21 @@ $('#add_stand').click(function() {
                             <!-- /.input group -->
                         </div>
                       </div>
+
+                      <div class="col-12 col-sm-12 col-md-6" id="outros_field_stand`+ count_stand +`" style="display: none;">
+                        <div class="form-group">
+                        <label>Título (Outros):</label>
+        
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                          <span class="input-group-text"><i style="color: #000000" class="fa fa-file"></i></span>
+                          </div>
+                          <input type="text" value="" id="outros_stand`+ count_stand +`"  class="form-control" name="outros_stand`+ count_stand +`">
+                        </div>
+              
+                        </div>
+                      </div>
+
                       <div class="col-12 col-sm-12 col-md-12" id="descricao_field_stand`+ count_stand +`" style="display: none;">
                         <div class="col-md-12">
                             <div class="card card-dark card-outline">
@@ -2370,6 +2541,7 @@ document.addEventListener("DOMContentLoaded", function() {
   //////////////////////////////////////////////////////////////////////////////////////////////////////SAVE THE DATE
   var tipoproduto_save_the_date = $("#tipoproduto_save_the_date");
   var categoriaproduto_save_the_date = $("#categoriaproduto_save_the_date");
+  var outros_save_the_date = $("#outros_the_date")
 
   var categoria_field_save_the_date = $("#categoria_field_save_the_date");
   var descricao_field_save_the_date = $("#descricao_field_save_the_date");
@@ -2417,12 +2589,25 @@ document.addEventListener("DOMContentLoaded", function() {
       descricao_field_save_the_date.hide();
     }
 
-});
+    
+  });
+
+  categoriaproduto_save_the_date.on("change", function() {
+    var selectedValue = $(this).find(":selected").text();
+    console.log(selectedValue)
+    if(selectedValue == "Outros"){
+      outros_save_the_date.show()
+
+    }else{
+      outros_save_the_date.hide()
+    }
+  });
   
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////DIVULGACAO
+  //////////////////////////////////////////////////////////////////////////////////////////////////////DIVULGACAO 
   var tipoproduto_divulgacao = $("#tipoproduto_divulgacao");
   var categoriaproduto_divulgacao = $("#categoriaproduto_divulgacao");
+  var outros_divulgacao = $("#outros_divulgacao")
 
   var categoria_field_divulgacao = $("#categoria_field_divulgacao");
   var descricao_field_divulgacao = $("#descricao_field_divulgacao");
@@ -2467,11 +2652,23 @@ document.addEventListener("DOMContentLoaded", function() {
       descricao_field_divulgacao.hide();
     }
 
-});
+  });
+
+  categoriaproduto_divulgacao.on("change", function() {
+    var selectedValue = $(this).find(":selected").text();
+
+    if(selectedValue == "Outros"){
+      outros_divulgacao.show()
+
+    }else{
+      outros_divulgacao.hide()
+    }
+  });
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////PROGRAMACAO
   var tipoproduto_programacao = $("#tipoproduto_programacao");
   var categoriaproduto_programacao = $("#categoriaproduto_programacao");
+  var outros_programacao = $("#outros_field_programacao")
 
   var categoria_field_programacao = $("#categoria_field_programacao");
   var descricao_field_programacao = $("#descricao_field_programacao");
@@ -2517,11 +2714,23 @@ document.addEventListener("DOMContentLoaded", function() {
       descricao_field_programacao.hide();
     }
 
-});
+  });
+
+  categoriaproduto_programacao.on("change", function() {
+    var selectedValue = $(this).find(":selected").text();
+
+    if(selectedValue == "Outros"){
+      outros_programacao.show()
+
+    }else{
+      outros_programacao.hide()
+    }
+  });
  
-  //////////////////////////////////////////////////////////////////////////////////////////////////////STAND
+  //////////////////////////////////////////////////////////////////////////////////////////////////////STAND 
   var tipoproduto_stand = $("#tipoproduto_stand");
   var categoriaproduto_stand = $("#categoriaproduto_stand");
+  var outros_stand = $("#outros_field_stand")
 
   var categoria_field_stand = $("#categoria_field_stand");
   var descricao_field_stand = $("#descricao_field_stand");
@@ -2546,7 +2755,7 @@ document.addEventListener("DOMContentLoaded", function() {
   tipoproduto_stand.on("change", function() {
         
     var selectedValue = $(this).val();
-    console.log(selectedValue)
+
     if (selectedValue === "5") {
       categoria_field_stand.hide();
       descricao_field_stand.show();
@@ -2567,7 +2776,19 @@ document.addEventListener("DOMContentLoaded", function() {
       descricao_field_stand.hide();
     }
 
-});
+  });
+
+  categoriaproduto_stand.on("change", function() {
+    var selectedValue = $(this).find(":selected").text();
+
+    if(selectedValue == "Outros"){
+      outros_stand.show()
+
+    }else{
+      outros_stand.hide()
+    }
+  });
+  
  
 
 
@@ -2670,6 +2891,7 @@ document.addEventListener("DOMContentLoaded", function() {
   stand_check_card.classList.add("d-none");
 
 });
+
 function realizaSolicitacao(user_id, solicitacao_id) {
     btnDesignar = document.getElementById('btnSendSolicitacao')
     btnDesignar.disabled = true;
