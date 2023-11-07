@@ -89,6 +89,7 @@ class Entregaveis_Serializar(serializers.ModelSerializer):
             "get_tipoentregavel_display",
             "get_status_display",
             "tarefas",
+            "arquivos",
         ]
 
 
@@ -116,6 +117,8 @@ class Solicitacao_Serializar(serializers.ModelSerializer):
             "get_status_display",
             "entregaveis",
             "programacao_adicional",
+            "briefing",
+            "arquivos",
         ]
 
 
@@ -141,6 +144,7 @@ class Simple_Entregaveis_Serializar(serializers.ModelSerializer):
             "get_tipoproduto_display",
             "get_tipoentregavel_display",
             "get_status_display",
+            "arquivos",
         ]
 
 
@@ -164,6 +168,8 @@ class Simple_Solicitacao_Serializar(serializers.ModelSerializer):
             'status',
             "status_solicitacao",
             "get_status_display",
+            "briefing",
+            "arquivos",
         ]
 
 
