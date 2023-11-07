@@ -1010,17 +1010,20 @@ def Ajax_Change_Entregavel(request):
 def Ajax_Add_Entregavel(request):
 
     user_loggin = request.user.id
-    with transaction.atomic():
+    solicitacao = request.POST.get('solicitacaoId','')
+    solicitacao_entregavel = Solicitacoes.objects.filter(id=solicitacao).first()
+    prazo_entrega = solicitacao_entregavel.prazo_entrega
+    with transaction.atomic():  
         evento_id = request.POST.get('solicitacaoId','')
-        prazo = request.POST.get('prazo_save_the_date','')
         tipo_produto = request.POST.get('tipoproduto_save_the_date','')
         categoria = request.POST.get('categoriaproduto_save_the_date','')
         tipo_entregavel = request.POST.get('tipo_entregavel','')
         audiovisual =  request.POST.get('audio_visual','')
         observacoes =  request.POST.get('obs_save_the_date','')
+        outros_entregaveis = request.POST.get('outro_entregavel','')
         arquivos = []
 
-        entregavel = Entregaveis.objects.create(prazo = prazo, tipo_produto = tipo_produto, categoria_produto = categoria,tipo_entregavel = tipo_entregavel, descricao_audio_visual = audiovisual, observacao = observacoes,arquivos = arquivos, status = 0,criado_por_id = user_loggin,evento_id = evento_id)
+        entregavel = Entregaveis.objects.create(prazo = prazo_entrega, tipo_produto = tipo_produto, categoria_produto = categoria,tipo_entregavel = tipo_entregavel, descricao_audio_visual = audiovisual, observacao = observacoes,arquivos = arquivos, status = 0,criado_por_id = user_loggin,evento_id = evento_id,outros = outros_entregaveis)
         nova_notificacao(request,evento_id)
         return JsonResponse({"success_message": "Tarefa Devolvida!"})
 
