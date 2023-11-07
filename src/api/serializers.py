@@ -90,6 +90,7 @@ class Entregaveis_Serializar(serializers.ModelSerializer):
             "get_status_display",
             "tarefas",
             "arquivos",
+            "outros",
         ]
 
 
@@ -145,6 +146,7 @@ class Simple_Entregaveis_Serializar(serializers.ModelSerializer):
             "get_tipoentregavel_display",
             "get_status_display",
             "arquivos",
+            "outros",
         ]
 
 

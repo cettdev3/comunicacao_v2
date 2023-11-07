@@ -9,6 +9,12 @@ from django.core.files.base import ContentFile
 import base64
 import json
 
+def convert(src):
+    with open(src, 'rb') as image_file:
+        encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
+        decoded_image = base64.b64decode(encoded_image)
+    return decoded_image
+
 
 def salvarArquivosERetornarArrayContendoAsUrlsDosArquivosSalvos(arquivos):
     fs = FileSystemStorage()
@@ -21,13 +27,6 @@ def salvarArquivosERetornarArrayContendoAsUrlsDosArquivosSalvos(arquivos):
         urlArquivo = fs.url(saved_file_name)
         urlArquivosSalvos.append(urlArquivo)
     return urlArquivosSalvos
-
-
-def convert(src):
-    with open(src, 'rb') as image_file:
-        encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
-        decoded_image = base64.b64decode(encoded_image)
-    return decoded_image
 
 
 def createSolicitacao(solicitacaoData):
@@ -74,6 +73,7 @@ def createEntregavel(entregavelData, solicitacao):
     observacao = entregavelData['observacao']
     motivo_revisao = entregavelData['motivo_revisao']
     statusEntregavel = int(entregavelData['status'])
+    outros = entregavelData['outros']
 
     fs = FileSystemStorage()
     exemplo_arte_url = entregavelData['exemplo_arte']
@@ -90,7 +90,7 @@ def createEntregavel(entregavelData, solicitacao):
     entregavel = Entregaveis(prazo=prazo, data_solicitacao=data_solicitacao, exemplo_arte=urEntregavel,
                              tipo_entregavel=tipo_entregavel, tipo_produto=tipo_produto,
                              categoria_produto=categoria_produto, descricao_audio_visual=descricao_audio_visual, observacao=observacao,
-                             motivo_revisao=motivo_revisao, status=statusEntregavel)
+                             motivo_revisao=motivo_revisao, status=statusEntregavel,outros=outros)
     entregavel.evento = solicitacao
     entregavel.criado_por = criado_por
     entregavel.arquivos = str(urlArquivosSalvos)
@@ -242,6 +242,9 @@ def updateEntregavel(entregavelData, pk):
     if 'statusEntregavel' in entregavelData:
         status = int(entregavelData['status'])
         entregavel.status = status
+    if 'outros' in entregavelData:
+        outros = entregavelData['outros']
+        entregavel.outros = outros
 
     if 'exemplo_arte' in entregavelData:
         url = f"{MEDIA_ROOT}\\{str(entregavel.exemplo_arte)[1:]}"
