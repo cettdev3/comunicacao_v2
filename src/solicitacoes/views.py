@@ -166,7 +166,7 @@ def Ajax_Realiza_Solicitacao(request):
                     arquivo_url = fs1.url(filename1)
                     arquivos_solicitacao.append(arquivo_url)
             except:
-                arquivo_url = ''
+                arquivo_url = []
 
             if idEvento != 'und':
                 tipoUnidade = request.POST.get('tipo_und',None)
@@ -302,6 +302,7 @@ def Ajax_Realiza_Solicitacao(request):
                                     arquivos_entregaveis_save_the_date.append(arquivo_url)
                             except:
                                 arquivos_entregaveis_save_the_date = []
+                                arquivos_entregaveis_save_the_date = []
 
                           
                             
@@ -401,6 +402,17 @@ def Ajax_Realiza_Solicitacao(request):
                             else:
                                 exemploarte_divulgacao_url = ''
 
+                            #PEGO OS ARQUIVOS DO ENTREGÁVEL PRINCIPAL
+                            try:
+                                arquivos_entregaveis_divulgacao = []
+                                arquivos_divulgacao = request.FILES.getlist('file_divulgacao')
+                                for arquivo in arquivos_divulgacao:
+                                    fs1 = FileSystemStorage()
+                                    filename1 = fs1.save(arquivo.name, arquivo)
+                                    arquivo_url = fs1.url(filename1)
+                                    arquivos_entregaveis_divulgacao.append(arquivo_url)
+                            except:
+                                arquivos_entregaveis_divulgacao = []
                             
                             eventos_entregaveis = Entregaveis.objects.create(
                                 evento_id = solicitacao.id,
@@ -414,6 +426,8 @@ def Ajax_Realiza_Solicitacao(request):
                                 criado_por_id = userid,
                                 arquivos = arquivos_entregaveis_divulgacao,
                                 outros = outros_entregavel
+                                criado_por_id = userid,
+                                arquivos = arquivos_entregaveis_divulgacao
                                 )
              
                         else:
@@ -446,7 +460,17 @@ def Ajax_Realiza_Solicitacao(request):
                             else:
                                 exemploarte_divulgacao_url = ''
 
-                            
+                            try:
+                                arquivos_entregaveis_divulgacao = []
+                                arquivos_divulgacao = request.FILES.getlist('file_divulgacao'+str(index))
+                                for arquivo in arquivos_divulgacao:
+                                    fs1 = FileSystemStorage()
+                                    filename1 = fs1.save(arquivo.name, arquivo)
+                                    arquivo_url = fs1.url(filename1)
+                                    arquivos_entregaveis_divulgacao.append(arquivo_url)
+                            except:
+                                arquivos_entregaveis_divulgacao = []
+
                             eventos_entregaveis = Entregaveis.objects.create(
                                 evento_id = solicitacao.id,
                                 prazo = prazo_divulgacao,
@@ -496,6 +520,17 @@ def Ajax_Realiza_Solicitacao(request):
                             else:
                                 exemploarte_programacao_url = ''
 
+                            #PEGO OS ARQUIVOS DO ENTREGÁVEL PRINCIPAL
+                            try:
+                                arquivos_entregaveis_programacao = []
+                                arquivos_programacao = request.FILES.getlist('file_programacao')
+                                for arquivo in arquivos_programacao:
+                                    fs1 = FileSystemStorage()
+                                    filename1 = fs1.save(arquivo.name, arquivo)
+                                    arquivo_url = fs1.url(filename1)
+                                    arquivos_entregaveis_programacao.append(arquivo_url)
+                            except:
+                                arquivos_entregaveis_programacao = []
                             
                             eventos_entregaveis = Entregaveis.objects.create(
                                 evento_id = solicitacao.id,
@@ -541,6 +576,16 @@ def Ajax_Realiza_Solicitacao(request):
                             else:
                                 exemploarte_programacao_url = ''
 
+                            try:
+                                arquivos_entregaveis_programacao = []
+                                arquivos_programacao = request.FILES.getlist('file_programacao'+str(index))
+                                for arquivo in arquivos_programacao:
+                                    fs1 = FileSystemStorage()
+                                    filename1 = fs1.save(arquivo.name, arquivo)
+                                    arquivo_url = fs1.url(filename1)
+                                    arquivos_entregaveis_programacao.append(arquivo_url)
+                            except:
+                                arquivos_entregaveis_programacao = []
                             
                             eventos_entregaveis = Entregaveis.objects.create(
                                 evento_id = solicitacao.id,
@@ -593,6 +638,18 @@ def Ajax_Realiza_Solicitacao(request):
                             else:
                                 exemploarte_stand_url = ''
 
+                            #PEGO OS ARQUIVOS DO ENTREGÁVEL PRINCIPAL
+                            try:
+                                arquivos_entregaveis_stand = []
+                                arquivos_stand = request.FILES.getlist('file_stand')
+                                for arquivo in arquivos_stand:
+                                    fs1 = FileSystemStorage()
+                                    filename1 = fs1.save(arquivo.name, arquivo)
+                                    arquivo_url = fs1.url(filename1)
+                                    arquivos_entregaveis_stand.append(arquivo_url)
+                            except:
+                                arquivos_entregaveis_stand = []
+
                             
                             eventos_entregaveis = Entregaveis.objects.create(
                                 evento_id = solicitacao.id,
@@ -640,7 +697,17 @@ def Ajax_Realiza_Solicitacao(request):
                             else:
                                 exemploarte_stand_url = ''
 
-                            
+                            try:
+                                arquivos_entregaveis_stand = []
+                                arquivos_stand = request.FILES.getlist('file_stand'+str(index))
+                                for arquivo in arquivos_stand:
+                                    fs1 = FileSystemStorage()
+                                    filename1 = fs1.save(arquivo.name, arquivo)
+                                    arquivo_url = fs1.url(filename1)
+                                    arquivos_entregaveis_stand.append(arquivo_url)
+                            except:
+                                arquivos_entregaveis_stand = []
+
                             eventos_entregaveis = Entregaveis.objects.create(
                                 evento_id = solicitacao.id,
                                 prazo = prazo_stand,
