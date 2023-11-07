@@ -423,11 +423,10 @@ def Ajax_Realiza_Solicitacao(request):
                                 categoria_produto = categoriaproduto_divulgacao,
                                 descricao_audio_visual = descricao_divulgacao,
                                 observacao = obs_divulgacao,
-                                criado_por_id = userid,
                                 arquivos = arquivos_entregaveis_divulgacao,
                                 outros = outros_entregavel,
                                 criado_por_id = userid,
-                                arquivos = arquivos_entregaveis_divulgacao
+    
                                 )
              
                         else:
@@ -674,7 +673,7 @@ def Ajax_Realiza_Solicitacao(request):
                             categoriaproduto_stand = request.POST.get('categoriaproduto_stand'+str(index),None)
                             descricao_stand = request.POST.get('descricao_stand'+str(index),None)
                             obs_stand = request.POST.get('obs_stand'+str(index),None)
-                            outros = request.POST.get('outros_stand'+str(index),'')
+                            outros_entregavel = request.POST.get('outros_stand'+str(index),'')
 
                             #PEGO OS ARQUIVOS DO ENTREGÁVEIS DINAMICOS
                             try:
