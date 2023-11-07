@@ -425,7 +425,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 observacao = obs_divulgacao,
                                 criado_por_id = userid,
                                 arquivos = arquivos_entregaveis_divulgacao,
-                                outros = outros_entregavel
+                                outros = outros_entregavel,
                                 criado_por_id = userid,
                                 arquivos = arquivos_entregaveis_divulgacao
                                 )
