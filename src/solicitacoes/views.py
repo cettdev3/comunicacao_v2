@@ -944,7 +944,7 @@ def Ajax_Altera_Solicitacao(request):
         briefing_antigo = solicitacao.briefing
         if briefing != None:
             if briefing_antigo:
-                solicitacao.briefing = briefing + '<hr><b>Briefing Retificado</b>: ' + briefing_antigo
+                solicitacao.briefing = briefing + '<hr><b>Briefing Antigo</b>: ' + briefing_antigo
             else:
                 solicitacao.briefing = briefing
         
