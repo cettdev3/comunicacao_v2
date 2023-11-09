@@ -278,7 +278,7 @@ def Ajax_Realiza_Solicitacao(request):
                             tipoproduto_save_the_date = request.POST.get('tipoproduto_save_the_date',None)
                             categoriaproduto_save_the_date = request.POST.get('categoriaproduto_save_the_date',None)
                             descricao_save_the_date = request.POST.get('descricao_save_the_date',None)
-                            obs_save_the_date = request.POST.get('obs_save_the_date',None)
+                            #obs_save_the_date = request.POST.get('obs_save_the_date',None)
                             outros_entregavel = request.POST.get('outros_field_save_the_date','')
 
                          
@@ -314,7 +314,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 tipo_produto = tipoproduto_save_the_date,
                                 categoria_produto = categoriaproduto_save_the_date,
                                 descricao_audio_visual = descricao_save_the_date,
-                                observacao = obs_save_the_date,
+                                #observacao = obs_save_the_date,
                                 criado_por_id = userid,
                                 arquivos = arquivos_entregaveis_save_the_date,
                                 outros = outros_entregavel
@@ -328,7 +328,7 @@ def Ajax_Realiza_Solicitacao(request):
                             tipoproduto_save_the_date = request.POST.get('tipoproduto_save_the_date'+str(index),None)
                             categoriaproduto_save_the_date = request.POST.get('categoriaproduto_save_the_date'+str(index),'')
                             descricao_save_the_date = request.POST.get('descricao_save_the_date'+str(index),None)
-                            obs_save_the_date = request.POST.get('obs_save_the_date'+str(index),None)
+                            #obs_save_the_date = request.POST.get('obs_save_the_date'+str(index),None)
                             outros_entregavel = request.POST.get('outros_field_save_the_date'+str(index),'')
 
                           
@@ -361,7 +361,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 tipo_produto = tipoproduto_save_the_date,
                                 categoria_produto = categoriaproduto_save_the_date,
                                 descricao_audio_visual = descricao_save_the_date,
-                                observacao = obs_save_the_date,
+                                #observacao = obs_save_the_date,
                                 criado_por_id = userid,
                                 arquivos = arquivos_entregaveis_save_the_date,
                                 outros = outros_entregavel
@@ -379,7 +379,7 @@ def Ajax_Realiza_Solicitacao(request):
                             tipoproduto_divulgacao = request.POST.get('tipoproduto_divulgacao',None)
                             categoriaproduto_divulgacao = request.POST.get('categoriaproduto_divulgacao',None)
                             descricao_divulgacao = request.POST.get('descricao_divulgacao',None)
-                            obs_divulgacao = request.POST.get('obs_divulgacao',None)
+                            #obs_divulgacao = request.POST.get('obs_divulgacao',None)
                             outros_entregavel = request.POST.get('outros_divulgacao','')
 
                             #PEGO OS ARQUIVOS DO ENTREGÁVEIS DINAMICOS
@@ -422,7 +422,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 tipo_produto = tipoproduto_divulgacao,
                                 categoria_produto = categoriaproduto_divulgacao,
                                 descricao_audio_visual = descricao_divulgacao,
-                                observacao = obs_divulgacao,
+                                #observacao = obs_divulgacao,
                                 arquivos = arquivos_entregaveis_divulgacao,
                                 outros = outros_entregavel,
                                 criado_por_id = userid,
@@ -435,7 +435,7 @@ def Ajax_Realiza_Solicitacao(request):
                             tipoproduto_divulgacao = request.POST.get('tipoproduto_divulgacao'+str(index),None)
                             categoriaproduto_divulgacao = request.POST.get('categoriaproduto_divulgacao'+str(index),None)
                             descricao_divulgacao = request.POST.get('descricao_divulgacao'+str(index),None)
-                            obs_divulgacao = request.POST.get('obs_divulgacao'+str(index),None)
+                            #obs_divulgacao = request.POST.get('obs_divulgacao'+str(index),None)
                             outros_entregavel = request.POST.get('outros_divulgacao'+str(index),'')
                             prazo_divulgacao = prazo_entrega
      
@@ -478,7 +478,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 tipo_produto = tipoproduto_divulgacao,
                                 categoria_produto = categoriaproduto_divulgacao,
                                 descricao_audio_visual = descricao_divulgacao,
-                                observacao = obs_divulgacao,
+                                #observacao = obs_divulgacao,
                                 criado_por_id = userid,
                                 arquivos = arquivos_entregaveis_divulgacao,
                                 outros = outros_entregavel
@@ -496,7 +496,7 @@ def Ajax_Realiza_Solicitacao(request):
                             tipoproduto_programacao = request.POST.get('tipoproduto_programacao',None)
                             categoriaproduto_programacao = request.POST.get('categoriaproduto_programacao',None)
                             descricao_programacao = request.POST.get('descricao_programacao',None)
-                            obs_programacao = request.POST.get('obs_programacao',None)
+                            #obs_programacao = request.POST.get('obs_programacao',None)
                             outros_entregavel = request.POST.get('outros_programacao','')
 
                             #PEGO OS ARQUIVOS DO ENTREGÁVEIS DINAMICOS
@@ -539,7 +539,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 tipo_produto = tipoproduto_programacao,
                                 categoria_produto = categoriaproduto_programacao,
                                 descricao_audio_visual = descricao_programacao,
-                                observacao = obs_programacao,
+                                #observacao = obs_programacao,
                                 arquivos = arquivos_entregaveis_programacao,
                                 criado_por_id = userid,
                                 outros = outros_entregavel
@@ -594,7 +594,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 tipo_produto = tipoproduto_programacao,
                                 categoria_produto = categoriaproduto_programacao,
                                 descricao_audio_visual = descricao_programacao,
-                                observacao = obs_programacao,
+                                #observacao = obs_programacao,
                                 criado_por_id = userid,
                                 outros = outros_entregavel,
                                 arquivos = arquivos_entregaveis_programacao
@@ -612,7 +612,7 @@ def Ajax_Realiza_Solicitacao(request):
                             tipoproduto_stand = request.POST.get('tipoproduto_stand',None)
                             categoriaproduto_stand = request.POST.get('categoriaproduto_stand',None)
                             descricao_stand = request.POST.get('descricao_stand',None)
-                            obs_stand = request.POST.get('obs_stand',None)
+                            #obs_stand = request.POST.get('obs_stand',None)
                             outros_entregavel = request.POST.get('outros_stand','')
                             userid = request.user.id
 
@@ -658,7 +658,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 tipo_produto = tipoproduto_stand,
                                 categoria_produto = categoriaproduto_stand,
                                 descricao_audio_visual = descricao_stand,
-                                observacao = obs_stand,
+                                #observacao = obs_stand,
                                 criado_por_id = userid,
                                 arquivos = arquivos_entregaveis_stand,
                                 outros = outros_entregavel
@@ -672,7 +672,7 @@ def Ajax_Realiza_Solicitacao(request):
                             tipoproduto_stand = request.POST.get('tipoproduto_stand'+str(index),None)
                             categoriaproduto_stand = request.POST.get('categoriaproduto_stand'+str(index),None)
                             descricao_stand = request.POST.get('descricao_stand'+str(index),None)
-                            obs_stand = request.POST.get('obs_stand'+str(index),None)
+                            #obs_stand = request.POST.get('obs_stand'+str(index),None)
                             outros_entregavel = request.POST.get('outros_stand'+str(index),'')
 
                             #PEGO OS ARQUIVOS DO ENTREGÁVEIS DINAMICOS
@@ -715,7 +715,7 @@ def Ajax_Realiza_Solicitacao(request):
                                 tipo_produto = tipoproduto_stand,
                                 categoria_produto = categoriaproduto_stand,
                                 descricao_audio_visual = descricao_stand,
-                                observacao = obs_stand,
+                                #observacao = obs_stand,
                                 criado_por_id = userid,
                                 arquivos = arquivos_entregaveis_stand,
                                 outros = outros_entregavel
@@ -1019,11 +1019,11 @@ def Ajax_Add_Entregavel(request):
         categoria = request.POST.get('categoriaproduto_save_the_date','')
         tipo_entregavel = request.POST.get('tipo_entregavel','')
         audiovisual =  request.POST.get('audio_visual','')
-        observacoes =  request.POST.get('obs_save_the_date','')
+        #observacoes =  request.POST.get('obs_save_the_date','')
         outros_entregaveis = request.POST.get('outro_entregavel','')
         arquivos = []
 
-        entregavel = Entregaveis.objects.create(prazo = prazo_entrega, tipo_produto = tipo_produto, categoria_produto = categoria,tipo_entregavel = tipo_entregavel, descricao_audio_visual = audiovisual, observacao = observacoes,arquivos = arquivos, status = 0,criado_por_id = user_loggin,evento_id = evento_id,outros = outros_entregaveis)
+        entregavel = Entregaveis.objects.create(prazo = prazo_entrega, tipo_produto = tipo_produto, categoria_produto = categoria,tipo_entregavel = tipo_entregavel, descricao_audio_visual = audiovisual,arquivos = arquivos, status = 0,criado_por_id = user_loggin,evento_id = evento_id,outros = outros_entregaveis)
         nova_notificacao(request,evento_id)
         return JsonResponse({"success_message": "Tarefa Devolvida!"})
 
