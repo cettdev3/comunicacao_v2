@@ -47,7 +47,7 @@ def Ajax_View_Task(request):
 
 
 
-    return render(request, 'ajax/ajax_view_task.html', {'tarefa': tarefa,'permissoes':permissoes,'arquivos':arquivos_list,'url_atual':url_atual,'allTasks':allTasks,'solicitacao':solicitacao,'arquivos':arquivos_list_entregavel})
+    return render(request, 'ajax/ajax_view_task.html', {'tarefa': tarefa,'permissoes':permissoes,'arquivos':arquivos_list,'url_atual':url_atual,'allTasks':allTasks,'solicitacao':solicitacao,'arquivos_sol':arquivos_list_entregavel})
         
 
 @login_required(login_url='/')
