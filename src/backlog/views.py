@@ -31,8 +31,15 @@ def Ajax_View_Task(request):
     #OBTEM O ENTREGAVEL
     entregavel = Entregaveis.objects.filter(id = idEntregavel).first()
     solicitacao = Solicitacoes.objects.filter(id=entregavel.evento_id).first()
-    
+
     try:
+        arquivos_entregaveis = solicitacao.arquivos
+        arquivos_list_entregavel = ast.literal_eval(arquivos_entregaveis)
+    except:
+        arquivos_list_entregavel = []
+ 
+    try:
+        
         arquivos = tarefa.arquivos
         arquivos_list = ast.literal_eval(arquivos)
     except:
@@ -40,7 +47,7 @@ def Ajax_View_Task(request):
 
 
 
-    return render(request, 'ajax/ajax_view_task.html', {'tarefa': tarefa,'permissoes':permissoes,'arquivos':arquivos_list,'url_atual':url_atual,'allTasks':allTasks,'solicitacao':solicitacao})
+    return render(request, 'ajax/ajax_view_task.html', {'tarefa': tarefa,'permissoes':permissoes,'arquivos':arquivos_list,'url_atual':url_atual,'allTasks':allTasks,'solicitacao':solicitacao,'arquivos':arquivos_list_entregavel})
         
 
 @login_required(login_url='/')
