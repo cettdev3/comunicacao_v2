@@ -1042,7 +1042,7 @@ def Ajax_Reenvia_Entregavel(request):
 @login_required(login_url='/')
 def Ajax_Delete_Files(request):
     with transaction.atomic():
-        print(request.POST)
+
         solicitacaoId = request.POST.get('solicitacao',None)
         arquivo_removido = request.POST.get('arquivo',None)
         tipo = request.POST.get('tipo',None)
@@ -1156,3 +1156,23 @@ def Ajax_Altera_Arquivos(request):
             tipo = 'entregavel'
 
             return render(request, 'ajax/ajax_load_files.html', {'arquivos': entregavel.arquivos,'solicitacao':entregavel,'block':block,'tipo':tipo})
+
+@login_required(login_url='/')
+def Ajax_Finalizar_Solicitacao(request):
+     with transaction.atomic():
+        solicitacaoID = request.POST.get('solicitacao_id', None)
+        
+        # Alterar status da solicitação
+        solicitacao = Solicitacoes.objects.get(id=solicitacaoID)
+        solicitacao.status = 3
+        solicitacao.save()
+
+        # Alterar status dos entregáveis relacionados à solicitação
+        entregaveis = Entregaveis.objects.filter(evento_id=solicitacaoID)
+        entregaveis.update(status=4)
+
+        # Atualizar as tarefas relacionadas aos entregáveis
+        for entregavel in entregaveis:
+            Tarefas.objects.filter(entregavel_id=entregavel.id).update(status=4)
+        
+        return JsonResponse({"success_message": "Solicitação Finalizada"})

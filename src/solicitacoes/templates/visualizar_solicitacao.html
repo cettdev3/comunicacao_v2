@@ -180,13 +180,26 @@
               {% endif %}
  
 </h5>
+<div class="row">
 {% if solicitacao.evento_json.titulo_evento %}
-{% if '10' in permissoes.permissao %}
-<a onclick="editarSolicitacaoModal('{{solicitacao.id}}')"  id="editar_solicitacao"  style=" width: 20%;" class="btn bg-dark">
+{% if entregavel.status == '3' or '11' in permissoes.permissao %}
+<a onclick="concluirSolicitacao('{{solicitacao.id}}')"  class="btn bg-dark">
                                         
-  <i class="fas fa-pencil"></i> <B>Editar Solicitação</B>
+  <i class="fas fa-check"></i> <B>Finalizar Solicitação</B>
 </a>
 {% endif %}
+{% if '10' in permissoes.permissao %}
+
+  
+ 
+  <a onclick="editarSolicitacaoModal('{{solicitacao.id}}')"  id="editar_solicitacao"    class="btn bg-dark">
+                                        
+    <i class="fas fa-pencil"></i> <B>Editar Solicitação</B>
+  </a>
+
+
+{% endif %}
+</div>
 {% endif %}
           </div>
         <!-- /.card-header -->
@@ -1651,7 +1664,54 @@ function AlteraFiles(solicitacao,file,tipo,subs){
   });
 }
 
+function concluirSolicitacao(solicitacao_id){
 
+Swal.fire({
+    title: 'Concluir Solicitação?',
+    text: 'Deseja realmente concluir a solicitação e todos seus itens envolvidos?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Sim',
+    cancelButtonText: 'Não'
+}).then((result) => {
+    if (result.isConfirmed) {
+        var XCSRFToken = '{{ csrf_token }}';
+        const url = "/ajax/conclui_solicitacao";
+        
+        // Use a função $.ajax do jQuery para fazer a solicitação AJAX
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: {'solicitacao_id':solicitacao_id},
+            headers: { "X-CSRFToken": XCSRFToken },
+            success: function (data) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Solicitação concluida!',
+                    text: "Solicitação concluída! Foi movida para Solicitações Concluídas"
+                }).then((result) => {
+                    // Ação a ser realizada após o botão "OK" ser clicado
+                    if (result.isConfirmed) {
+                        // Redirecionar ou atualizar a página aqui
+                        location.reload(); // Isso atualizará a página
+                    }
+                });
+            },
+            error: function (data) {
+                if (data.responseJSON && data.responseJSON.error_message) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ops!',
+                        text: data.responseJSON.error_message
+                    });
+                }
+            }
+        });
+    }
+});
+}
 
 function removeFiles(solicitacao,file,tipo,subs){
   var solicitacaoID = solicitacao
