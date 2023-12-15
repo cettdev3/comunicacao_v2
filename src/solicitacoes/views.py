@@ -46,8 +46,9 @@ def Permissoes_usuario(request):
 def Form_Solicitacoes(request):
     try:
         permissoes = Permissoes.objects.filter(usuario_id=request.user.id).first()
-        token = get_token_api_eventos()
-        eventos = get_all_eventos(token)
+        # token = get_token_api_eventos()
+        # eventos = get_all_eventos(token)
+        eventos = None
 
         eventos_no_prazo = []
         if eventos:
