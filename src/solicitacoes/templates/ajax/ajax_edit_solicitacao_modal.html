@@ -109,14 +109,25 @@
                 <label>Público do Evento:</label>
   
                 <div class="input-group">
-                <input required value="{{solicitacao.publico_evento}}" type="atext" class="form-control" type="text" name="publico_evento_altera" id="publico_evento_altera">
+                <input required value="{{solicitacao.publico_evento}}" class="form-control" type="text" name="publico_evento_altera" id="publico_evento_altera">
+                </div>
+                <!-- /.input group -->
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-12 col-md-3">
+                <div class="form-group">
+                <label>Prazo de Entrega:</label>
+  
+                <div class="input-group">
+                <input required value="{{solicitacao.prazo_entrega|date:'Y-m-d'}}"  class="form-control" type="date" name="prazo_entrega_solicitacao" id="prazo_entrega_solicitacao">
                 </div>
                 <!-- /.input group -->
                 </div>
               </div>
 
               
-              <div class="col-12 col-sm-12 col-md-12">
+              <div class="col-12 col-sm-12 col-md-9">
                 <div class="form-group">
                 <label>Unidade:</label>
   

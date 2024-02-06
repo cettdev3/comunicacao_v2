@@ -933,6 +933,7 @@ def Ajax_Altera_Solicitacao(request):
         data_inicio_convertida = convert_data_formatada(data_inicio)
         data_fim_convertida = convert_data_formatada(data_fim)
         briefing = request.POST.get('briefing',None)
+        prazo_entrega = request.POST.get('prazo_entrega_solicitacao',None)
 
         evento_json = {"escola": unidade, "endereco": endereco, "data_inicio": data_inicio_convertida, "data_fim": data_fim_convertida, "titulo_evento": titulo_evento}
         solicitacao = Solicitacoes.objects.get(id=solicitacaoID)
@@ -941,6 +942,7 @@ def Ajax_Altera_Solicitacao(request):
         solicitacao.evento_json = evento_json
         solicitacao.tipo_projeto = projeto
         solicitacao.publico_evento = publico_evento
+        solicitacao.prazo_entrega = prazo_entrega
         solicitacao.criado_por_id = request.POST.get('solicitante',None)
         briefing_antigo = solicitacao.briefing
         if briefing != None:
@@ -951,6 +953,7 @@ def Ajax_Altera_Solicitacao(request):
         
         solicitacao.save()
 
+        Entregaveis.objects.filter(evento_id=solicitacaoID).update(prazo=prazo_entrega)
         return render(request, 'ajax/ajax_load_files.html', {'arquivos': solicitacao.arquivos,'solicitacao':solicitacao})
 
     except Exception as e:
